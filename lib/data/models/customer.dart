@@ -31,24 +31,24 @@ class CustomerAddress {
   LatLng? get point => hasLocation ? LatLng(latitude!, longitude!) : null;
 
   factory CustomerAddress.fromJson(Map<String, dynamic> json) => CustomerAddress(
-        id: json['id'] as String?,
-        label: json['label'] as String? ?? '',
-        address: json['address'] as String? ?? '',
-        wilaya: json['wilaya'] as String?,
-        commune: json['commune'] as String?,
-        latitude: (json['latitude'] as num?)?.toDouble(),
-        longitude: (json['longitude'] as num?)?.toDouble(),
-      );
+    id: json['id'] as String?,
+    label: json['label'] as String? ?? '',
+    address: json['address'] as String? ?? '',
+    wilaya: json['wilaya'] as String?,
+    commune: json['commune'] as String?,
+    latitude: (json['latitude'] as num?)?.toDouble(),
+    longitude: (json['longitude'] as num?)?.toDouble(),
+  );
 
   Map<String, dynamic> toJson() => {
-        if (id != null) 'id': id,
-        'label': label,
-        'address': address,
-        'wilaya': wilaya,
-        'commune': commune,
-        'latitude': latitude,
-        'longitude': longitude,
-      };
+    if (id != null) 'id': id,
+    'label': label,
+    'address': address,
+    'wilaya': wilaya,
+    'commune': commune,
+    'latitude': latitude,
+    'longitude': longitude,
+  };
 
   CustomerAddress copyWith({
     String? label,
@@ -58,16 +58,15 @@ class CustomerAddress {
     double? latitude,
     double? longitude,
     bool clearLocation = false,
-  }) =>
-      CustomerAddress(
-        id: id,
-        label: label ?? this.label,
-        address: address ?? this.address,
-        wilaya: wilaya ?? this.wilaya,
-        commune: commune ?? this.commune,
-        latitude: clearLocation ? null : (latitude ?? this.latitude),
-        longitude: clearLocation ? null : (longitude ?? this.longitude),
-      );
+  }) => CustomerAddress(
+    id: id,
+    label: label ?? this.label,
+    address: address ?? this.address,
+    wilaya: wilaya ?? this.wilaya,
+    commune: commune ?? this.commune,
+    latitude: clearLocation ? null : (latitude ?? this.latitude),
+    longitude: clearLocation ? null : (longitude ?? this.longitude),
+  );
 }
 
 class Customer {
@@ -156,25 +155,25 @@ class Customer {
 
   /// Full representation, used for the device cache.
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'reference': reference,
-        'first_name': firstName,
-        'last_name': lastName,
-        'business_name': businessName,
-        'primary_phone': primaryPhone,
-        'secondary_phone': secondaryPhone,
-        'whatsapp_phone': whatsappPhone,
-        'wilaya': wilaya,
-        'commune': commune,
-        'address': address,
-        'latitude': latitude,
-        'longitude': longitude,
-        'status': status.name,
-        'created_at': createdAt.toUtc().toIso8601String(),
-        'updated_at': updatedAt.toUtc().toIso8601String(),
-        'created_by': createdBy,
-        'customer_addresses': addresses.map((a) => a.toJson()).toList(),
-      };
+    'id': id,
+    'reference': reference,
+    'first_name': firstName,
+    'last_name': lastName,
+    'business_name': businessName,
+    'primary_phone': primaryPhone,
+    'secondary_phone': secondaryPhone,
+    'whatsapp_phone': whatsappPhone,
+    'wilaya': wilaya,
+    'commune': commune,
+    'address': address,
+    'latitude': latitude,
+    'longitude': longitude,
+    'status': status.name,
+    'created_at': createdAt.toUtc().toIso8601String(),
+    'updated_at': updatedAt.toUtc().toIso8601String(),
+    'created_by': createdBy,
+    'customer_addresses': addresses.map((a) => a.toJson()).toList(),
+  };
 }
 
 /// Values entered in the add/edit form, sent to the `save_customer` RPC.
@@ -214,19 +213,19 @@ class CustomerDraft {
   List<String> get phones => [primaryPhone, secondaryPhone, whatsappPhone].whereType<String>().toList();
 
   Map<String, dynamic> toPayload() => {
-        'first_name': firstName,
-        'last_name': lastName,
-        'business_name': businessName,
-        'primary_phone': primaryPhone,
-        'secondary_phone': secondaryPhone,
-        'whatsapp_phone': whatsappPhone,
-        'wilaya': wilaya,
-        'commune': commune,
-        'address': address,
-        'latitude': latitude,
-        'longitude': longitude,
-        'status': status.name,
-      };
+    'first_name': firstName,
+    'last_name': lastName,
+    'business_name': businessName,
+    'primary_phone': primaryPhone,
+    'secondary_phone': secondaryPhone,
+    'whatsapp_phone': whatsappPhone,
+    'wilaya': wilaya,
+    'commune': commune,
+    'address': address,
+    'latitude': latitude,
+    'longitude': longitude,
+    'status': status.name,
+  };
 }
 
 /// A possible duplicate returned by `find_customer_duplicates`.
@@ -250,14 +249,14 @@ class DuplicateCandidate {
   final bool archived;
 
   factory DuplicateCandidate.fromJson(Map<String, dynamic> json) => DuplicateCandidate(
-        id: json['id'] as String,
-        reference: json['reference'] as String,
-        fullName: '${json['first_name']} ${json['last_name']}',
-        primaryPhone: json['primary_phone'] as String,
-        cityLine: '${json['commune']}, ${json['wilaya']}',
-        reason: json['reason'] as String,
-        archived: json['status'] == 'archived',
-      );
+    id: json['id'] as String,
+    reference: json['reference'] as String,
+    fullName: '${json['first_name']} ${json['last_name']}',
+    primaryPhone: json['primary_phone'] as String,
+    cityLine: '${json['commune']}, ${json['wilaya']}',
+    reason: json['reason'] as String,
+    archived: json['status'] == 'archived',
+  );
 }
 
 /// A pair listed on the duplicate review screen.
@@ -269,9 +268,9 @@ class DuplicatePair {
   final double score;
 
   factory DuplicatePair.fromJson(Map<String, dynamic> json) => DuplicatePair(
-        customerA: json['customer_a'] as String,
-        customerB: json['customer_b'] as String,
-        reason: json['reason'] as String,
-        score: (json['score'] as num).toDouble(),
-      );
+    customerA: json['customer_a'] as String,
+    customerB: json['customer_b'] as String,
+    reason: json['reason'] as String,
+    score: (json['score'] as num).toDouble(),
+  );
 }

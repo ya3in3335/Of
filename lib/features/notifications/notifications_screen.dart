@@ -65,10 +65,12 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                   if (i == 0) {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: Space.xs),
-                      child: Row(children: [
-                        Expanded(child: Text(l10n.notificationsIntro, style: Theme.of(context).textTheme.bodySmall)),
-                        const SyncStatusBadge(),
-                      ]),
+                      child: Row(
+                        children: [
+                          Expanded(child: Text(l10n.notificationsIntro, style: Theme.of(context).textTheme.bodySmall)),
+                          const SyncStatusBadge(),
+                        ],
+                      ),
                     );
                   }
                   final item = state.items[i - 1];
@@ -112,28 +114,45 @@ class _NotificationTile extends StatelessWidget {
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.all(Space.sm),
-          decoration: BoxDecoration(borderRadius: Radii.card, border: Border.all(color: AppColors.divider)),
-          child: Row(children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
-              child: Icon(icon, color: color, size: 20),
-            ),
-            const SizedBox(width: Space.sm),
-            Expanded(
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(title, style: text.labelSmall),
-                Row(children: [
-                  Flexible(child: Text(item.name, style: text.titleSmall, overflow: TextOverflow.ellipsis)),
-                  const SizedBox(width: 6),
-                  ReferencePill(item.reference),
-                ]),
-                Text(Formatters.relative(context, item.at), style: text.bodySmall),
-              ]),
-            ),
-            if (unread) Container(width: 8, height: 8, decoration: const BoxDecoration(color: AppColors.blue, shape: BoxShape.circle)),
-          ]),
+          decoration: BoxDecoration(
+            borderRadius: Radii.card,
+            border: Border.all(color: AppColors.divider),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
+                child: Icon(icon, color: color, size: 20),
+              ),
+              const SizedBox(width: Space.sm),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: text.labelSmall),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(item.name, style: text.titleSmall, overflow: TextOverflow.ellipsis),
+                        ),
+                        const SizedBox(width: 6),
+                        ReferencePill(item.reference),
+                      ],
+                    ),
+                    Text(Formatters.relative(context, item.at), style: text.bodySmall),
+                  ],
+                ),
+              ),
+              if (unread)
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(color: AppColors.blue, shape: BoxShape.circle),
+                ),
+            ],
+          ),
         ),
       ),
     );

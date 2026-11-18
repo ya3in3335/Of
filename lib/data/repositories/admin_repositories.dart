@@ -24,36 +24,35 @@ class EmployeeRepository {
   static const _columns = 'id, full_name, username, role, is_active, phone, created_at, last_login_at';
 
   Future<List<Profile>> list() => _guard(() async {
-        final rows = await _client.from('profiles').select(_columns).order('full_name');
-        return rows.map(Profile.fromJson).toList();
-      });
+    final rows = await _client.from('profiles').select(_columns).order('full_name');
+    return rows.map(Profile.fromJson).toList();
+  });
 
   Future<Profile> get(String id) => _guard(() async {
-        final row = await _client.from('profiles').select(_columns).eq('id', id).maybeSingle();
-        if (row == null) throw const AppException(AppErrorKind.notFound);
-        return Profile.fromJson(row);
-      });
+    final row = await _client.from('profiles').select(_columns).eq('id', id).maybeSingle();
+    if (row == null) throw const AppException(AppErrorKind.notFound);
+    return Profile.fromJson(row);
+  });
 
   Future<Profile> _invoke(Map<String, dynamic> body) => _guard(() async {
-        final response = await _client.functions.invoke('admin-users', body: body);
-        final data = response.data;
-        if (data is! Map || data['profile'] == null) throw const AppException(AppErrorKind.server);
-        return Profile.fromJson(Map<String, dynamic>.from(data['profile'] as Map));
-      });
+    final response = await _client.functions.invoke('admin-users', body: body);
+    final data = response.data;
+    if (data is! Map || data['profile'] == null) throw const AppException(AppErrorKind.server);
+    return Profile.fromJson(Map<String, dynamic>.from(data['profile'] as Map));
+  });
 
   Future<Profile> create({
     required String fullName,
     required String username,
     required String password,
     required UserRole role,
-  }) =>
-      _invoke({
-        'action': 'create',
-        'full_name': fullName,
-        'username': username,
-        'password': password,
-        'role': role.name,
-      });
+  }) => _invoke({
+    'action': 'create',
+    'full_name': fullName,
+    'username': username,
+    'password': password,
+    'role': role.name,
+  });
 
   Future<Profile> setActive(String id, bool active) =>
       _invoke({'action': 'set_active', 'user_id': id, 'active': active});
@@ -80,9 +79,9 @@ class ActivityRepository {
       });
 
   Future<DashboardStats> dashboardStats() => _guard(() async {
-        final json = await _client.rpc('admin_dashboard_stats');
-        return DashboardStats.fromJson(Map<String, dynamic>.from(json as Map));
-      });
+    final json = await _client.rpc('admin_dashboard_stats');
+    return DashboardStats.fromJson(Map<String, dynamic>.from(json as Map));
+  });
 }
 
 class SettingsRepository {
@@ -91,22 +90,22 @@ class SettingsRepository {
   final SupabaseClient _client;
 
   Future<AppSettings> fetch() => _guard(() async {
-        final row = await _client
-            .from('app_settings')
-            .select('company_name, default_latitude, default_longitude, default_zoom')
-            .eq('id', 1)
-            .maybeSingle();
-        return row == null ? AppSettings.fallback : AppSettings.fromJson(row);
-      });
+    final row = await _client
+        .from('app_settings')
+        .select('company_name, default_latitude, default_longitude, default_zoom')
+        .eq('id', 1)
+        .maybeSingle();
+    return row == null ? AppSettings.fallback : AppSettings.fromJson(row);
+  });
 
   Future<AppSettings> update(AppSettings settings) => _guard(() async {
-        final row = await _client
-            .from('app_settings')
-            .update(settings.toJson())
-            .eq('id', 1)
-            .select('company_name, default_latitude, default_longitude, default_zoom')
-            .maybeSingle();
-        if (row == null) throw const AppException(AppErrorKind.forbidden);
-        return AppSettings.fromJson(row);
-      });
+    final row = await _client
+        .from('app_settings')
+        .update(settings.toJson())
+        .eq('id', 1)
+        .select('company_name, default_latitude, default_longitude, default_zoom')
+        .maybeSingle();
+    if (row == null) throw const AppException(AppErrorKind.forbidden);
+    return AppSettings.fromJson(row);
+  });
 }

@@ -13,27 +13,28 @@ class SearchHit {
 
 class _Entry {
   _Entry(this.customer)
-      : nameKey = TextNormalizer.normalize(customer.fullName),
-        reverseKey = TextNormalizer.normalize('${customer.lastName} ${customer.firstName}'),
-        referenceKey = TextNormalizer.normalize(customer.reference),
-        searchText = [
-          TextNormalizer.normalize([
+    : nameKey = TextNormalizer.normalize(customer.fullName),
+      reverseKey = TextNormalizer.normalize('${customer.lastName} ${customer.firstName}'),
+      referenceKey = TextNormalizer.normalize(customer.reference),
+      searchText = [
+        TextNormalizer.normalize(
+          [
             customer.firstName,
             customer.lastName,
             customer.businessName ?? '',
             customer.reference,
             customer.commune,
             customer.wilaya,
-          ].join(' ')),
-          customer.primaryPhone,
-          customer.secondaryPhone ?? '',
-          customer.whatsappPhone ?? '',
-        ].join(' '),
-        phones = [customer.primaryPhone, customer.secondaryPhone, customer.whatsappPhone]
-            .whereType<String>()
-            .toList() {
+          ].join(' '),
+        ),
+        customer.primaryPhone,
+        customer.secondaryPhone ?? '',
+        customer.whatsappPhone ?? '',
+      ].join(' '),
+      phones = [customer.primaryPhone, customer.secondaryPhone, customer.whatsappPhone].whereType<String>().toList() {
     nameWords = nameKey.split(' ');
     trigrams = TextNormalizer.trigrams(nameKey);
+    wordTrigrams = [for (final w in nameWords) TextNormalizer.trigrams(w)];
   }
 
   final Customer customer;
@@ -44,6 +45,7 @@ class _Entry {
   final List<String> phones;
   late final List<String> nameWords;
   late final Set<String> trigrams;
+  late final List<Set<String>> wordTrigrams;
 }
 
 /// In-memory customer search over the synced directory. Pure Dart, so it is
@@ -111,7 +113,15 @@ class CustomerSearchEngine {
 
       // 4. Fuzzy names (spelling variants: Benaly / Benali, Abdelkader / Abdelkadir)
       if (score == 0 && q.length >= 3 && !digitsOnlyQuery) {
-        final sim = TextNormalizer.similarity(queryTrigrams, e.trigrams);
+        // Compare with the full name and with each single name, so a
+        // misspelled last name alone ("Benaly") still finds "Mohamed Benali".
+        var sim = TextNormalizer.similarity(queryTrigrams, e.trigrams);
+        if (tokens.length == 1) {
+          for (final w in e.wordTrigrams) {
+            final s = TextNormalizer.similarity(queryTrigrams, w);
+            if (s > sim) sim = s;
+          }
+        }
         if (sim >= 0.35) {
           score = 300 * sim;
           kind = MatchKind.fuzzyName;
@@ -146,10 +156,9 @@ class CustomerSearchEngine {
     for (final e in _entries) {
       if (e.customer.id == excludeId) continue;
       final phoneMatch = e.phones.any(normalizedPhones.contains);
-      final nameMatch = name.length >= 4 &&
-          (e.nameKey == name ||
-              e.reverseKey == name ||
-              TextNormalizer.similarity(nameTrigrams, e.trigrams) >= 0.6);
+      final nameMatch =
+          name.length >= 4 &&
+          (e.nameKey == name || e.reverseKey == name || TextNormalizer.similarity(nameTrigrams, e.trigrams) >= 0.6);
       if (phoneMatch || nameMatch) result.add(e.customer);
     }
     return result;

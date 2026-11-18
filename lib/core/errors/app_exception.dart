@@ -44,7 +44,9 @@ class AppException implements Exception {
       if (msg.contains('invalid login') || msg.contains('invalid credentials') || error.code == 'invalid_credentials') {
         return const AppException(AppErrorKind.invalidCredentials);
       }
-      if (msg.contains('banned') || error.code == 'user_banned') return const AppException(AppErrorKind.accountDisabled);
+      if (msg.contains('banned') || error.code == 'user_banned') {
+        return const AppException(AppErrorKind.accountDisabled);
+      }
       if (msg.contains('jwt') || msg.contains('refresh token') || msg.contains('session')) {
         return AppException(AppErrorKind.sessionExpired, error.message);
       }
@@ -94,7 +96,9 @@ class AppException implements Exception {
         case 'self_change':
           return AppException(AppErrorKind.validation, message);
       }
-      if (error.status == 404) return const AppException(AppErrorKind.notConfigured, 'admin-users function not deployed');
+      if (error.status == 404) {
+        return const AppException(AppErrorKind.notConfigured, 'admin-users function not deployed');
+      }
       return AppException(AppErrorKind.server, message ?? 'HTTP ${error.status}');
     }
     if (error is RealtimeSubscribeException) return AppException(AppErrorKind.server, error.toString());

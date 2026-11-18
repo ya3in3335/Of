@@ -41,12 +41,16 @@ class _AppSettingsScreenState extends ConsumerState<AppSettingsScreen> {
     if (!_formKey.currentState!.validate() || _center == null) return;
     final l10n = context.l10n;
     try {
-      await ref.read(appSettingsProvider.notifier).save(AppSettings(
-            companyName: _company.text.trim(),
-            defaultLatitude: _center!.latitude,
-            defaultLongitude: _center!.longitude,
-            defaultZoom: _zoom,
-          ));
+      await ref
+          .read(appSettingsProvider.notifier)
+          .save(
+            AppSettings(
+              companyName: _company.text.trim(),
+              defaultLatitude: _center!.latitude,
+              defaultLongitude: _center!.longitude,
+              defaultZoom: _zoom,
+            ),
+          );
       if (!mounted) return;
       showToast(context, l10n.settingsSaved, kind: ToastKind.success);
       context.pop();
@@ -80,41 +84,50 @@ class _AppSettingsScreenState extends ConsumerState<AppSettingsScreen> {
                   title: l10n.settingsCompany,
                   child: TextFormField(
                     controller: _company,
-                    decoration: InputDecoration(labelText: l10n.fieldCompanyName, prefixIcon: const Icon(Icons.business_rounded)),
+                    decoration: InputDecoration(
+                      labelText: l10n.fieldCompanyName,
+                      prefixIcon: const Icon(Icons.business_rounded),
+                    ),
                     validator: (v) => fieldErrorText(context, Validators.required(v, min: 2, max: 80)),
                   ),
                 ),
                 const SizedBox(height: Space.md),
                 SectionCard(
                   title: l10n.settingsMapCenter,
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                    Text(l10n.settingsMapCenterHint, style: Theme.of(context).textTheme.bodySmall),
-                    const SizedBox(height: Space.sm),
-                    if (_center != null) MiniMapPreview(point: _center!, height: 150),
-                    const SizedBox(height: Space.xs),
-                    if (_center != null)
-                      Text(Formatters.coordinates(_center!.latitude, _center!.longitude),
-                          textDirection: TextDirection.ltr, style: Theme.of(context).textTheme.labelMedium),
-                    const SizedBox(height: Space.xs),
-                    OutlinedButton.icon(
-                      onPressed: () async {
-                        final picked = await LocationPickerScreen.open(context, initial: _center);
-                        if (picked != null) setState(() => _center = picked.point);
-                      },
-                      icon: const Icon(Icons.edit_location_alt_outlined),
-                      label: Text(l10n.actionChange),
-                    ),
-                    const SizedBox(height: Space.sm),
-                    Text(l10n.settingsMapZoom(_zoom.round()), style: Theme.of(context).textTheme.labelMedium),
-                    Slider(
-                      value: _zoom,
-                      min: 5,
-                      max: 16,
-                      divisions: 11,
-                      label: '${_zoom.round()}',
-                      onChanged: (v) => setState(() => _zoom = v),
-                    ),
-                  ]),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(l10n.settingsMapCenterHint, style: Theme.of(context).textTheme.bodySmall),
+                      const SizedBox(height: Space.sm),
+                      if (_center != null) MiniMapPreview(point: _center!, height: 150),
+                      const SizedBox(height: Space.xs),
+                      if (_center != null)
+                        Text(
+                          Formatters.coordinates(_center!.latitude, _center!.longitude),
+                          textDirection: TextDirection.ltr,
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      const SizedBox(height: Space.xs),
+                      OutlinedButton.icon(
+                        onPressed: () async {
+                          final picked = await LocationPickerScreen.open(context, initial: _center);
+                          if (picked != null) setState(() => _center = picked.point);
+                        },
+                        icon: const Icon(Icons.edit_location_alt_outlined),
+                        label: Text(l10n.actionChange),
+                      ),
+                      const SizedBox(height: Space.sm),
+                      Text(l10n.settingsMapZoom(_zoom.round()), style: Theme.of(context).textTheme.labelMedium),
+                      Slider(
+                        value: _zoom,
+                        min: 5,
+                        max: 16,
+                        divisions: 11,
+                        label: '${_zoom.round()}',
+                        onChanged: (v) => setState(() => _zoom = v),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: Space.xl),
                 AsyncButton(label: l10n.actionSaveChanges, icon: Icons.check_rounded, onPressed: _save),

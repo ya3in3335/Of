@@ -13,20 +13,25 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0.92, end: 1),
-            duration: const Duration(milliseconds: 600),
-            curve: Curves.easeOutBack,
-            builder: (context, v, child) => Transform.scale(scale: v, child: child),
-            child: const BrandLogo(size: 150),
-          ),
-          const SizedBox(height: 28),
-          const SizedBox(width: 26, height: 26, child: CircularProgressIndicator(strokeWidth: 2.6)),
-          const SizedBox(height: 14),
-          Text(context.l10n.splashLoading,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary)),
-        ]),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0.92, end: 1),
+              duration: const Duration(milliseconds: 600),
+              curve: Curves.easeOutBack,
+              builder: (context, v, child) => Transform.scale(scale: v, child: child),
+              child: const BrandLogo(size: 150),
+            ),
+            const SizedBox(height: 28),
+            const SizedBox(width: 26, height: 26, child: CircularProgressIndicator(strokeWidth: 2.6)),
+            const SizedBox(height: 14),
+            Text(
+              context.l10n.splashLoading,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
+            ),
+          ],
+        ),
       ),
     );
   }

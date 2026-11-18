@@ -35,6 +35,5 @@ class AppConfig {
 
   static const userAgentPackage = 'dz.outifor.outifor';
 
-  static bool get isConfigured =>
-      supabaseUrl.startsWith('https://') && supabaseAnonKey.length > 20;
+  static bool get isConfigured => supabaseUrl.startsWith('https://') && supabaseAnonKey.length > 20;
 }

@@ -1,5 +1,5 @@
 name: outifor
-description: "A new Flutter project."
+description: "OUTIFOR — wholesale customer directory and delivery location system."
 publish_to: 'none'
 version: 0.1.0+1
 
@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   connectivity_plus: ^7.3.2
+  cupertino_ui: ^1.1.7
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -34,3 +35,27 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
+
+  assets:
+    - assets/brand/
+
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-400.ttf
+        - asset: assets/fonts/Inter-500.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-600.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-700.ttf
+          weight: 700
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-400.ttf
+        - asset: assets/fonts/Cairo-500.ttf
+          weight: 500
+        - asset: assets/fonts/Cairo-600.ttf
+          weight: 600
+        - asset: assets/fonts/Cairo-700.ttf
+          weight: 700

@@ -45,11 +45,13 @@ class _DirectoryScreenState extends ConsumerState<DirectoryScreen> {
     } else {
       list = d.customers;
     }
-    list = list.where((c) => switch (_status) {
-          StatusFilter.active => !c.isArchived,
-          StatusFilter.archived => c.isArchived,
-          StatusFilter.all => true,
-        });
+    list = list.where(
+      (c) => switch (_status) {
+        StatusFilter.active => !c.isArchived,
+        StatusFilter.archived => c.isArchived,
+        StatusFilter.all => true,
+      },
+    );
     if (_missingLocationOnly) list = list.where((c) => !c.hasLocation);
     if (_wilaya != null) list = list.where((c) => c.wilaya == _wilaya);
     final result = list.toList();
@@ -160,93 +162,109 @@ class _DirectoryScreenState extends ConsumerState<DirectoryScreen> {
               icon: const Icon(Icons.content_copy_rounded),
               onPressed: () => context.push(Routes.duplicates),
             ),
-          const Padding(padding: EdgeInsetsDirectional.only(end: Space.md), child: SyncStatusBadge()),
+          const Padding(
+            padding: EdgeInsetsDirectional.only(end: Space.md),
+            child: SyncStatusBadge(),
+          ),
         ],
       ),
-      body: Column(children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(Space.page, Space.xs, Space.page, Space.sm),
-          child: SearchField(
-            controller: _search,
-            hint: l10n.directoryFilterHint,
-            onChanged: (v) => setState(() => _query = v),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(Space.page, Space.xs, Space.page, Space.sm),
+            child: SearchField(
+              controller: _search,
+              hint: l10n.directoryFilterHint,
+              onChanged: (v) => setState(() => _query = v),
+            ),
           ),
-        ),
-        SizedBox(
-          height: 40,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: Space.page),
-            children: [
-              if (isAdmin) ...[
-                for (final s in StatusFilter.values) ...[
-                  ChoiceChip(
-                    label: Text(switch (s) {
-                      StatusFilter.active => l10n.statusActive,
-                      StatusFilter.archived => l10n.statusArchivedPlural,
-                      StatusFilter.all => l10n.filterAll,
-                    }),
-                    selected: _status == s,
-                    onSelected: (_) => setState(() => _status = s),
+          SizedBox(
+            height: 40,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: Space.page),
+              children: [
+                if (isAdmin) ...[
+                  for (final s in StatusFilter.values) ...[
+                    ChoiceChip(
+                      label: Text(switch (s) {
+                        StatusFilter.active => l10n.statusActive,
+                        StatusFilter.archived => l10n.statusArchivedPlural,
+                        StatusFilter.all => l10n.filterAll,
+                      }),
+                      selected: _status == s,
+                      onSelected: (_) => setState(() => _status = s),
+                    ),
+                    const SizedBox(width: Space.xs),
+                  ],
+                ],
+                FilterChip(
+                  avatar: Icon(
+                    Icons.location_off_rounded,
+                    size: 16,
+                    color: _missingLocationOnly ? Colors.white : AppColors.warning,
                   ),
-                  const SizedBox(width: Space.xs),
-                ],
-              ],
-              FilterChip(
-                avatar: Icon(Icons.location_off_rounded,
-                    size: 16, color: _missingLocationOnly ? Colors.white : AppColors.warning),
-                label: Text(l10n.filterNoLocation),
-                selected: _missingLocationOnly,
-                showCheckmark: false,
-                onSelected: (v) => setState(() => _missingLocationOnly = v),
-              ),
-              const SizedBox(width: Space.xs),
-              ActionChip(
-                avatar: Icon(Icons.place_outlined, size: 16, color: _wilaya != null ? AppColors.blue : AppColors.textSecondary),
-                label: Text(_wilaya ?? l10n.filterWilaya),
-                onPressed: () => _pickWilaya(wilayas),
-              ),
-              const SizedBox(width: Space.xs),
-              PopupMenuButton<SortOrder>(
-                tooltip: l10n.sortTitle,
-                initialValue: _sort,
-                onSelected: (s) => setState(() => _sort = s),
-                itemBuilder: (_) => [
-                  PopupMenuItem(value: SortOrder.name, child: Text(l10n.sortName)),
-                  PopupMenuItem(value: SortOrder.newest, child: Text(l10n.sortNewest)),
-                  PopupMenuItem(value: SortOrder.updated, child: Text(l10n.sortUpdated)),
-                ],
-                child: Chip(
-                  avatar: const Icon(Icons.sort_rounded, size: 16, color: AppColors.textSecondary),
-                  label: Text(switch (_sort) {
-                    SortOrder.name => l10n.sortName,
-                    SortOrder.newest => l10n.sortNewest,
-                    SortOrder.updated => l10n.sortUpdated,
-                  }),
+                  label: Text(l10n.filterNoLocation),
+                  selected: _missingLocationOnly,
+                  showCheckmark: false,
+                  onSelected: (v) => setState(() => _missingLocationOnly = v),
                 ),
-              ),
-            ],
+                const SizedBox(width: Space.xs),
+                ActionChip(
+                  avatar: Icon(
+                    Icons.place_outlined,
+                    size: 16,
+                    color: _wilaya != null ? AppColors.blue : AppColors.textSecondary,
+                  ),
+                  label: Text(_wilaya ?? l10n.filterWilaya),
+                  onPressed: () => _pickWilaya(wilayas),
+                ),
+                const SizedBox(width: Space.xs),
+                PopupMenuButton<SortOrder>(
+                  tooltip: l10n.sortTitle,
+                  initialValue: _sort,
+                  onSelected: (s) => setState(() => _sort = s),
+                  itemBuilder: (_) => [
+                    PopupMenuItem(value: SortOrder.name, child: Text(l10n.sortName)),
+                    PopupMenuItem(value: SortOrder.newest, child: Text(l10n.sortNewest)),
+                    PopupMenuItem(value: SortOrder.updated, child: Text(l10n.sortUpdated)),
+                  ],
+                  child: Chip(
+                    avatar: const Icon(Icons.sort_rounded, size: 16, color: AppColors.textSecondary),
+                    label: Text(switch (_sort) {
+                      SortOrder.name => l10n.sortName,
+                      SortOrder.newest => l10n.sortNewest,
+                      SortOrder.updated => l10n.sortUpdated,
+                    }),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(Space.page, Space.sm, Space.page, Space.xs),
-          child: Row(children: [
-            Text(l10n.directoryCount(customers.length), style: Theme.of(context).textTheme.labelMedium),
-            const Spacer(),
-            if (filtersActive)
-              TextButton(
-                style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
-                onPressed: () => setState(() {
-                  _status = StatusFilter.active;
-                  _missingLocationOnly = false;
-                  _wilaya = null;
-                }),
-                child: Text(l10n.filterReset),
-              ),
-          ]),
-        ),
-        Expanded(child: AnimatedSwitcher(duration: Motion.normal, child: body)),
-      ]),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(Space.page, Space.sm, Space.page, Space.xs),
+            child: Row(
+              children: [
+                Text(l10n.directoryCount(customers.length), style: Theme.of(context).textTheme.labelMedium),
+                const Spacer(),
+                if (filtersActive)
+                  TextButton(
+                    style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
+                    onPressed: () => setState(() {
+                      _status = StatusFilter.active;
+                      _missingLocationOnly = false;
+                      _wilaya = null;
+                    }),
+                    child: Text(l10n.filterReset),
+                  ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: AnimatedSwitcher(duration: Motion.normal, child: body),
+          ),
+        ],
+      ),
     );
   }
 }

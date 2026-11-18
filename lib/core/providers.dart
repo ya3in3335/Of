@@ -14,8 +14,9 @@ import '../data/services/local_cache.dart';
 final supabaseClientProvider = Provider<SupabaseClient>((ref) => throw UnimplementedError('Supabase not initialised'));
 
 /// Overridden in main() with the loaded instance.
-final sharedPreferencesProvider =
-    Provider<SharedPreferences>((ref) => throw UnimplementedError('SharedPreferences not loaded'));
+final sharedPreferencesProvider = Provider<SharedPreferences>(
+  (ref) => throw UnimplementedError('SharedPreferences not loaded'),
+);
 
 final authRepositoryProvider = Provider((ref) => AuthRepository(ref.watch(supabaseClientProvider)));
 final customerRepositoryProvider = Provider((ref) => CustomerRepository(ref.watch(supabaseClientProvider)));

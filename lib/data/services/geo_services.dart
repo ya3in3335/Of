@@ -24,14 +24,16 @@ class GeocodingService {
   Future<List<GeocodingResult>> search(String query, {String language = 'fr'}) async {
     final text = query.trim();
     if (text.length < 3) return const [];
-    final uri = Uri.parse('${AppConfig.geocodingUrl}/search').replace(queryParameters: {
-      'q': text,
-      'format': 'jsonv2',
-      'addressdetails': '1',
-      'limit': '8',
-      'countrycodes': AppConfig.geocodingCountries,
-      'accept-language': language,
-    });
+    final uri = Uri.parse('${AppConfig.geocodingUrl}/search').replace(
+      queryParameters: {
+        'q': text,
+        'format': 'jsonv2',
+        'addressdetails': '1',
+        'limit': '8',
+        'countrycodes': AppConfig.geocodingCountries,
+        'accept-language': language,
+      },
+    );
     final response = await _client
         .get(uri, headers: {'User-Agent': '${AppConfig.userAgentPackage} (customer directory)'})
         .timeout(const Duration(seconds: 12));
@@ -99,6 +101,5 @@ class LocationService {
 
   Future<void> openSettings() => Geolocator.openAppSettings();
 
-  static double distanceMeters(LatLng a, LatLng b) =>
-      const Distance().as(LengthUnit.Meter, a, b);
+  static double distanceMeters(LatLng a, LatLng b) => const Distance().as(LengthUnit.Meter, a, b);
 }

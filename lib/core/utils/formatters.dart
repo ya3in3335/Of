@@ -23,7 +23,8 @@ abstract final class Formatters {
   static String dateTime(BuildContext context, DateTime value) =>
       DateFormat.yMMMd(context.languageCode).add_Hm().format(value.toLocal());
 
-  static String time(BuildContext context, DateTime value) => DateFormat.Hm(context.languageCode).format(value.toLocal());
+  static String time(BuildContext context, DateTime value) =>
+      DateFormat.Hm(context.languageCode).format(value.toLocal());
 
   /// "just now", "5 min ago", "yesterday", or a date.
   static String relative(BuildContext context, DateTime value, {DateTime? now}) {

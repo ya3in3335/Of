@@ -27,17 +27,19 @@ class LanguageScreen extends ConsumerWidget {
         children: [
           SectionCard(
             padding: const EdgeInsets.symmetric(vertical: Space.xs, horizontal: Space.xs),
-            child: Column(children: [
-              for (final (code, label, hint) in options)
-                ListTile(
-                  title: Text(label),
-                  subtitle: Text(hint),
-                  trailing: current == code
-                      ? const Icon(Icons.check_circle_rounded, color: AppColors.blue)
-                      : const Icon(Icons.circle_outlined, color: AppColors.border),
-                  onTap: () => ref.read(preferencesProvider.notifier).setLocale(code),
-                ),
-            ]),
+            child: Column(
+              children: [
+                for (final (code, label, hint) in options)
+                  ListTile(
+                    title: Text(label),
+                    subtitle: Text(hint),
+                    trailing: current == code
+                        ? const Icon(Icons.check_circle_rounded, color: AppColors.blue)
+                        : const Icon(Icons.circle_outlined, color: AppColors.border),
+                    onTap: () => ref.read(preferencesProvider.notifier).setLocale(code),
+                  ),
+              ],
+            ),
           ),
           const SizedBox(height: Space.sm),
           Text(l10n.languageNote, style: Theme.of(context).textTheme.bodySmall),

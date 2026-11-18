@@ -4,3 +4,4 @@ analyzer:
   exclude:
     - build/**
     - android/**
+    - lib/l10n/gen/**

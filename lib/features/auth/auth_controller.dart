@@ -17,7 +17,7 @@ class AuthState {
   const AuthState.initializing() : this._(AuthPhase.initializing);
   const AuthState.signedOut([AppErrorKind? reason]) : this._(AuthPhase.signedOut, signOutReason: reason);
   const AuthState.signedIn(Profile profile, {bool verified = true})
-      : this._(AuthPhase.signedIn, profile: profile, verified: verified);
+    : this._(AuthPhase.signedIn, profile: profile, verified: verified);
 
   final AuthPhase phase;
   final Profile? profile;

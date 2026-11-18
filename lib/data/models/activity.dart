@@ -31,16 +31,16 @@ class ActivityLog {
       'target:profiles!activity_logs_target_profile_id_fkey(full_name)';
 
   factory ActivityLog.fromJson(Map<String, dynamic> json) => ActivityLog(
-        id: (json['id'] as num).toInt(),
-        action: json['action'] as String,
-        createdAt: DateTime.parse(json['created_at'] as String),
-        actorId: json['actor_id'] as String?,
-        actorName: (json['actor'] as Map?)?['full_name'] as String?,
-        customerId: json['customer_id'] as String?,
-        targetProfileId: json['target_profile_id'] as String?,
-        targetName: (json['target'] as Map?)?['full_name'] as String?,
-        details: Map<String, dynamic>.from((json['details'] as Map?) ?? const {}),
-      );
+    id: (json['id'] as num).toInt(),
+    action: json['action'] as String,
+    createdAt: DateTime.parse(json['created_at'] as String),
+    actorId: json['actor_id'] as String?,
+    actorName: (json['actor'] as Map?)?['full_name'] as String?,
+    customerId: json['customer_id'] as String?,
+    targetProfileId: json['target_profile_id'] as String?,
+    targetName: (json['target'] as Map?)?['full_name'] as String?,
+    details: Map<String, dynamic>.from((json['details'] as Map?) ?? const {}),
+  );
 }
 
 class DashboardStats {
@@ -101,16 +101,16 @@ class AppSettings {
   final double defaultZoom;
 
   factory AppSettings.fromJson(Map<String, dynamic> json) => AppSettings(
-        companyName: json['company_name'] as String,
-        defaultLatitude: (json['default_latitude'] as num).toDouble(),
-        defaultLongitude: (json['default_longitude'] as num).toDouble(),
-        defaultZoom: (json['default_zoom'] as num).toDouble(),
-      );
+    companyName: json['company_name'] as String,
+    defaultLatitude: (json['default_latitude'] as num).toDouble(),
+    defaultLongitude: (json['default_longitude'] as num).toDouble(),
+    defaultZoom: (json['default_zoom'] as num).toDouble(),
+  );
 
   Map<String, dynamic> toJson() => {
-        'company_name': companyName,
-        'default_latitude': defaultLatitude,
-        'default_longitude': defaultLongitude,
-        'default_zoom': defaultZoom,
-      };
+    'company_name': companyName,
+    'default_latitude': defaultLatitude,
+    'default_longitude': defaultLongitude,
+    'default_zoom': defaultZoom,
+  };
 }

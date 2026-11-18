@@ -16,9 +16,19 @@ enum ActivityFilter { all, admin, field }
 
 const _fieldActions = ['customer_viewed', 'customer_called', 'customer_whatsapp', 'customer_navigated'];
 const _adminActions = [
-  'customer_created', 'customer_updated', 'customer_location_updated', 'customer_archived', 'customer_restored',
-  'customer_deleted', 'employee_created', 'employee_activated', 'employee_deactivated', 'employee_password_reset',
-  'employee_updated', 'duplicate_dismissed', 'settings_updated',
+  'customer_created',
+  'customer_updated',
+  'customer_location_updated',
+  'customer_archived',
+  'customer_restored',
+  'customer_deleted',
+  'employee_created',
+  'employee_activated',
+  'employee_deactivated',
+  'employee_password_reset',
+  'employee_updated',
+  'duplicate_dismissed',
+  'settings_updated',
 ];
 
 /// Audit trail (admin only, enforced by RLS on activity_logs).
@@ -54,7 +64,9 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
       }
     });
     try {
-      final list = await ref.read(activityRepositoryProvider).recent(
+      final list = await ref
+          .read(activityRepositoryProvider)
+          .recent(
             limit: _page,
             offset: _items.length,
             actions: switch (_filter) {
@@ -117,25 +129,27 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.activityTitle)),
-      body: Column(children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(Space.page, 0, Space.page, Space.sm),
-          child: SegmentedButton<ActivityFilter>(
-            showSelectedIcon: false,
-            segments: [
-              ButtonSegment(value: ActivityFilter.all, label: Text(l10n.filterAll)),
-              ButtonSegment(value: ActivityFilter.admin, label: Text(l10n.activityFilterAdmin)),
-              ButtonSegment(value: ActivityFilter.field, label: Text(l10n.activityFilterField)),
-            ],
-            selected: {_filter},
-            onSelectionChanged: (s) {
-              setState(() => _filter = s.first);
-              _load(reset: true);
-            },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(Space.page, 0, Space.page, Space.sm),
+            child: SegmentedButton<ActivityFilter>(
+              showSelectedIcon: false,
+              segments: [
+                ButtonSegment(value: ActivityFilter.all, label: Text(l10n.filterAll)),
+                ButtonSegment(value: ActivityFilter.admin, label: Text(l10n.activityFilterAdmin)),
+                ButtonSegment(value: ActivityFilter.field, label: Text(l10n.activityFilterField)),
+              ],
+              selected: {_filter},
+              onSelectionChanged: (s) {
+                setState(() => _filter = s.first);
+                _load(reset: true);
+              },
+            ),
           ),
-        ),
-        Expanded(child: body),
-      ]),
+          Expanded(child: body),
+        ],
+      ),
     );
   }
 }
@@ -146,25 +160,25 @@ class ActivityTile extends ConsumerWidget {
   final bool dense;
 
   static (IconData, Color) visual(String action) => switch (action) {
-        'customer_created' => (Icons.person_add_alt_1_rounded, AppColors.success),
-        'customer_updated' => (Icons.edit_rounded, AppColors.blue),
-        'customer_location_updated' => (Icons.edit_location_alt_rounded, AppColors.blue),
-        'customer_archived' => (Icons.archive_rounded, AppColors.textSecondary),
-        'customer_restored' => (Icons.unarchive_rounded, AppColors.success),
-        'customer_deleted' => (Icons.delete_rounded, AppColors.error),
-        'customer_viewed' => (Icons.visibility_rounded, AppColors.textTertiary),
-        'customer_called' => (Icons.call_rounded, AppColors.navy),
-        'customer_whatsapp' => (Icons.chat_rounded, AppColors.whatsapp),
-        'customer_navigated' => (Icons.navigation_rounded, AppColors.blue),
-        'employee_created' => (Icons.badge_rounded, AppColors.success),
-        'employee_activated' => (Icons.lock_open_rounded, AppColors.success),
-        'employee_deactivated' => (Icons.block_rounded, AppColors.error),
-        'employee_password_reset' => (Icons.key_rounded, AppColors.warning),
-        'employee_updated' => (Icons.manage_accounts_rounded, AppColors.blue),
-        'duplicate_dismissed' => (Icons.do_not_disturb_on_rounded, AppColors.textSecondary),
-        'settings_updated' => (Icons.tune_rounded, AppColors.navy),
-        _ => (Icons.history_rounded, AppColors.textSecondary),
-      };
+    'customer_created' => (Icons.person_add_alt_1_rounded, AppColors.success),
+    'customer_updated' => (Icons.edit_rounded, AppColors.blue),
+    'customer_location_updated' => (Icons.edit_location_alt_rounded, AppColors.blue),
+    'customer_archived' => (Icons.archive_rounded, AppColors.textSecondary),
+    'customer_restored' => (Icons.unarchive_rounded, AppColors.success),
+    'customer_deleted' => (Icons.delete_rounded, AppColors.error),
+    'customer_viewed' => (Icons.visibility_rounded, AppColors.textTertiary),
+    'customer_called' => (Icons.call_rounded, AppColors.navy),
+    'customer_whatsapp' => (Icons.chat_rounded, AppColors.whatsapp),
+    'customer_navigated' => (Icons.navigation_rounded, AppColors.blue),
+    'employee_created' => (Icons.badge_rounded, AppColors.success),
+    'employee_activated' => (Icons.lock_open_rounded, AppColors.success),
+    'employee_deactivated' => (Icons.block_rounded, AppColors.error),
+    'employee_password_reset' => (Icons.key_rounded, AppColors.warning),
+    'employee_updated' => (Icons.manage_accounts_rounded, AppColors.blue),
+    'duplicate_dismissed' => (Icons.do_not_disturb_on_rounded, AppColors.textSecondary),
+    'settings_updated' => (Icons.tune_rounded, AppColors.navy),
+    _ => (Icons.history_rounded, AppColors.textSecondary),
+  };
 
   static String describe(BuildContext context, ActivityLog log) {
     final l10n = context.l10n;
@@ -216,25 +230,31 @@ class ActivityTile extends ConsumerWidget {
       onTap: canOpen ? () => context.push(Routes.customer(log.customerId!)) : null,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: dense ? 6 : Space.xs),
-        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
-            child: Icon(icon, size: 18, color: color),
-          ),
-          const SizedBox(width: Space.sm),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(describe(context, resolved), style: text.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
-              const SizedBox(height: 1),
-              Text(
-                '${log.actorName ?? context.l10n.activitySystem} · ${Formatters.relative(context, log.createdAt)}',
-                style: text.bodySmall,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
+              child: Icon(icon, size: 18, color: color),
+            ),
+            const SizedBox(width: Space.sm),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(describe(context, resolved), style: text.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
+                  const SizedBox(height: 1),
+                  Text(
+                    '${log.actorName ?? context.l10n.activitySystem} · ${Formatters.relative(context, log.createdAt)}',
+                    style: text.bodySmall,
+                  ),
+                ],
               ),
-            ]),
-          ),
-        ]),
+            ),
+          ],
+        ),
       ),
     );
   }

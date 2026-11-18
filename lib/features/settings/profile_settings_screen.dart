@@ -38,10 +38,9 @@ class _ProfileSettingsScreenState extends ConsumerState<ProfileSettingsScreen> {
     if (!_formKey.currentState!.validate()) return;
     final l10n = context.l10n;
     try {
-      await ref.read(authRepositoryProvider).updateOwnProfile(
-            fullName: _name.text.trim(),
-            phone: _phone.text.trim().isEmpty ? null : _phone.text.trim(),
-          );
+      await ref
+          .read(authRepositoryProvider)
+          .updateOwnProfile(fullName: _name.text.trim(), phone: _phone.text.trim().isEmpty ? null : _phone.text.trim());
       await ref.read(authControllerProvider.notifier).refreshProfile();
       if (!mounted) return;
       showToast(context, l10n.profileSaved, kind: ToastKind.success);
@@ -64,25 +63,35 @@ class _ProfileSettingsScreenState extends ConsumerState<ProfileSettingsScreen> {
           padding: const EdgeInsets.fromLTRB(Space.page, Space.sm, Space.page, Space.xxl),
           children: [
             if (profile != null)
-              Center(child: InitialsAvatar(initials: profile.initials, seed: profile.id, size: 80)),
+              Center(
+                child: InitialsAvatar(initials: profile.initials, seed: profile.id, size: 80),
+              ),
             const SizedBox(height: Space.lg),
             SectionCard(
-              child: Column(children: [
-                TextFormField(
-                  controller: _name,
-                  textCapitalization: TextCapitalization.words,
-                  decoration: InputDecoration(labelText: l10n.fieldFullName, prefixIcon: const Icon(Icons.badge_outlined)),
-                  validator: (v) => err(Validators.required(v, min: 2, max: 120)),
-                ),
-                const SizedBox(height: Space.sm),
-                TextFormField(
-                  controller: _phone,
-                  keyboardType: TextInputType.phone,
-                  textDirection: TextDirection.ltr,
-                  decoration: InputDecoration(labelText: l10n.fieldPhone, prefixIcon: const Icon(Icons.phone_outlined)),
-                  validator: (v) => err(Validators.phone(v, isRequired: false)),
-                ),
-              ]),
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _name,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: InputDecoration(
+                      labelText: l10n.fieldFullName,
+                      prefixIcon: const Icon(Icons.badge_outlined),
+                    ),
+                    validator: (v) => err(Validators.required(v, min: 2, max: 120)),
+                  ),
+                  const SizedBox(height: Space.sm),
+                  TextFormField(
+                    controller: _phone,
+                    keyboardType: TextInputType.phone,
+                    textDirection: TextDirection.ltr,
+                    decoration: InputDecoration(
+                      labelText: l10n.fieldPhone,
+                      prefixIcon: const Icon(Icons.phone_outlined),
+                    ),
+                    validator: (v) => err(Validators.phone(v, isRequired: false)),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: Space.xs),
             Text(l10n.profileRoleHint, style: Theme.of(context).textTheme.bodySmall),

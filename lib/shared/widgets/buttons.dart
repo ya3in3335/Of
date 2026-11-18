@@ -67,24 +67,24 @@ class _AsyncButtonState extends State<AsyncButton> {
 
     final Widget button = switch (widget.style) {
       AsyncButtonStyle.filled => FilledButton(
-          style: widget.color == null ? null : FilledButton.styleFrom(backgroundColor: widget.color),
-          onPressed: enabled ? _run : (_busy ? () {} : null),
-          child: child,
-        ),
+        style: widget.color == null ? null : FilledButton.styleFrom(backgroundColor: widget.color),
+        onPressed: enabled ? _run : (_busy ? () {} : null),
+        child: child,
+      ),
       AsyncButtonStyle.outlined => OutlinedButton(
-          style: widget.color == null ? null : OutlinedButton.styleFrom(foregroundColor: widget.color),
-          onPressed: enabled ? _run : (_busy ? () {} : null),
-          child: child,
-        ),
+        style: widget.color == null ? null : OutlinedButton.styleFrom(foregroundColor: widget.color),
+        onPressed: enabled ? _run : (_busy ? () {} : null),
+        child: child,
+      ),
       AsyncButtonStyle.tonal => FilledButton(
-          style: FilledButton.styleFrom(
-            backgroundColor: (widget.color ?? AppColors.blue).withValues(alpha: 0.10),
-            foregroundColor: widget.color ?? AppColors.blue,
-            elevation: 0,
-          ),
-          onPressed: enabled ? _run : (_busy ? () {} : null),
-          child: child,
+        style: FilledButton.styleFrom(
+          backgroundColor: (widget.color ?? AppColors.blue).withValues(alpha: 0.10),
+          foregroundColor: widget.color ?? AppColors.blue,
+          elevation: 0,
         ),
+        onPressed: enabled ? _run : (_busy ? () {} : null),
+        child: child,
+      ),
     };
     return widget.expand ? SizedBox(width: double.infinity, child: button) : button;
   }
@@ -122,16 +122,19 @@ class ActionTile extends StatelessWidget {
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: Space.md, horizontal: Space.xs),
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              Icon(icon, color: fg, size: 26),
-              const SizedBox(height: 6),
-              Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(color: fg),
-              ),
-            ]),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, color: fg, size: 26),
+                const SizedBox(height: 6),
+                Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(color: fg),
+                ),
+              ],
+            ),
           ),
         ),
       ),

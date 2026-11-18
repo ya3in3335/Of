@@ -60,35 +60,44 @@ class CustomerPin extends StatelessWidget {
       scale: scale,
       duration: Motion.fast,
       alignment: Alignment.bottomCenter,
-      child: Stack(alignment: Alignment.topCenter, children: [
-        Icon(Icons.location_on_rounded, size: 52, color: selected ? AppColors.blue : color, shadows: const [
-          Shadow(color: Color(0x40000000), blurRadius: 6, offset: Offset(0, 2)),
-        ]),
-        Positioned(
-          top: 11,
-          child: Container(
-            width: 18,
-            height: 18,
-            decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-            alignment: Alignment.center,
-            child: label == null
-                ? Icon(Icons.storefront_rounded, size: 12, color: selected ? AppColors.blue : color)
-                : Text(label!, style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: color)),
+      child: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Icon(
+            Icons.location_on_rounded,
+            size: 52,
+            color: selected ? AppColors.blue : color,
+            shadows: const [Shadow(color: Color(0x40000000), blurRadius: 6, offset: Offset(0, 2))],
           ),
-        ),
-      ]),
+          Positioned(
+            top: 11,
+            child: Container(
+              width: 18,
+              height: 18,
+              decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+              alignment: Alignment.center,
+              child: label == null
+                  ? Icon(Icons.storefront_rounded, size: 12, color: selected ? AppColors.blue : color)
+                  : Text(
+                      label!,
+                      style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: color),
+                    ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
 Marker customerMarker(LatLng point, {Key? key, bool selected = false, Color color = AppColors.navy}) => Marker(
-      key: key,
-      point: point,
-      width: CustomerPin.size.width,
-      height: CustomerPin.size.height,
-      alignment: Alignment.topCenter,
-      child: CustomerPin(selected: selected, color: color),
-    );
+  key: key,
+  point: point,
+  width: CustomerPin.size.width,
+  height: CustomerPin.size.height,
+  alignment: Alignment.topCenter,
+  child: CustomerPin(selected: selected, color: color),
+);
 
 /// Pulsing blue dot for the user's position.
 class MyLocationDot extends StatelessWidget {
@@ -122,43 +131,50 @@ class MiniMapPreview extends StatelessWidget {
       borderRadius: Radii.field,
       child: SizedBox(
         height: height,
-        child: Stack(children: [
-          FlutterMap(
-            key: ValueKey(point),
-            options: MapOptions(
-              initialCenter: point,
-              initialZoom: 16,
-              interactionOptions: const InteractionOptions(flags: InteractiveFlag.none),
-            ),
-            children: [
-              const BaseTiles(),
-              MarkerLayer(markers: [customerMarker(point)]),
-            ],
-          ),
-          const MapAttribution(),
-          if (onTap != null)
-            Positioned.fill(
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(onTap: onTap),
+        child: Stack(
+          children: [
+            FlutterMap(
+              key: ValueKey(point),
+              options: MapOptions(
+                initialCenter: point,
+                initialZoom: 16,
+                interactionOptions: const InteractionOptions(flags: InteractiveFlag.none),
               ),
+              children: [
+                const BaseTiles(),
+                MarkerLayer(markers: [customerMarker(point)]),
+              ],
             ),
-          if (onTap != null)
-            PositionedDirectional(
-              end: Space.xs,
-              top: Space.xs,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(color: Colors.white, borderRadius: Radii.chip, boxShadow: Shadows.card),
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  const Icon(Icons.open_in_full_rounded, size: 14, color: AppColors.navy),
-                  const SizedBox(width: 4),
-                  Text(context.l10n.mapOpenFull,
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppColors.navy)),
-                ]),
+            const MapAttribution(),
+            if (onTap != null)
+              Positioned.fill(
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(onTap: onTap),
+                ),
               ),
-            ),
-        ]),
+            if (onTap != null)
+              PositionedDirectional(
+                end: Space.xs,
+                top: Space.xs,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(color: Colors.white, borderRadius: Radii.chip, boxShadow: Shadows.card),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.open_in_full_rounded, size: 14, color: AppColors.navy),
+                      const SizedBox(width: 4),
+                      Text(
+                        context.l10n.mapOpenFull,
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppColors.navy),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -166,7 +182,13 @@ class MiniMapPreview extends StatelessWidget {
 
 /// Round floating map control button.
 class MapControlButton extends StatelessWidget {
-  const MapControlButton({super.key, required this.icon, required this.onPressed, required this.tooltip, this.busy = false});
+  const MapControlButton({
+    super.key,
+    required this.icon,
+    required this.onPressed,
+    required this.tooltip,
+    this.busy = false,
+  });
   final IconData icon;
   final VoidCallback? onPressed;
   final String tooltip;

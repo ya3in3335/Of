@@ -7,7 +7,6 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_tokens.dart';
 import '../../domain/directory_controller.dart';
-import '../../shared/widgets/common.dart';
 import '../auth/auth_controller.dart';
 import '../search/search_panel.dart';
 
@@ -43,16 +42,21 @@ class _Header extends ConsumerWidget {
     final firstName = (profile?.fullName ?? '').split(' ').first;
     return Padding(
       padding: const EdgeInsets.fromLTRB(Space.page, Space.md, Space.xs, Space.xs),
-      child: Row(children: [
-        Expanded(
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(l10n.homeGreeting(firstName), style: text.bodyMedium?.copyWith(color: AppColors.textSecondary)),
-            const SizedBox(height: 2),
-            Text(l10n.homeTitle, style: text.headlineSmall),
-          ]),
-        ),
-        NotificationBell(unread: unread),
-      ]),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(l10n.homeGreeting(firstName), style: text.bodyMedium?.copyWith(color: AppColors.textSecondary)),
+                const SizedBox(height: 2),
+                Text(l10n.homeTitle, style: text.headlineSmall),
+              ],
+            ),
+          ),
+          NotificationBell(unread: unread),
+        ],
+      ),
     );
   }
 }
@@ -90,28 +94,32 @@ class _DirectorySummary extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(Space.page, Space.xs, Space.page, 0),
       child: Container(
         padding: const EdgeInsets.all(Space.md),
-        decoration: BoxDecoration(
-          color: AppColors.navy,
-          borderRadius: Radii.card,
-          boxShadow: Shadows.card,
+        decoration: BoxDecoration(color: AppColors.navy, borderRadius: Radii.card, boxShadow: Shadows.card),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('${active.length}', style: text.headlineMedium?.copyWith(color: Colors.white)),
+                  Text(l10n.homeCustomersAvailable, style: text.bodySmall?.copyWith(color: const Color(0xFFB9CCE6))),
+                ],
+              ),
+            ),
+            Container(width: 1, height: 40, color: const Color(0x33FFFFFF)),
+            const SizedBox(width: Space.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('$located', style: text.headlineMedium?.copyWith(color: Colors.white)),
+                  Text(l10n.homeWithLocation, style: text.bodySmall?.copyWith(color: const Color(0xFFB9CCE6))),
+                ],
+              ),
+            ),
+            const SyncStatusBadgeOnDark(),
+          ],
         ),
-        child: Row(children: [
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('${active.length}', style: text.headlineMedium?.copyWith(color: Colors.white)),
-              Text(l10n.homeCustomersAvailable, style: text.bodySmall?.copyWith(color: const Color(0xFFB9CCE6))),
-            ]),
-          ),
-          Container(width: 1, height: 40, color: const Color(0x33FFFFFF)),
-          const SizedBox(width: Space.md),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('$located', style: text.headlineMedium?.copyWith(color: Colors.white)),
-              Text(l10n.homeWithLocation, style: text.bodySmall?.copyWith(color: const Color(0xFFB9CCE6))),
-            ]),
-          ),
-          const SyncStatusBadgeOnDark(),
-        ]),
       ),
     );
   }

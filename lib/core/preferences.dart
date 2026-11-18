@@ -26,10 +26,7 @@ class PreferencesController extends Notifier<AppPreferences> {
   @override
   AppPreferences build() {
     final prefs = ref.watch(sharedPreferencesProvider);
-    return AppPreferences(
-      localeCode: prefs.getString(_kLocale),
-      onboardingDone: prefs.getBool(_kOnboarding) ?? false,
-    );
+    return AppPreferences(localeCode: prefs.getString(_kLocale), onboardingDone: prefs.getBool(_kOnboarding) ?? false);
   }
 
   Future<void> setLocale(String? code) async {
@@ -69,7 +66,9 @@ class SessionMemory {
     }
   }
 
-  Future<void> saveProfile(Profile p) => _ref.read(sharedPreferencesProvider).setString(
+  Future<void> saveProfile(Profile p) => _ref
+      .read(sharedPreferencesProvider)
+      .setString(
         _kProfile,
         jsonEncode({
           'id': p.id,

@@ -22,19 +22,19 @@ class DirectoryState {
     required this.loaded,
     this.lastSyncedAt,
     this.error,
-  })  : byId = Map.unmodifiable(byId),
-        customers = _sorted(byId.values),
-        engine = CustomerSearchEngine(byId.values);
+  }) : byId = Map.unmodifiable(byId),
+       customers = _sorted(byId.values),
+       engine = CustomerSearchEngine(byId.values);
 
   DirectoryState.empty()
-      : userId = null,
-        byId = const {},
-        customers = const [],
-        engine = CustomerSearchEngine(const []),
-        status = SyncStatus.idle,
-        loaded = false,
-        lastSyncedAt = null,
-        error = null;
+    : userId = null,
+      byId = const {},
+      customers = const [],
+      engine = CustomerSearchEngine(const []),
+      status = SyncStatus.idle,
+      loaded = false,
+      lastSyncedAt = null,
+      error = null;
 
   final String? userId;
   final Map<String, Customer> byId;
@@ -67,11 +67,13 @@ class DirectoryState {
     bool clearError = false,
   }) {
     if (byId == null) {
-      return DirectoryState._keep(this,
-          status: status ?? this.status,
-          loaded: loaded ?? this.loaded,
-          lastSyncedAt: lastSyncedAt ?? this.lastSyncedAt,
-          error: clearError ? null : (error ?? this.error));
+      return DirectoryState._keep(
+        this,
+        status: status ?? this.status,
+        loaded: loaded ?? this.loaded,
+        lastSyncedAt: lastSyncedAt ?? this.lastSyncedAt,
+        error: clearError ? null : (error ?? this.error),
+      );
     }
     return DirectoryState(
       userId: userId,
@@ -84,12 +86,16 @@ class DirectoryState {
   }
 
   // Status-only updates reuse the existing list and search index.
-  DirectoryState._keep(DirectoryState o,
-      {required this.status, required this.loaded, required this.lastSyncedAt, required this.error})
-      : userId = o.userId,
-        byId = o.byId,
-        customers = o.customers,
-        engine = o.engine;
+  DirectoryState._keep(
+    DirectoryState o, {
+    required this.status,
+    required this.loaded,
+    required this.lastSyncedAt,
+    required this.error,
+  }) : userId = o.userId,
+       byId = o.byId,
+       customers = o.customers,
+       engine = o.engine;
 }
 
 /// Keeps the device copy of the directory in sync with Supabase:
@@ -183,13 +189,17 @@ class DirectoryController extends Notifier<DirectoryState> {
       if (result.changes.isNotEmpty) {
         unawaited(ref.read(notificationsProvider.notifier).add(result.changes));
       }
-      await ref.read(localCacheProvider).save(DirectorySnapshot(
-            userId: userId,
-            customers: result.customers.values.toList(),
-            customersCursor: _customersCursor,
-            deletionsCursor: _deletionsCursor,
-            lastSyncedAt: now,
-          ));
+      await ref
+          .read(localCacheProvider)
+          .save(
+            DirectorySnapshot(
+              userId: userId,
+              customers: result.customers.values.toList(),
+              customersCursor: _customersCursor,
+              deletionsCursor: _deletionsCursor,
+              lastSyncedAt: now,
+            ),
+          );
     } catch (e) {
       if (!ref.mounted) return;
       final error = AppException.from(e);
@@ -224,13 +234,17 @@ class DirectoryController extends Notifier<DirectoryState> {
   Future<void> _persist() async {
     final userId = state.userId;
     if (userId == null) return;
-    await ref.read(localCacheProvider).save(DirectorySnapshot(
-          userId: userId,
-          customers: state.byId.values.toList(),
-          customersCursor: _customersCursor,
-          deletionsCursor: _deletionsCursor,
-          lastSyncedAt: state.lastSyncedAt,
-        ));
+    await ref
+        .read(localCacheProvider)
+        .save(
+          DirectorySnapshot(
+            userId: userId,
+            customers: state.byId.values.toList(),
+            customersCursor: _customersCursor,
+            deletionsCursor: _deletionsCursor,
+            lastSyncedAt: state.lastSyncedAt,
+          ),
+        );
   }
 }
 
@@ -293,8 +307,9 @@ class NotificationsController extends Notifier<NotificationsState> {
   }
 }
 
-final notificationsProvider =
-    NotifierProvider<NotificationsController, NotificationsState>(NotificationsController.new);
+final notificationsProvider = NotifierProvider<NotificationsController, NotificationsState>(
+  NotificationsController.new,
+);
 
 // ---------------------------------------------------------------------------
 // Recently opened customers (employee home), stored per user.
@@ -321,5 +336,6 @@ class RecentCustomersController extends Notifier<List<String>> {
   }
 }
 
-final recentCustomersProvider =
-    NotifierProvider<RecentCustomersController, List<String>>(RecentCustomersController.new);
+final recentCustomersProvider = NotifierProvider<RecentCustomersController, List<String>>(
+  RecentCustomersController.new,
+);

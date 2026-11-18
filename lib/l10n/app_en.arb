@@ -184,9 +184,6 @@
     "placeholders": {
       "count": {
         "type": "int"
-      },
-      "1": {
-        "type": "String"
       }
     }
   },
@@ -204,12 +201,6 @@
     "placeholders": {
       "count": {
         "type": "int"
-      },
-      "No": {
-        "type": "String"
-      },
-      "1": {
-        "type": "String"
       }
     }
   },

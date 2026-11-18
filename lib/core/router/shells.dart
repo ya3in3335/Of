@@ -33,23 +33,30 @@ class AdminShell extends ConsumerWidget {
         shell: shell,
         destinations: [
           NavigationDestination(
-              icon: const Icon(Icons.space_dashboard_outlined),
-              selectedIcon: const Icon(Icons.space_dashboard_rounded),
-              label: l10n.navDashboard),
+            icon: const Icon(Icons.space_dashboard_outlined),
+            selectedIcon: const Icon(Icons.space_dashboard_rounded),
+            label: l10n.navDashboard,
+          ),
           NavigationDestination(
-              icon: const Icon(Icons.people_alt_outlined),
-              selectedIcon: const Icon(Icons.people_alt_rounded),
-              label: l10n.navCustomers),
+            icon: const Icon(Icons.people_alt_outlined),
+            selectedIcon: const Icon(Icons.people_alt_rounded),
+            label: l10n.navCustomers,
+          ),
           NavigationDestination(
-              icon: const Icon(Icons.badge_outlined),
-              selectedIcon: const Icon(Icons.badge_rounded),
-              label: l10n.navEmployees),
+            icon: const Icon(Icons.badge_outlined),
+            selectedIcon: const Icon(Icons.badge_rounded),
+            label: l10n.navEmployees,
+          ),
           NavigationDestination(
-              icon: const Icon(Icons.map_outlined), selectedIcon: const Icon(Icons.map_rounded), label: l10n.navMap),
+            icon: const Icon(Icons.map_outlined),
+            selectedIcon: const Icon(Icons.map_rounded),
+            label: l10n.navMap,
+          ),
           NavigationDestination(
-              icon: const Icon(Icons.settings_outlined),
-              selectedIcon: const Icon(Icons.settings_rounded),
-              label: l10n.navSettings),
+            icon: const Icon(Icons.settings_outlined),
+            selectedIcon: const Icon(Icons.settings_rounded),
+            label: l10n.navSettings,
+          ),
         ],
       ),
     );
@@ -70,17 +77,25 @@ class EmployeeShell extends ConsumerWidget {
         shell: shell,
         destinations: [
           NavigationDestination(
-              icon: const Icon(Icons.search_rounded), selectedIcon: const Icon(Icons.search_rounded), label: l10n.navSearch),
+            icon: const Icon(Icons.search_rounded),
+            selectedIcon: const Icon(Icons.search_rounded),
+            label: l10n.navSearch,
+          ),
           NavigationDestination(
-              icon: const Icon(Icons.people_alt_outlined),
-              selectedIcon: const Icon(Icons.people_alt_rounded),
-              label: l10n.navCustomers),
+            icon: const Icon(Icons.people_alt_outlined),
+            selectedIcon: const Icon(Icons.people_alt_rounded),
+            label: l10n.navCustomers,
+          ),
           NavigationDestination(
-              icon: const Icon(Icons.map_outlined), selectedIcon: const Icon(Icons.map_rounded), label: l10n.navMap),
+            icon: const Icon(Icons.map_outlined),
+            selectedIcon: const Icon(Icons.map_rounded),
+            label: l10n.navMap,
+          ),
           NavigationDestination(
-              icon: const Icon(Icons.person_outline_rounded),
-              selectedIcon: const Icon(Icons.person_rounded),
-              label: l10n.navProfile),
+            icon: const Icon(Icons.person_outline_rounded),
+            selectedIcon: const Icon(Icons.person_rounded),
+            label: l10n.navProfile,
+          ),
         ],
       ),
     );
@@ -96,32 +111,40 @@ class _NavBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final online = ref.watch(connectivityProvider).value ?? true;
     final status = ref.watch(directoryProvider.select((s) => s.status));
-    return Column(mainAxisSize: MainAxisSize.min, children: [
-      if (!online || status == SyncStatus.offline)
-        Material(
-          color: const Color(0xFFFDF3E2),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const Icon(Icons.cloud_off_rounded, size: 16, color: Color(0xFFD98A14)),
-              const SizedBox(width: 6),
-              Flexible(
-                child: Text(
-                  context.l10n.offlineBanner,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(color: const Color(0xFF8A5A0C)),
-                ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (!online || status == SyncStatus.offline)
+          Material(
+            color: const Color(0xFFFDF3E2),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.cloud_off_rounded, size: 16, color: Color(0xFFD98A14)),
+                  const SizedBox(width: 6),
+                  Flexible(
+                    child: Text(
+                      context.l10n.offlineBanner,
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(color: const Color(0xFF8A5A0C)),
+                    ),
+                  ),
+                ],
               ),
-            ]),
+            ),
+          ),
+        DecoratedBox(
+          decoration: const BoxDecoration(
+            border: Border(top: BorderSide(color: Color(0xFFEDF1F6))),
+          ),
+          child: NavigationBar(
+            selectedIndex: shell.currentIndex,
+            onDestinationSelected: (i) => shell.goBranch(i, initialLocation: i == shell.currentIndex),
+            destinations: destinations,
           ),
         ),
-      DecoratedBox(
-        decoration: const BoxDecoration(border: Border(top: BorderSide(color: Color(0xFFEDF1F6)))),
-        child: NavigationBar(
-          selectedIndex: shell.currentIndex,
-          onDestinationSelected: (i) => shell.goBranch(i, initialLocation: i == shell.currentIndex),
-          destinations: destinations,
-        ),
-      ),
-    ]);
+      ],
+    );
   }
 }

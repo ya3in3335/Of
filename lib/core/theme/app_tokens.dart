@@ -34,9 +34,7 @@ abstract final class Shadows {
     BoxShadow(color: Color(0x0F123B70), blurRadius: 18, offset: Offset(0, 6)),
     BoxShadow(color: Color(0x08123B70), blurRadius: 2, offset: Offset(0, 1)),
   ];
-  static const floating = [
-    BoxShadow(color: Color(0x26123B70), blurRadius: 24, offset: Offset(0, 10)),
-  ];
+  static const floating = [BoxShadow(color: Color(0x26123B70), blurRadius: 24, offset: Offset(0, 10))];
 }
 
 abstract final class Motion {
@@ -48,9 +46,9 @@ abstract final class Motion {
 
 abstract final class AppDecorations {
   static BoxDecoration card({Color color = AppColors.surface, bool border = false}) => BoxDecoration(
-        color: color,
-        borderRadius: Radii.card,
-        boxShadow: Shadows.card,
-        border: border ? Border.all(color: AppColors.border) : null,
-      );
+    color: color,
+    borderRadius: Radii.card,
+    boxShadow: Shadows.card,
+    border: border ? Border.all(color: AppColors.border) : null,
+  );
 }

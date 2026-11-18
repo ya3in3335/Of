@@ -157,199 +157,226 @@ class _CustomerProfileScreenState extends ConsumerState<CustomerProfileScreen> {
           Container(
             padding: const EdgeInsets.all(Space.lg),
             decoration: AppDecorations.card(),
-            child: Column(children: [
-              InitialsAvatar(initials: customer.initials, seed: customer.id, size: 68, muted: customer.isArchived),
-              const SizedBox(height: Space.sm),
-              Text(customer.fullName, style: text.headlineSmall, textAlign: TextAlign.center),
-              if (customer.businessName != null) ...[
-                const SizedBox(height: 2),
-                Text(customer.businessName!,
+            child: Column(
+              children: [
+                InitialsAvatar(initials: customer.initials, seed: customer.id, size: 68, muted: customer.isArchived),
+                const SizedBox(height: Space.sm),
+                Text(customer.fullName, style: text.headlineSmall, textAlign: TextAlign.center),
+                if (customer.businessName != null) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    customer.businessName!,
                     style: text.bodyMedium?.copyWith(color: AppColors.textSecondary, fontWeight: FontWeight.w600),
-                    textAlign: TextAlign.center),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+                const SizedBox(height: Space.sm),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: Space.xs,
+                  runSpacing: Space.xs,
+                  children: [
+                    ReferencePill(customer.reference),
+                    if (customer.isArchived)
+                      StatusChip(label: l10n.statusArchived, tone: ChipTone.neutral, icon: Icons.archive_outlined)
+                    else
+                      StatusChip(label: l10n.statusActive, tone: ChipTone.success),
+                    StatusChip(label: customer.cityLine, tone: ChipTone.info, icon: Icons.place_rounded),
+                  ],
+                ),
+                const SizedBox(height: Space.lg),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ActionTile(
+                        icon: Icons.call_rounded,
+                        label: l10n.actionCall,
+                        color: AppColors.navy,
+                        filled: true,
+                        onTap: () => actions.call(customer),
+                      ),
+                    ),
+                    const SizedBox(width: Space.xs),
+                    Expanded(
+                      child: ActionTile(
+                        icon: Icons.chat_rounded,
+                        label: l10n.actionWhatsapp,
+                        color: AppColors.whatsapp,
+                        onTap: customer.whatsappPhone == null ? null : () => actions.whatsapp(customer),
+                      ),
+                    ),
+                    const SizedBox(width: Space.xs),
+                    Expanded(
+                      child: ActionTile(
+                        icon: Icons.navigation_rounded,
+                        label: l10n.actionNavigate,
+                        color: AppColors.blue,
+                        onTap: customer.hasLocation ? () => actions.navigate(customer) : null,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Space.xs),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _SmallAction(
+                        icon: Icons.copy_rounded,
+                        label: l10n.actionCopyPhone,
+                        onTap: () => actions.copy(customer.primaryPhone, l10n.copiedPhone),
+                      ),
+                    ),
+                    const SizedBox(width: Space.xs),
+                    Expanded(
+                      child: _SmallAction(
+                        icon: Icons.tag_rounded,
+                        label: l10n.actionCopyReference,
+                        onTap: () => actions.copy(customer.reference, l10n.copiedReference),
+                      ),
+                    ),
+                  ],
+                ),
               ],
-              const SizedBox(height: Space.sm),
-              Wrap(alignment: WrapAlignment.center, spacing: Space.xs, runSpacing: Space.xs, children: [
-                ReferencePill(customer.reference),
-                if (customer.isArchived)
-                  StatusChip(label: l10n.statusArchived, tone: ChipTone.neutral, icon: Icons.archive_outlined)
-                else
-                  StatusChip(label: l10n.statusActive, tone: ChipTone.success),
-                StatusChip(label: customer.cityLine, tone: ChipTone.info, icon: Icons.place_rounded),
-              ]),
-              const SizedBox(height: Space.lg),
-              Row(children: [
-                Expanded(
-                  child: ActionTile(
-                    icon: Icons.call_rounded,
-                    label: l10n.actionCall,
-                    color: AppColors.navy,
-                    filled: true,
-                    onTap: () => actions.call(customer),
-                  ),
-                ),
-                const SizedBox(width: Space.xs),
-                Expanded(
-                  child: ActionTile(
-                    icon: Icons.chat_rounded,
-                    label: l10n.actionWhatsapp,
-                    color: AppColors.whatsapp,
-                    onTap: customer.whatsappPhone == null ? null : () => actions.whatsapp(customer),
-                  ),
-                ),
-                const SizedBox(width: Space.xs),
-                Expanded(
-                  child: ActionTile(
-                    icon: Icons.navigation_rounded,
-                    label: l10n.actionNavigate,
-                    color: AppColors.blue,
-                    onTap: customer.hasLocation ? () => actions.navigate(customer) : null,
-                  ),
-                ),
-              ]),
-              const SizedBox(height: Space.xs),
-              Row(children: [
-                Expanded(
-                  child: _SmallAction(
-                    icon: Icons.copy_rounded,
-                    label: l10n.actionCopyPhone,
-                    onTap: () => actions.copy(customer.primaryPhone, l10n.copiedPhone),
-                  ),
-                ),
-                const SizedBox(width: Space.xs),
-                Expanded(
-                  child: _SmallAction(
-                    icon: Icons.tag_rounded,
-                    label: l10n.actionCopyReference,
-                    onTap: () => actions.copy(customer.reference, l10n.copiedReference),
-                  ),
-                ),
-              ]),
-            ]),
+            ),
           ),
           const SizedBox(height: Space.md),
 
           // Location
           SectionCard(
             title: l10n.customerLocation,
-            child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-              InfoRow(
-                icon: Icons.location_city_rounded,
-                label: l10n.fieldWilayaCommune,
-                value: '${customer.commune} — ${customer.wilaya}',
-              ),
-              InfoRow(
-                icon: Icons.signpost_outlined,
-                label: l10n.fieldAddress,
-                value: customer.address,
-                trailing: IconButton(
-                  tooltip: l10n.actionCopy,
-                  icon: const Icon(Icons.copy_rounded, size: 18),
-                  onPressed: () => actions.copy(
-                      '${customer.address}, ${customer.commune}, ${customer.wilaya}', l10n.copiedAddress),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                InfoRow(
+                  icon: Icons.location_city_rounded,
+                  label: l10n.fieldWilayaCommune,
+                  value: '${customer.commune} — ${customer.wilaya}',
                 ),
-              ),
-              const SizedBox(height: Space.sm),
-              if (customer.hasLocation) ...[
-                MiniMapPreview(
-                  point: customer.point!,
-                  onTap: () => context.push(Routes.customerLocation(customer.id)),
-                ),
-                const SizedBox(height: Space.sm),
-                Row(children: [
-                  Expanded(
-                    child: Text(
-                      Formatters.coordinates(customer.latitude!, customer.longitude!),
-                      textDirection: TextDirection.ltr,
-                      style: text.bodySmall,
+                InfoRow(
+                  icon: Icons.signpost_outlined,
+                  label: l10n.fieldAddress,
+                  value: customer.address,
+                  trailing: IconButton(
+                    tooltip: l10n.actionCopy,
+                    icon: const Icon(Icons.copy_rounded, size: 18),
+                    onPressed: () => actions.copy(
+                      '${customer.address}, ${customer.commune}, ${customer.wilaya}',
+                      l10n.copiedAddress,
                     ),
                   ),
-                  TextButton.icon(
-                    onPressed: () => ref.read(launcherProvider).showLocation(customer.latitude!, customer.longitude!),
-                    icon: const Icon(Icons.map_outlined, size: 18),
-                    label: Text(l10n.actionOpenInMaps),
+                ),
+                const SizedBox(height: Space.sm),
+                if (customer.hasLocation) ...[
+                  MiniMapPreview(
+                    point: customer.point!,
+                    onTap: () => context.push(Routes.customerLocation(customer.id)),
                   ),
-                ]),
-              ] else
-                _NoLocation(customer: customer, isAdmin: isAdmin, actions: actions),
-            ]),
+                  const SizedBox(height: Space.sm),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          Formatters.coordinates(customer.latitude!, customer.longitude!),
+                          textDirection: TextDirection.ltr,
+                          style: text.bodySmall,
+                        ),
+                      ),
+                      TextButton.icon(
+                        onPressed: () =>
+                            ref.read(launcherProvider).showLocation(customer.latitude!, customer.longitude!),
+                        icon: const Icon(Icons.map_outlined, size: 18),
+                        label: Text(l10n.actionOpenInMaps),
+                      ),
+                    ],
+                  ),
+                ] else
+                  _NoLocation(customer: customer, isAdmin: isAdmin, actions: actions),
+              ],
+            ),
           ),
           const SizedBox(height: Space.md),
 
           // Contact
           SectionCard(
             title: l10n.customerContact,
-            child: Column(children: [
-              _PhoneRow(
-                label: l10n.fieldPrimaryPhone,
-                phone: customer.primaryPhone,
-                onCall: () => actions.call(customer),
-                onCopy: () => actions.copy(customer.primaryPhone, l10n.copiedPhone),
-              ),
-              if (customer.secondaryPhone != null)
+            child: Column(
+              children: [
                 _PhoneRow(
-                  label: l10n.fieldSecondaryPhone,
-                  phone: customer.secondaryPhone!,
-                  onCall: () => actions.call(customer, customer.secondaryPhone),
-                  onCopy: () => actions.copy(customer.secondaryPhone!, l10n.copiedPhone),
+                  label: l10n.fieldPrimaryPhone,
+                  phone: customer.primaryPhone,
+                  onCall: () => actions.call(customer),
+                  onCopy: () => actions.copy(customer.primaryPhone, l10n.copiedPhone),
                 ),
-              if (customer.whatsappPhone != null)
-                _PhoneRow(
-                  label: l10n.fieldWhatsappPhone,
-                  phone: customer.whatsappPhone!,
-                  icon: Icons.chat_rounded,
-                  iconColor: AppColors.whatsapp,
-                  onCall: () => actions.whatsapp(customer),
-                  onCopy: () => actions.copy(customer.whatsappPhone!, l10n.copiedPhone),
-                )
-              else
-                Padding(
-                  padding: const EdgeInsets.only(top: Space.xs),
-                  child: Text(l10n.customerNoWhatsapp, style: text.bodySmall),
-                ),
-            ]),
+                if (customer.secondaryPhone != null)
+                  _PhoneRow(
+                    label: l10n.fieldSecondaryPhone,
+                    phone: customer.secondaryPhone!,
+                    onCall: () => actions.call(customer, customer.secondaryPhone),
+                    onCopy: () => actions.copy(customer.secondaryPhone!, l10n.copiedPhone),
+                  ),
+                if (customer.whatsappPhone != null)
+                  _PhoneRow(
+                    label: l10n.fieldWhatsappPhone,
+                    phone: customer.whatsappPhone!,
+                    icon: Icons.chat_rounded,
+                    iconColor: AppColors.whatsapp,
+                    onCall: () => actions.whatsapp(customer),
+                    onCopy: () => actions.copy(customer.whatsappPhone!, l10n.copiedPhone),
+                  )
+                else
+                  Padding(
+                    padding: const EdgeInsets.only(top: Space.xs),
+                    child: Text(l10n.customerNoWhatsapp, style: text.bodySmall),
+                  ),
+              ],
+            ),
           ),
 
           if (customer.addresses.isNotEmpty) ...[
             const SizedBox(height: Space.md),
             SectionCard(
               title: l10n.customerOtherAddresses,
-              child: Column(children: [
-                for (final a in customer.addresses)
-                  InfoRow(
-                    icon: Icons.storefront_outlined,
-                    label: a.label,
-                    value: [a.address, a.commune, a.wilaya].whereType<String>().where((s) => s.isNotEmpty).join(', '),
-                    trailing: IconButton(
-                      tooltip: l10n.actionNavigate,
-                      icon: Icon(Icons.navigation_rounded,
-                          color: a.hasLocation ? AppColors.blue : AppColors.textTertiary, size: 20),
-                      onPressed: () => actions.navigate(customer, address: a),
+              child: Column(
+                children: [
+                  for (final a in customer.addresses)
+                    InfoRow(
+                      icon: Icons.storefront_outlined,
+                      label: a.label,
+                      value: [a.address, a.commune, a.wilaya].whereType<String>().where((s) => s.isNotEmpty).join(', '),
+                      trailing: IconButton(
+                        tooltip: l10n.actionNavigate,
+                        icon: Icon(
+                          Icons.navigation_rounded,
+                          color: a.hasLocation ? AppColors.blue : AppColors.textTertiary,
+                          size: 20,
+                        ),
+                        onPressed: () => actions.navigate(customer, address: a),
+                      ),
                     ),
-                  ),
-              ]),
+                ],
+              ),
             ),
           ],
 
-          if (isAdmin) ...[
-            const SizedBox(height: Space.md),
-            _AdminNotes(customerId: customer.id),
-          ],
+          if (isAdmin) ...[const SizedBox(height: Space.md), _AdminNotes(customerId: customer.id)],
 
           const SizedBox(height: Space.md),
           SectionCard(
             title: l10n.customerRecord,
-            child: Column(children: [
-              InfoRow(
-                icon: Icons.event_available_outlined,
-                label: l10n.fieldCreatedAt,
-                value: Formatters.dateTime(context, customer.createdAt),
-              ),
-              InfoRow(
-                icon: Icons.update_rounded,
-                label: l10n.fieldUpdatedAt,
-                value: Formatters.relative(context, customer.updatedAt),
-              ),
-            ]),
+            child: Column(
+              children: [
+                InfoRow(
+                  icon: Icons.event_available_outlined,
+                  label: l10n.fieldCreatedAt,
+                  value: Formatters.dateTime(context, customer.createdAt),
+                ),
+                InfoRow(
+                  icon: Icons.update_rounded,
+                  label: l10n.fieldUpdatedAt,
+                  value: Formatters.relative(context, customer.updatedAt),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -366,7 +393,10 @@ class _SmallAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OutlinedButton.icon(
-      style: OutlinedButton.styleFrom(minimumSize: const Size(0, 42), padding: const EdgeInsets.symmetric(horizontal: 8)),
+      style: OutlinedButton.styleFrom(
+        minimumSize: const Size(0, 42),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+      ),
       onPressed: onTap,
       icon: Icon(icon, size: 17),
       label: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13)),
@@ -398,18 +428,21 @@ class _PhoneRow extends StatelessWidget {
       value: Formatters.phone(phone),
       valueDirection: TextDirection.ltr,
       onTap: onCall,
-      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-        IconButton(
-          tooltip: context.l10n.actionCopy,
-          icon: const Icon(Icons.copy_rounded, size: 18),
-          onPressed: onCopy,
-        ),
-        IconButton(
-          tooltip: label,
-          icon: Icon(icon, size: 20, color: iconColor),
-          onPressed: onCall,
-        ),
-      ]),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            tooltip: context.l10n.actionCopy,
+            icon: const Icon(Icons.copy_rounded, size: 18),
+            onPressed: onCopy,
+          ),
+          IconButton(
+            tooltip: label,
+            icon: Icon(icon, size: 20, color: iconColor),
+            onPressed: onCall,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -426,30 +459,41 @@ class _NoLocation extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Space.md),
       decoration: BoxDecoration(color: AppColors.warningSoft, borderRadius: Radii.field),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [
-          const Icon(Icons.location_off_rounded, color: AppColors.warning),
-          const SizedBox(width: Space.xs),
-          Expanded(child: Text(l10n.customerNoLocationTitle, style: Theme.of(context).textTheme.titleSmall)),
-        ]),
-        const SizedBox(height: Space.xxs),
-        Text(isAdmin ? l10n.customerNoLocationAdmin : l10n.customerNoLocationEmployee,
-            style: Theme.of(context).textTheme.bodySmall),
-        const SizedBox(height: Space.sm),
-        Wrap(spacing: Space.xs, runSpacing: Space.xs, children: [
-          OutlinedButton.icon(
-            onPressed: () => actions.navigate(customer),
-            icon: const Icon(Icons.search_rounded, size: 18),
-            label: Text(l10n.actionSearchAddressInMaps),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.location_off_rounded, color: AppColors.warning),
+              const SizedBox(width: Space.xs),
+              Expanded(child: Text(l10n.customerNoLocationTitle, style: Theme.of(context).textTheme.titleSmall)),
+            ],
           ),
-          if (isAdmin)
-            FilledButton.icon(
-              onPressed: () => context.push(Routes.editCustomer(customer.id)),
-              icon: const Icon(Icons.add_location_alt_rounded, size: 18),
-              label: Text(l10n.actionSetLocation),
-            ),
-        ]),
-      ]),
+          const SizedBox(height: Space.xxs),
+          Text(
+            isAdmin ? l10n.customerNoLocationAdmin : l10n.customerNoLocationEmployee,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: Space.sm),
+          Wrap(
+            spacing: Space.xs,
+            runSpacing: Space.xs,
+            children: [
+              OutlinedButton.icon(
+                onPressed: () => actions.navigate(customer),
+                icon: const Icon(Icons.search_rounded, size: 18),
+                label: Text(l10n.actionSearchAddressInMaps),
+              ),
+              if (isAdmin)
+                FilledButton.icon(
+                  onPressed: () => context.push(Routes.editCustomer(customer.id)),
+                  icon: const Icon(Icons.add_location_alt_rounded, size: 18),
+                  label: Text(l10n.actionSetLocation),
+                ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -470,15 +514,15 @@ class _AdminNotes extends ConsumerWidget {
       ),
       child: notes.when(
         loading: () => const Skeleton(height: 14, width: 180),
-        error: (e, _) => Row(children: [
-          Expanded(child: Text(errorMessage(context, e), style: Theme.of(context).textTheme.bodySmall)),
-          TextButton(onPressed: () => ref.invalidate(adminNotesProvider(customerId)), child: Text(l10n.actionRetry)),
-        ]),
+        error: (e, _) => Row(
+          children: [
+            Expanded(child: Text(errorMessage(context, e), style: Theme.of(context).textTheme.bodySmall)),
+            TextButton(onPressed: () => ref.invalidate(adminNotesProvider(customerId)), child: Text(l10n.actionRetry)),
+          ],
+        ),
         data: (value) => Text(
           value ?? l10n.adminNotesEmpty,
-          style: value == null
-              ? Theme.of(context).textTheme.bodySmall
-              : Theme.of(context).textTheme.bodyMedium,
+          style: value == null ? Theme.of(context).textTheme.bodySmall : Theme.of(context).textTheme.bodyMedium,
         ),
       ),
     );

@@ -20,7 +20,7 @@ class InitialsAvatar extends StatelessWidget {
     final color = muted
         ? AppColors.textTertiary
         : AppColors.avatarPalette[seed.codeUnits.fold<int>(0, (a, b) => (a * 31 + b) & 0x7fffffff) %
-            AppColors.avatarPalette.length];
+              AppColors.avatarPalette.length];
     return Container(
       width: size,
       height: size,
@@ -54,10 +54,16 @@ class StatusChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
       decoration: BoxDecoration(color: bg, borderRadius: Radii.chip),
-      child: Row(mainAxisSize: MainAxisSize.min, children: [
-        if (icon != null) ...[Icon(icon, size: 13, color: fg), const SizedBox(width: 4)],
-        Text(label, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: fg, fontWeight: FontWeight.w700)),
-      ]),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[Icon(icon, size: 13, color: fg), const SizedBox(width: 4)],
+          Text(
+            label,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(color: fg, fontWeight: FontWeight.w700),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -75,11 +81,8 @@ class ReferencePill extends StatelessWidget {
       child: Text(
         reference,
         textDirection: TextDirection.ltr,
-        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: AppColors.navy,
-              fontFeatures: const [FontFeature.tabularFigures()],
-              letterSpacing: 0.3,
-            ),
+        style: Theme.of(context).textTheme.labelSmall
+            ?.copyWith(color: AppColors.navy, fontFeatures: const [FontFeature.tabularFigures()], letterSpacing: 0.3),
       ),
     );
   }
@@ -98,19 +101,26 @@ class SectionCard extends StatelessWidget {
     return Container(
       decoration: AppDecorations.card(),
       padding: padding ?? const EdgeInsets.all(Space.md),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        if (title != null) ...[
-          Row(children: [
-            Expanded(
-              child: Text(title!.toUpperCase(),
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(letterSpacing: context.isArabic ? 0 : 0.8)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (title != null) ...[
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    title!.toUpperCase(),
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(letterSpacing: context.isArabic ? 0 : 0.8),
+                  ),
+                ),
+                ?trailing,
+              ],
             ),
-            ?trailing,
-          ]),
-          const SizedBox(height: Space.sm),
+            const SizedBox(height: Space.sm),
+          ],
+          child,
         ],
-        child,
-      ]),
+      ),
     );
   }
 }
@@ -142,23 +152,28 @@ class InfoRow extends StatelessWidget {
       borderRadius: Radii.field,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: Space.xs),
-        child: Row(children: [
-          Container(
-            width: 38,
-            height: 38,
-            decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.circular(Radii.sm)),
-            child: Icon(icon, size: 19, color: AppColors.navy),
-          ),
-          const SizedBox(width: Space.sm),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(label, style: text.bodySmall),
-              const SizedBox(height: 1),
-              Text(value, style: text.titleSmall, textDirection: valueDirection),
-            ]),
-          ),
-          ?trailing,
-        ]),
+        child: Row(
+          children: [
+            Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: BorderRadius.circular(Radii.sm)),
+              child: Icon(icon, size: 19, color: AppColors.navy),
+            ),
+            const SizedBox(width: Space.sm),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(label, style: text.bodySmall),
+                  const SizedBox(height: 1),
+                  Text(value, style: text.titleSmall, textDirection: valueDirection),
+                ],
+              ),
+            ),
+            ?trailing,
+          ],
+        ),
       ),
     );
   }
@@ -177,16 +192,16 @@ class SyncStatusBadge extends ConsumerWidget {
     final (icon, color, label) = switch (status) {
       SyncStatus.syncing => (Icons.sync_rounded, AppColors.blue, l10n.syncSyncing),
       SyncStatus.offline => (
-          Icons.cloud_off_rounded,
-          AppColors.warning,
-          last == null ? l10n.syncOfflineNoData : l10n.syncOffline(Formatters.time(context, last))
-        ),
+        Icons.cloud_off_rounded,
+        AppColors.warning,
+        last == null ? l10n.syncOfflineNoData : l10n.syncOffline(Formatters.time(context, last)),
+      ),
       SyncStatus.error => (Icons.sync_problem_rounded, AppColors.error, l10n.syncError),
       SyncStatus.idle => (
-          Icons.cloud_done_rounded,
-          AppColors.success,
-          last == null ? l10n.syncNever : l10n.syncDone(Formatters.time(context, last))
-        ),
+        Icons.cloud_done_rounded,
+        AppColors.success,
+        last == null ? l10n.syncNever : l10n.syncDone(Formatters.time(context, last)),
+      ),
     };
     return Semantics(
       button: true,
@@ -197,17 +212,22 @@ class SyncStatusBadge extends ConsumerWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(color: color.withValues(alpha: 0.10), borderRadius: Radii.chip),
-          child: Row(mainAxisSize: MainAxisSize.min, children: [
-            status == SyncStatus.syncing
-                ? SizedBox(width: 13, height: 13, child: CircularProgressIndicator(strokeWidth: 2, color: color))
-                : Icon(icon, size: 15, color: color),
-            const SizedBox(width: 6),
-            Flexible(
-              child: Text(label,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              status == SyncStatus.syncing
+                  ? SizedBox(width: 13, height: 13, child: CircularProgressIndicator(strokeWidth: 2, color: color))
+                  : Icon(icon, size: 15, color: color),
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  label,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(color: color)),
-            ),
-          ]),
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(color: color),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

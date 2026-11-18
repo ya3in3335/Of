@@ -63,12 +63,9 @@ class _EmployeeFormScreenState extends ConsumerState<EmployeeFormScreen> {
     final username = _username.text.trim().toLowerCase();
     final password = _password.text;
     try {
-      await ref.read(employeeRepositoryProvider).create(
-            fullName: _name.text.trim(),
-            username: username,
-            password: password,
-            role: _role,
-          );
+      await ref
+          .read(employeeRepositoryProvider)
+          .create(fullName: _name.text.trim(), username: username, password: password, role: _role);
       if (!mounted) return;
       await showCredentialsDialog(context, username: username, password: password);
       if (!mounted) return;
@@ -92,77 +89,94 @@ class _EmployeeFormScreenState extends ConsumerState<EmployeeFormScreen> {
           children: [
             SectionCard(
               title: l10n.employeeIdentity,
-              child: Column(children: [
-                TextFormField(
-                  controller: _name,
-                  textCapitalization: TextCapitalization.words,
-                  decoration: InputDecoration(labelText: '${l10n.fieldFullName} *', prefixIcon: const Icon(Icons.badge_outlined)),
-                  validator: (v) => err(Validators.required(v, min: 2, max: 120)),
-                ),
-                const SizedBox(height: Space.sm),
-                TextFormField(
-                  controller: _username,
-                  textDirection: TextDirection.ltr,
-                  autocorrect: false,
-                  onChanged: (_) => _usernameEdited = true,
-                  decoration: InputDecoration(
-                    labelText: '${l10n.loginUsername} *',
-                    prefixIcon: const Icon(Icons.alternate_email_rounded),
-                    helperText: l10n.usernameHelper,
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _name,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: InputDecoration(
+                      labelText: '${l10n.fieldFullName} *',
+                      prefixIcon: const Icon(Icons.badge_outlined),
+                    ),
+                    validator: (v) => err(Validators.required(v, min: 2, max: 120)),
                   ),
-                  validator: (v) => err(Validators.username(v)),
-                ),
-              ]),
+                  const SizedBox(height: Space.sm),
+                  TextFormField(
+                    controller: _username,
+                    textDirection: TextDirection.ltr,
+                    autocorrect: false,
+                    onChanged: (_) => _usernameEdited = true,
+                    decoration: InputDecoration(
+                      labelText: '${l10n.loginUsername} *',
+                      prefixIcon: const Icon(Icons.alternate_email_rounded),
+                      helperText: l10n.usernameHelper,
+                    ),
+                    validator: (v) => err(Validators.username(v)),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: Space.md),
             SectionCard(
               title: l10n.employeeRole,
-              child: Column(children: [
-                for (final role in UserRole.values)
-                  RadioListTile<UserRole>(
-                    contentPadding: EdgeInsets.zero,
-                    value: role,
-                    groupValue: _role,
-                    onChanged: (v) => setState(() => _role = v!),
-                    title: Text(role == UserRole.admin ? l10n.roleAdmin : l10n.roleEmployee),
-                    subtitle: Text(role == UserRole.admin ? l10n.roleAdminHint : l10n.roleEmployeeHint),
-                  ),
-              ]),
+              child: RadioGroup<UserRole>(
+                groupValue: _role,
+                onChanged: (v) => setState(() => _role = v!),
+                child: Column(
+                  children: [
+                    for (final role in UserRole.values)
+                      RadioListTile<UserRole>(
+                        contentPadding: EdgeInsets.zero,
+                        value: role,
+                        title: Text(role == UserRole.admin ? l10n.roleAdmin : l10n.roleEmployee),
+                        subtitle: Text(role == UserRole.admin ? l10n.roleAdminHint : l10n.roleEmployeeHint),
+                      ),
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: Space.md),
             SectionCard(
               title: l10n.employeeTempPassword,
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                TextFormField(
-                  controller: _password,
-                  obscureText: _obscure,
-                  textDirection: TextDirection.ltr,
-                  autocorrect: false,
-                  decoration: InputDecoration(
-                    labelText: '${l10n.loginPassword} *',
-                    prefixIcon: const Icon(Icons.key_outlined),
-                    suffixIcon: Row(mainAxisSize: MainAxisSize.min, children: [
-                      IconButton(
-                        tooltip: _obscure ? l10n.actionShowPassword : l10n.actionHidePassword,
-                        icon: Icon(_obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined),
-                        onPressed: () => setState(() => _obscure = !_obscure),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextFormField(
+                    controller: _password,
+                    obscureText: _obscure,
+                    textDirection: TextDirection.ltr,
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      labelText: '${l10n.loginPassword} *',
+                      prefixIcon: const Icon(Icons.key_outlined),
+                      suffixIcon: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            tooltip: _obscure ? l10n.actionShowPassword : l10n.actionHidePassword,
+                            icon: Icon(_obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+                            onPressed: () => setState(() => _obscure = !_obscure),
+                          ),
+                          IconButton(
+                            tooltip: l10n.actionGenerate,
+                            icon: const Icon(Icons.autorenew_rounded),
+                            onPressed: () => setState(() => _password.text = generateTemporaryPassword()),
+                          ),
+                        ],
                       ),
-                      IconButton(
-                        tooltip: l10n.actionGenerate,
-                        icon: const Icon(Icons.autorenew_rounded),
-                        onPressed: () => setState(() => _password.text = generateTemporaryPassword()),
-                      ),
-                    ]),
+                    ),
+                    validator: (v) => err(Validators.password(v)),
                   ),
-                  validator: (v) => err(Validators.password(v)),
-                ),
-                const SizedBox(height: Space.xs),
-                Row(children: [
-                  const Icon(Icons.info_outline_rounded, size: 16, color: AppColors.textTertiary),
-                  const SizedBox(width: 6),
-                  Expanded(child: Text(l10n.passwordRules, style: Theme.of(context).textTheme.bodySmall)),
-                ]),
-              ]),
+                  const SizedBox(height: Space.xs),
+                  Row(
+                    children: [
+                      const Icon(Icons.info_outline_rounded, size: 16, color: AppColors.textTertiary),
+                      const SizedBox(width: 6),
+                      Expanded(child: Text(l10n.passwordRules, style: Theme.of(context).textTheme.bodySmall)),
+                    ],
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: Space.xl),
             AsyncButton(label: l10n.actionCreateAccount, icon: Icons.check_rounded, onPressed: _submit),

@@ -83,11 +83,7 @@ const _employeeShellPrefixes = [Routes.home, Routes.directory, Routes.explore, R
 
 /// Redirect rules. The UI guard mirrors the server rules; the server (RLS)
 /// remains the real enforcement.
-String? resolveRedirect({
-  required String location,
-  required AuthState auth,
-  required bool onboardingDone,
-}) {
+String? resolveRedirect({required String location, required AuthState auth, required bool onboardingDone}) {
   final atSplash = location == Routes.splash;
   final atPublic = location == Routes.login || location == Routes.onboarding;
 
@@ -101,7 +97,8 @@ String? resolveRedirect({
       final admin = auth.isAdmin;
       final home = admin ? Routes.dashboard : Routes.home;
       if (atSplash || atPublic || location == '/') return home;
-      bool matches(String prefix) => location == prefix || location.startsWith('$prefix/') || location.startsWith(prefix);
+      bool matches(String prefix) =>
+          location == prefix || location.startsWith('$prefix/') || location.startsWith(prefix);
       final editRoute = RegExp(r'^/customer/[^/]+/edit$').hasMatch(location);
       if (!admin && (editRoute || _adminOnlyPrefixes.any(matches))) return Routes.home;
       if (admin && _employeeShellPrefixes.any(matches)) return Routes.dashboard;
@@ -123,11 +120,8 @@ final routerProvider = Provider<GoRouter>((ref) {
   final refresh = _RouterRefresh(ref);
   ref.onDispose(refresh.dispose);
 
-  GoRoute pushed(String path, Widget Function(GoRouterState s) build) => GoRoute(
-        path: path,
-        parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => build(state),
-      );
+  GoRoute pushed(String path, Widget Function(GoRouterState s) build) =>
+      GoRoute(path: path, parentNavigatorKey: rootNavigatorKey, builder: (context, state) => build(state));
 
   final router = GoRouter(
     navigatorKey: rootNavigatorKey,
@@ -147,21 +141,39 @@ final routerProvider = Provider<GoRouter>((ref) {
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => AdminShell(shell: shell),
         branches: [
-          StatefulShellBranch(routes: [GoRoute(path: Routes.dashboard, builder: (_, _) => const AdminDashboardScreen())]),
-          StatefulShellBranch(routes: [GoRoute(path: Routes.customers, builder: (_, _) => const DirectoryScreen())]),
-          StatefulShellBranch(routes: [GoRoute(path: Routes.employees, builder: (_, _) => const EmployeesScreen())]),
-          StatefulShellBranch(routes: [GoRoute(path: Routes.map, builder: (_, _) => const MapOverviewScreen())]),
-          StatefulShellBranch(routes: [GoRoute(path: Routes.settings, builder: (_, _) => const SettingsScreen())]),
+          StatefulShellBranch(
+            routes: [GoRoute(path: Routes.dashboard, builder: (_, _) => const AdminDashboardScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: Routes.customers, builder: (_, _) => const DirectoryScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: Routes.employees, builder: (_, _) => const EmployeesScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: Routes.map, builder: (_, _) => const MapOverviewScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: Routes.settings, builder: (_, _) => const SettingsScreen())],
+          ),
         ],
       ),
 
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => EmployeeShell(shell: shell),
         branches: [
-          StatefulShellBranch(routes: [GoRoute(path: Routes.home, builder: (_, _) => const EmployeeHomeScreen())]),
-          StatefulShellBranch(routes: [GoRoute(path: Routes.directory, builder: (_, _) => const DirectoryScreen())]),
-          StatefulShellBranch(routes: [GoRoute(path: Routes.explore, builder: (_, _) => const MapOverviewScreen())]),
-          StatefulShellBranch(routes: [GoRoute(path: Routes.me, builder: (_, _) => const SettingsScreen())]),
+          StatefulShellBranch(
+            routes: [GoRoute(path: Routes.home, builder: (_, _) => const EmployeeHomeScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: Routes.directory, builder: (_, _) => const DirectoryScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: Routes.explore, builder: (_, _) => const MapOverviewScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: Routes.me, builder: (_, _) => const SettingsScreen())],
+          ),
         ],
       ),
 

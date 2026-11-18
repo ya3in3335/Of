@@ -48,14 +48,14 @@ abstract final class AppTheme {
     // Arabic glyphs need a little more line height to breathe.
     final h = arabic ? 1.5 : 1.35;
     TextStyle t(double size, FontWeight weight, {Color color = AppColors.textPrimary, double? height}) => TextStyle(
-          fontFamily: family,
-          fontFamilyFallback: fallback,
-          fontSize: size,
-          fontWeight: weight,
-          color: color,
-          height: height ?? h,
-          letterSpacing: arabic ? 0 : -0.1,
-        );
+      fontFamily: family,
+      fontFamilyFallback: fallback,
+      fontSize: size,
+      fontWeight: weight,
+      color: color,
+      height: height ?? h,
+      letterSpacing: arabic ? 0 : -0.1,
+    );
 
     final textTheme = TextTheme(
       displaySmall: t(30, FontWeight.w700, height: 1.2),

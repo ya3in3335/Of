@@ -19,22 +19,15 @@ class LauncherService {
 
   /// Turn-by-turn directions from the phone's current position (Google Maps
   /// uses the device location as origin when none is given).
-  static Uri directionsUri(double lat, double lng) => Uri.https('www.google.com', '/maps/dir/', {
-        'api': '1',
-        'destination': '$lat,$lng',
-        'travelmode': 'driving',
-      });
+  static Uri directionsUri(double lat, double lng) =>
+      Uri.https('www.google.com', '/maps/dir/', {'api': '1', 'destination': '$lat,$lng', 'travelmode': 'driving'});
 
-  static Uri locationUri(double lat, double lng) => Uri.https('www.google.com', '/maps/search/', {
-        'api': '1',
-        'query': '$lat,$lng',
-      });
+  static Uri locationUri(double lat, double lng) =>
+      Uri.https('www.google.com', '/maps/search/', {'api': '1', 'query': '$lat,$lng'});
 
   /// Used only when a customer has no GPS point: searches the written address.
-  static Uri addressSearchUri(String address) => Uri.https('www.google.com', '/maps/search/', {
-        'api': '1',
-        'query': address,
-      });
+  static Uri addressSearchUri(String address) =>
+      Uri.https('www.google.com', '/maps/search/', {'api': '1', 'query': address});
 
   Future<bool> call(String phone) => _open(callUri(phone));
   Future<bool> whatsapp(String phone) => _open(whatsappUri(phone));

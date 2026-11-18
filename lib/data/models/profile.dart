@@ -37,13 +37,13 @@ class Profile {
   }
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        id: json['id'] as String,
-        fullName: json['full_name'] as String,
-        username: json['username'] as String,
-        role: UserRole.parse(json['role'] as String?),
-        isActive: json['is_active'] as bool? ?? false,
-        phone: json['phone'] as String?,
-        createdAt: DateTime.parse(json['created_at'] as String),
-        lastLoginAt: json['last_login_at'] == null ? null : DateTime.parse(json['last_login_at'] as String),
-      );
+    id: json['id'] as String,
+    fullName: json['full_name'] as String,
+    username: json['username'] as String,
+    role: UserRole.parse(json['role'] as String?),
+    isActive: json['is_active'] as bool? ?? false,
+    phone: json['phone'] as String?,
+    createdAt: DateTime.parse(json['created_at'] as String),
+    lastLoginAt: json['last_login_at'] == null ? null : DateTime.parse(json['last_login_at'] as String),
+  );
 }

@@ -21,20 +21,20 @@ class DirectoryChange {
   final DateTime at;
 
   Map<String, dynamic> toJson() => {
-        'kind': kind.name,
-        'customer_id': customerId,
-        'name': name,
-        'reference': reference,
-        'at': at.toUtc().toIso8601String(),
-      };
+    'kind': kind.name,
+    'customer_id': customerId,
+    'name': name,
+    'reference': reference,
+    'at': at.toUtc().toIso8601String(),
+  };
 
   factory DirectoryChange.fromJson(Map<String, dynamic> json) => DirectoryChange(
-        kind: ChangeKind.values.byName(json['kind'] as String),
-        customerId: json['customer_id'] as String,
-        name: json['name'] as String,
-        reference: json['reference'] as String,
-        at: DateTime.parse(json['at'] as String),
-      );
+    kind: ChangeKind.values.byName(json['kind'] as String),
+    customerId: json['customer_id'] as String,
+    name: json['name'] as String,
+    reference: json['reference'] as String,
+    at: DateTime.parse(json['at'] as String),
+  );
 }
 
 class MergeResult {
@@ -74,13 +74,9 @@ abstract final class DirectoryMerger {
       if (!reportChanges) continue;
       final kind = _diff(previous, c);
       if (kind != null) {
-        changes.add(DirectoryChange(
-          kind: kind,
-          customerId: c.id,
-          name: c.fullName,
-          reference: c.reference,
-          at: c.updatedAt,
-        ));
+        changes.add(
+          DirectoryChange(kind: kind, customerId: c.id, name: c.fullName, reference: c.reference, at: c.updatedAt),
+        );
       }
     }
 
@@ -92,13 +88,15 @@ abstract final class DirectoryMerger {
       if (existing != null && !existing.updatedAt.isAfter(d.deletedAt)) {
         next.remove(d.customerId);
         if (reportChanges && current.containsKey(d.customerId)) {
-          changes.add(DirectoryChange(
-            kind: ChangeKind.deleted,
-            customerId: d.customerId,
-            name: existing.fullName,
-            reference: d.reference,
-            at: d.deletedAt,
-          ));
+          changes.add(
+            DirectoryChange(
+              kind: ChangeKind.deleted,
+              customerId: d.customerId,
+              name: existing.fullName,
+              reference: d.reference,
+              at: d.deletedAt,
+            ),
+          );
         }
       }
     }
@@ -113,7 +111,8 @@ abstract final class DirectoryMerger {
     if (before.status != after.status) {
       return after.isArchived ? ChangeKind.archived : ChangeKind.restored;
     }
-    final infoChanged = before.firstName != after.firstName ||
+    final infoChanged =
+        before.firstName != after.firstName ||
         before.lastName != after.lastName ||
         before.businessName != after.businessName ||
         before.primaryPhone != after.primaryPhone ||

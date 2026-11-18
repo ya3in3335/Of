@@ -33,23 +33,30 @@ Future<void> showCredentialsDialog(BuildContext context, {required String userna
     builder: (context) => AlertDialog(
       icon: const Icon(Icons.key_rounded, color: AppColors.blue, size: 32),
       title: Text(l10n.credentialsTitle, textAlign: TextAlign.center),
-      content: Column(mainAxisSize: MainAxisSize.min, children: [
-        Text(l10n.credentialsBody, textAlign: TextAlign.center),
-        const SizedBox(height: Space.md),
-        Container(
-          padding: const EdgeInsets.all(Space.md),
-          decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: Radii.field),
-          child: Column(children: [
-            _CredentialLine(label: l10n.loginUsername, value: username),
-            const Divider(height: Space.lg),
-            _CredentialLine(label: l10n.loginPassword, value: password),
-          ]),
-        ),
-      ]),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(l10n.credentialsBody, textAlign: TextAlign.center),
+          const SizedBox(height: Space.md),
+          Container(
+            padding: const EdgeInsets.all(Space.md),
+            decoration: BoxDecoration(color: AppColors.surfaceMuted, borderRadius: Radii.field),
+            child: Column(
+              children: [
+                _CredentialLine(label: l10n.loginUsername, value: username),
+                const Divider(height: Space.lg),
+                _CredentialLine(label: l10n.loginPassword, value: password),
+              ],
+            ),
+          ),
+        ],
+      ),
       actions: [
         TextButton(
           onPressed: () async {
-            await Clipboard.setData(ClipboardData(text: '${l10n.loginUsername}: $username\n${l10n.loginPassword}: $password'));
+            await Clipboard.setData(
+              ClipboardData(text: '${l10n.loginUsername}: $username\n${l10n.loginPassword}: $password'),
+            );
             if (context.mounted) showToast(context, l10n.copiedCredentials, kind: ToastKind.success);
           },
           child: Text(l10n.actionCopyAll),
@@ -67,14 +74,16 @@ class _CredentialLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      Text(label, style: Theme.of(context).textTheme.bodySmall),
-      const Spacer(),
-      SelectableText(
-        value,
-        textDirection: TextDirection.ltr,
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(fontFamily: 'monospace', letterSpacing: 0.5),
-      ),
-    ]);
+    return Row(
+      children: [
+        Text(label, style: Theme.of(context).textTheme.bodySmall),
+        const Spacer(),
+        SelectableText(
+          value,
+          textDirection: TextDirection.ltr,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontFamily: 'monospace', letterSpacing: 0.5),
+        ),
+      ],
+    );
   }
 }

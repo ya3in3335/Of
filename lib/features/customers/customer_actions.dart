@@ -43,7 +43,10 @@ class CustomerActions {
     final ok = (lat != null && lng != null)
         ? await launcher.directions(lat, lng)
         : await launcher.searchAddress(
-            address == null ? '${c.address}, ${c.commune}, ${c.wilaya}' : '${address.address}, ${address.commune ?? ''}');
+            address == null
+                ? '${c.address}, ${c.commune}, ${c.wilaya}'
+                : '${address.address}, ${address.commune ?? ''}',
+          );
     if (!ok && context.mounted) _failed();
   }
 

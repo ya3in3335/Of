@@ -54,14 +54,14 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
     final profile = ref.watch(currentProfileProvider);
     String? err(FieldError? e) => fieldErrorText(context, e);
     InputDecoration deco(String label) => InputDecoration(
-          labelText: label,
-          prefixIcon: const Icon(Icons.lock_outline_rounded),
-          suffixIcon: IconButton(
-            tooltip: _obscure ? l10n.actionShowPassword : l10n.actionHidePassword,
-            icon: Icon(_obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined),
-            onPressed: () => setState(() => _obscure = !_obscure),
-          ),
-        );
+      labelText: label,
+      prefixIcon: const Icon(Icons.lock_outline_rounded),
+      suffixIcon: IconButton(
+        tooltip: _obscure ? l10n.actionShowPassword : l10n.actionHidePassword,
+        icon: Icon(_obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+        onPressed: () => setState(() => _obscure = !_obscure),
+      ),
+    );
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsAccount)),
@@ -72,55 +72,59 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
           children: [
             SectionCard(
               title: l10n.settingsAccountInfo,
-              child: Column(children: [
-                InfoRow(
-                  icon: Icons.alternate_email_rounded,
-                  label: l10n.loginUsername,
-                  value: profile?.username ?? '',
-                  valueDirection: TextDirection.ltr,
-                ),
-                InfoRow(
-                  icon: Icons.verified_user_outlined,
-                  label: l10n.employeeRole,
-                  value: (profile?.isAdmin ?? false) ? l10n.roleAdmin : l10n.roleEmployee,
-                ),
-              ]),
+              child: Column(
+                children: [
+                  InfoRow(
+                    icon: Icons.alternate_email_rounded,
+                    label: l10n.loginUsername,
+                    value: profile?.username ?? '',
+                    valueDirection: TextDirection.ltr,
+                  ),
+                  InfoRow(
+                    icon: Icons.verified_user_outlined,
+                    label: l10n.employeeRole,
+                    value: (profile?.isAdmin ?? false) ? l10n.roleAdmin : l10n.roleEmployee,
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: Space.md),
             SectionCard(
               title: l10n.changePasswordTitle,
-              child: Column(children: [
-                TextFormField(
-                  controller: _current,
-                  obscureText: _obscure,
-                  decoration: deco(l10n.fieldCurrentPassword),
-                  validator: (v) => (v == null || v.isEmpty) ? l10n.validationRequired : null,
-                ),
-                const SizedBox(height: Space.sm),
-                TextFormField(
-                  controller: _next,
-                  obscureText: _obscure,
-                  decoration: deco(l10n.fieldNewPassword),
-                  validator: (v) {
-                    final e = Validators.password(v);
-                    if (e != null) return err(e);
-                    if (v == _current.text) return l10n.validationSamePassword;
-                    return null;
-                  },
-                ),
-                const SizedBox(height: Space.sm),
-                TextFormField(
-                  controller: _confirm,
-                  obscureText: _obscure,
-                  decoration: deco(l10n.fieldConfirmPassword),
-                  validator: (v) => v != _next.text ? err(FieldError.mismatch) : null,
-                ),
-                const SizedBox(height: Space.xs),
-                Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Text(l10n.passwordRules, style: Theme.of(context).textTheme.bodySmall),
-                ),
-              ]),
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _current,
+                    obscureText: _obscure,
+                    decoration: deco(l10n.fieldCurrentPassword),
+                    validator: (v) => (v == null || v.isEmpty) ? l10n.validationRequired : null,
+                  ),
+                  const SizedBox(height: Space.sm),
+                  TextFormField(
+                    controller: _next,
+                    obscureText: _obscure,
+                    decoration: deco(l10n.fieldNewPassword),
+                    validator: (v) {
+                      final e = Validators.password(v);
+                      if (e != null) return err(e);
+                      if (v == _current.text) return l10n.validationSamePassword;
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: Space.sm),
+                  TextFormField(
+                    controller: _confirm,
+                    obscureText: _obscure,
+                    decoration: deco(l10n.fieldConfirmPassword),
+                    validator: (v) => v != _next.text ? err(FieldError.mismatch) : null,
+                  ),
+                  const SizedBox(height: Space.xs),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Text(l10n.passwordRules, style: Theme.of(context).textTheme.bodySmall),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: Space.xl),
             AsyncButton(label: l10n.changePasswordTitle, icon: Icons.check_rounded, onPressed: _submit),

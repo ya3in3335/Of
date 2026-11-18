@@ -31,24 +31,31 @@ class EmptyState extends StatelessWidget {
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: Space.xxl, vertical: compact ? Space.lg : Space.xxl),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Container(
-            width: compact ? 64 : 84,
-            height: compact ? 64 : 84,
-            decoration: const BoxDecoration(color: AppColors.infoSoft, shape: BoxShape.circle),
-            child: Icon(icon, size: compact ? 30 : 38, color: AppColors.blue),
-          ),
-          const SizedBox(height: Space.lg),
-          Text(title, style: text.titleMedium, textAlign: TextAlign.center),
-          if (message != null) ...[
-            const SizedBox(height: Space.xs),
-            Text(message!, style: text.bodyMedium?.copyWith(color: AppColors.textSecondary), textAlign: TextAlign.center),
-          ],
-          if (actionLabel != null && onAction != null) ...[
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: compact ? 64 : 84,
+              height: compact ? 64 : 84,
+              decoration: const BoxDecoration(color: AppColors.infoSoft, shape: BoxShape.circle),
+              child: Icon(icon, size: compact ? 30 : 38, color: AppColors.blue),
+            ),
             const SizedBox(height: Space.lg),
-            OutlinedButton(onPressed: onAction, child: Text(actionLabel!)),
+            Text(title, style: text.titleMedium, textAlign: TextAlign.center),
+            if (message != null) ...[
+              const SizedBox(height: Space.xs),
+              Text(
+                message!,
+                style: text.bodyMedium?.copyWith(color: AppColors.textSecondary),
+                textAlign: TextAlign.center,
+              ),
+            ],
+            if (actionLabel != null && onAction != null) ...[
+              const SizedBox(height: Space.lg),
+              OutlinedButton(onPressed: onAction, child: Text(actionLabel!)),
+            ],
           ],
-        ]),
+        ),
       ),
     );
   }
@@ -89,8 +96,8 @@ class Skeleton extends StatefulWidget {
 }
 
 class _SkeletonState extends State<Skeleton> with SingleTickerProviderStateMixin {
-  late final AnimationController _c =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 1100))..repeat(reverse: true);
+  late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 1100))
+    ..repeat(reverse: true);
 
   @override
   void dispose() {
@@ -126,17 +133,22 @@ class ListSkeleton extends StatelessWidget {
       itemBuilder: (_, i) => Container(
         padding: const EdgeInsets.all(Space.md),
         decoration: AppDecorations.card(),
-        child: Row(children: [
-          const Skeleton(width: 44, height: 44, radius: 22),
-          const SizedBox(width: Space.md),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Skeleton(width: 120.0 + (i % 3) * 40, height: 14),
-              const SizedBox(height: Space.xs),
-              const Skeleton(width: 160, height: 11),
-            ]),
-          ),
-        ]),
+        child: Row(
+          children: [
+            const Skeleton(width: 44, height: 44, radius: 22),
+            const SizedBox(width: Space.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Skeleton(width: 120.0 + (i % 3) * 40, height: 14),
+                  const SizedBox(height: Space.xs),
+                  const Skeleton(width: 160, height: 11),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -153,14 +165,18 @@ class OfflineBanner extends StatelessWidget {
       width: double.infinity,
       color: AppColors.warningSoft,
       padding: const EdgeInsets.symmetric(horizontal: Space.page, vertical: Space.xs),
-      child: Row(children: [
-        const Icon(Icons.cloud_off_rounded, size: 18, color: AppColors.warning),
-        const SizedBox(width: Space.xs),
-        Expanded(
-          child: Text(message,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: const Color(0xFF8A5A0C))),
-        ),
-      ]),
+      child: Row(
+        children: [
+          const Icon(Icons.cloud_off_rounded, size: 18, color: AppColors.warning),
+          const SizedBox(width: Space.xs),
+          Expanded(
+            child: Text(
+              message,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: const Color(0xFF8A5A0C)),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

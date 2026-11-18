@@ -34,10 +34,12 @@ class LocationPickerScreen extends ConsumerStatefulWidget {
   final String? addressHint;
 
   static Future<PickedLocation?> open(BuildContext context, {LatLng? initial, String? addressHint}) =>
-      Navigator.of(context).push<PickedLocation>(MaterialPageRoute(
-        fullscreenDialog: true,
-        builder: (_) => LocationPickerScreen(initial: initial, addressHint: addressHint),
-      ));
+      Navigator.of(context).push<PickedLocation>(
+        MaterialPageRoute(
+          fullscreenDialog: true,
+          builder: (_) => LocationPickerScreen(initial: initial, addressHint: addressHint),
+        ),
+      );
 
   @override
   ConsumerState<LocationPickerScreen> createState() => _LocationPickerScreenState();
@@ -59,8 +61,11 @@ class _LocationPickerScreenState extends ConsumerState<LocationPickerScreen> {
   void initState() {
     super.initState();
     final settings = ref.read(appSettingsProvider).value;
-    _center = widget.initial ??
-        (settings == null ? const LatLng(36.7538, 3.0588) : LatLng(settings.defaultLatitude, settings.defaultLongitude));
+    _center =
+        widget.initial ??
+        (settings == null
+            ? const LatLng(36.7538, 3.0588)
+            : LatLng(settings.defaultLatitude, settings.defaultLongitude));
     _moved = widget.initial != null;
     if (widget.addressHint != null && widget.initial == null) _search.text = widget.addressHint!;
   }
@@ -136,25 +141,28 @@ class _LocationPickerScreenState extends ConsumerState<LocationPickerScreen> {
         title: Text(l10n.pickerManualTitle),
         content: Form(
           key: formKey,
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Text(l10n.pickerManualHint, style: Theme.of(context).textTheme.bodySmall),
-            const SizedBox(height: Space.md),
-            TextFormField(
-              controller: lat,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-              textDirection: TextDirection.ltr,
-              decoration: InputDecoration(labelText: l10n.fieldLatitude, hintText: '36.753800'),
-              validator: (v) => fieldErrorText(context, Validators.coordinate(v, min: -90, max: 90)),
-            ),
-            const SizedBox(height: Space.sm),
-            TextFormField(
-              controller: lng,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-              textDirection: TextDirection.ltr,
-              decoration: InputDecoration(labelText: l10n.fieldLongitude, hintText: '3.058800'),
-              validator: (v) => fieldErrorText(context, Validators.coordinate(v, min: -180, max: 180)),
-            ),
-          ]),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(l10n.pickerManualHint, style: Theme.of(context).textTheme.bodySmall),
+              const SizedBox(height: Space.md),
+              TextFormField(
+                controller: lat,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                textDirection: TextDirection.ltr,
+                decoration: InputDecoration(labelText: l10n.fieldLatitude, hintText: '36.753800'),
+                validator: (v) => fieldErrorText(context, Validators.coordinate(v, min: -90, max: 90)),
+              ),
+              const SizedBox(height: Space.sm),
+              TextFormField(
+                controller: lng,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                textDirection: TextDirection.ltr,
+                decoration: InputDecoration(labelText: l10n.fieldLongitude, hintText: '3.058800'),
+                validator: (v) => fieldErrorText(context, Validators.coordinate(v, min: -180, max: 180)),
+              ),
+            ],
+          ),
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.actionCancel)),
@@ -163,8 +171,10 @@ class _LocationPickerScreenState extends ConsumerState<LocationPickerScreen> {
               if (!formKey.currentState!.validate()) return;
               Navigator.pop(
                 context,
-                LatLng(double.parse(lat.text.trim().replaceAll(',', '.')),
-                    double.parse(lng.text.trim().replaceAll(',', '.'))),
+                LatLng(
+                  double.parse(lat.text.trim().replaceAll(',', '.')),
+                  double.parse(lng.text.trim().replaceAll(',', '.')),
+                ),
               );
             },
             child: Text(l10n.actionApply),
@@ -193,22 +203,28 @@ class _LocationPickerScreenState extends ConsumerState<LocationPickerScreen> {
       builder: (context) => SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(Space.page, 0, Space.page, Space.page),
-          child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            Text(l10n.pickerConfirmTitle, style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: Space.xs),
-            Text(l10n.pickerConfirmBody, style: Theme.of(context).textTheme.bodyMedium),
-            const SizedBox(height: Space.md),
-            MiniMapPreview(point: _center, height: 180),
-            const SizedBox(height: Space.xs),
-            Text(Formatters.coordinates(_center.latitude, _center.longitude),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(l10n.pickerConfirmTitle, style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: Space.xs),
+              Text(l10n.pickerConfirmBody, style: Theme.of(context).textTheme.bodyMedium),
+              const SizedBox(height: Space.md),
+              MiniMapPreview(point: _center, height: 180),
+              const SizedBox(height: Space.xs),
+              Text(
+                Formatters.coordinates(_center.latitude, _center.longitude),
                 textDirection: TextDirection.ltr,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.labelMedium),
-            const SizedBox(height: Space.md),
-            FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.pickerUseThisLocation)),
-            const SizedBox(height: Space.xs),
-            OutlinedButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.pickerAdjust)),
-          ]),
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+              const SizedBox(height: Space.md),
+              FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.pickerUseThisLocation)),
+              const SizedBox(height: Space.xs),
+              OutlinedButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.pickerAdjust)),
+            ],
+          ),
         ),
       ),
     );
@@ -225,158 +241,179 @@ class _LocationPickerScreenState extends ConsumerState<LocationPickerScreen> {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.pickerTitle)),
-      body: Stack(children: [
-        FlutterMap(
-          mapController: _map,
-          options: MapOptions(
-            initialCenter: _center,
-            initialZoom: widget.initial != null ? 17 : (settings?.defaultZoom ?? 12),
-            minZoom: 4,
-            maxZoom: 19,
-            onPositionChanged: (camera, hasGesture) {
-              if (hasGesture) {
-                setState(() {
-                  _center = camera.center;
-                  _moved = true;
-                  _fromSearch = null;
-                });
-              }
-            },
-            onTap: (_, p) {
-              FocusScope.of(context).unfocus();
-              _fromSearch = null;
-              _goTo(p, zoom: _map.camera.zoom < 16 ? 17 : _map.camera.zoom);
-            },
-          ),
-          children: const [BaseTiles()],
-        ),
-        // Fixed pin at the centre of the map.
-        IgnorePointer(
-          child: Center(
-            child: Transform.translate(
-              offset: const Offset(0, -24),
-              child: CustomerPin(selected: _moved),
+      body: Stack(
+        children: [
+          FlutterMap(
+            mapController: _map,
+            options: MapOptions(
+              initialCenter: _center,
+              initialZoom: widget.initial != null ? 17 : (settings?.defaultZoom ?? 12),
+              minZoom: 4,
+              maxZoom: 19,
+              onPositionChanged: (camera, hasGesture) {
+                if (hasGesture) {
+                  setState(() {
+                    _center = camera.center;
+                    _moved = true;
+                    _fromSearch = null;
+                  });
+                }
+              },
+              onTap: (_, p) {
+                FocusScope.of(context).unfocus();
+                _fromSearch = null;
+                _goTo(p, zoom: _map.camera.zoom < 16 ? 17 : _map.camera.zoom);
+              },
             ),
+            children: const [BaseTiles()],
           ),
-        ),
-        IgnorePointer(
-          child: Center(
-            child: Container(
-              width: 6,
-              height: 6,
-              decoration: const BoxDecoration(color: AppColors.navy, shape: BoxShape.circle),
-            ),
-          ),
-        ),
-        Positioned(
-          top: Space.sm,
-          left: Space.md,
-          right: Space.md,
-          child: Column(children: [
-            Material(
-              elevation: 3,
-              shadowColor: const Color(0x33123B70),
-              borderRadius: Radii.field,
-              child: TextField(
-                controller: _search,
-                onChanged: _onQuery,
-                textInputAction: TextInputAction.search,
-                onSubmitted: _runSearch,
-                decoration: InputDecoration(
-                  hintText: l10n.pickerSearchHint,
-                  prefixIcon: const Icon(Icons.travel_explore_rounded),
-                  suffixIcon: _searching
-                      ? const Padding(
-                          padding: EdgeInsets.all(14),
-                          child: SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2)),
-                        )
-                      : null,
-                  enabledBorder: const OutlineInputBorder(borderRadius: Radii.field, borderSide: BorderSide.none),
-                ),
+          // Fixed pin at the centre of the map.
+          IgnorePointer(
+            child: Center(
+              child: Transform.translate(
+                offset: const Offset(0, -24),
+                child: CustomerPin(selected: _moved),
               ),
             ),
-            if (_results.isNotEmpty || _searchError != null)
-              Container(
-                margin: const EdgeInsets.only(top: Space.xs),
-                constraints: const BoxConstraints(maxHeight: 260),
-                decoration: BoxDecoration(color: Colors.white, borderRadius: Radii.field, boxShadow: Shadows.floating),
-                child: _searchError != null
-                    ? Padding(
-                        padding: const EdgeInsets.all(Space.md),
-                        child: Text(_searchError!, style: text.bodySmall),
-                      )
-                    : ListView.separated(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.zero,
-                        itemCount: _results.length,
-                        separatorBuilder: (_, _) => const Divider(),
-                        itemBuilder: (context, i) => ListTile(
-                          leading: const Icon(Icons.place_outlined),
-                          title: Text(_results[i].label, maxLines: 2, overflow: TextOverflow.ellipsis),
-                          onTap: () {
-                            FocusScope.of(context).unfocus();
-                            final r = _results[i];
-                            setState(() => _results = const []);
-                            _goTo(r.point);
-                            _fromSearch = r;
-                          },
-                        ),
-                      ),
+          ),
+          IgnorePointer(
+            child: Center(
+              child: Container(
+                width: 6,
+                height: 6,
+                decoration: const BoxDecoration(color: AppColors.navy, shape: BoxShape.circle),
               ),
-          ]),
-        ),
-        PositionedDirectional(
-          end: Space.md,
-          bottom: 190,
-          child: Column(children: [
-            MapControlButton(
-              icon: Icons.my_location_rounded,
-              tooltip: l10n.pickerUseMyLocation,
-              busy: _locating,
-              onPressed: _useMyLocation,
             ),
-            const SizedBox(height: Space.xs),
-            MapControlButton(icon: Icons.pin_outlined, tooltip: l10n.pickerManualTitle, onPressed: _manualEntry),
-          ]),
-        ),
-        const Positioned(bottom: 170, left: 0, child: MapAttribution()),
-        Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(Space.page, Space.md, Space.page, Space.md),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(Radii.xl)),
-              boxShadow: Shadows.floating,
-            ),
-            child: SafeArea(
-              top: false,
-              child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                Row(children: [
-                  Icon(_moved ? Icons.gps_fixed_rounded : Icons.pan_tool_alt_outlined,
-                      color: _moved ? AppColors.success : AppColors.textTertiary, size: 20),
-                  const SizedBox(width: Space.xs),
-                  Expanded(
-                    child: Text(
-                      _moved ? Formatters.coordinates(_center.latitude, _center.longitude) : l10n.pickerInstructions,
-                      textDirection: _moved ? TextDirection.ltr : null,
-                      style: _moved ? text.titleSmall : text.bodySmall,
+          ),
+          Positioned(
+            top: Space.sm,
+            left: Space.md,
+            right: Space.md,
+            child: Column(
+              children: [
+                Material(
+                  elevation: 3,
+                  shadowColor: const Color(0x33123B70),
+                  borderRadius: Radii.field,
+                  child: TextField(
+                    controller: _search,
+                    onChanged: _onQuery,
+                    textInputAction: TextInputAction.search,
+                    onSubmitted: _runSearch,
+                    decoration: InputDecoration(
+                      hintText: l10n.pickerSearchHint,
+                      prefixIcon: const Icon(Icons.travel_explore_rounded),
+                      suffixIcon: _searching
+                          ? const Padding(
+                              padding: EdgeInsets.all(14),
+                              child: SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2)),
+                            )
+                          : null,
+                      enabledBorder: const OutlineInputBorder(borderRadius: Radii.field, borderSide: BorderSide.none),
                     ),
                   ),
-                ]),
-                const SizedBox(height: Space.md),
-                FilledButton.icon(
-                  onPressed: _confirm,
-                  icon: const Icon(Icons.check_rounded),
-                  label: Text(l10n.pickerConfirm),
                 ),
-              ]),
+                if (_results.isNotEmpty || _searchError != null)
+                  Container(
+                    margin: const EdgeInsets.only(top: Space.xs),
+                    constraints: const BoxConstraints(maxHeight: 260),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: Radii.field,
+                      boxShadow: Shadows.floating,
+                    ),
+                    child: _searchError != null
+                        ? Padding(
+                            padding: const EdgeInsets.all(Space.md),
+                            child: Text(_searchError!, style: text.bodySmall),
+                          )
+                        : ListView.separated(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: _results.length,
+                            separatorBuilder: (_, _) => const Divider(),
+                            itemBuilder: (context, i) => ListTile(
+                              leading: const Icon(Icons.place_outlined),
+                              title: Text(_results[i].label, maxLines: 2, overflow: TextOverflow.ellipsis),
+                              onTap: () {
+                                FocusScope.of(context).unfocus();
+                                final r = _results[i];
+                                setState(() => _results = const []);
+                                _goTo(r.point);
+                                _fromSearch = r;
+                              },
+                            ),
+                          ),
+                  ),
+              ],
             ),
           ),
-        ),
-      ]),
+          PositionedDirectional(
+            end: Space.md,
+            bottom: 190,
+            child: Column(
+              children: [
+                MapControlButton(
+                  icon: Icons.my_location_rounded,
+                  tooltip: l10n.pickerUseMyLocation,
+                  busy: _locating,
+                  onPressed: _useMyLocation,
+                ),
+                const SizedBox(height: Space.xs),
+                MapControlButton(icon: Icons.pin_outlined, tooltip: l10n.pickerManualTitle, onPressed: _manualEntry),
+              ],
+            ),
+          ),
+          const Positioned(bottom: 170, left: 0, child: MapAttribution()),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(Space.page, Space.md, Space.page, Space.md),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(Radii.xl)),
+                boxShadow: Shadows.floating,
+              ),
+              child: SafeArea(
+                top: false,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          _moved ? Icons.gps_fixed_rounded : Icons.pan_tool_alt_outlined,
+                          color: _moved ? AppColors.success : AppColors.textTertiary,
+                          size: 20,
+                        ),
+                        const SizedBox(width: Space.xs),
+                        Expanded(
+                          child: Text(
+                            _moved
+                                ? Formatters.coordinates(_center.latitude, _center.longitude)
+                                : l10n.pickerInstructions,
+                            textDirection: _moved ? TextDirection.ltr : null,
+                            style: _moved ? text.titleSmall : text.bodySmall,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: Space.md),
+                    FilledButton.icon(
+                      onPressed: _confirm,
+                      icon: const Icon(Icons.check_rounded),
+                      label: Text(l10n.pickerConfirm),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

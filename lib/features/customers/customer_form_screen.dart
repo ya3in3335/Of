@@ -178,7 +178,11 @@ class _CustomerFormScreenState extends ConsumerState<CustomerFormScreen> {
       if (_isEdit) ref.invalidate(adminNotesProvider(saved.id));
       if (!mounted) return;
       _dirty = false;
-      showToast(context, _isEdit ? l10n.customerUpdated : l10n.customerCreated(saved.reference), kind: ToastKind.success);
+      showToast(
+        context,
+        _isEdit ? l10n.customerUpdated : l10n.customerCreated(saved.reference),
+        kind: ToastKind.success,
+      );
       if (_isEdit) {
         context.pop();
       } else {
@@ -213,48 +217,69 @@ class _CustomerFormScreenState extends ConsumerState<CustomerFormScreen> {
       builder: (context) => SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(Space.page, 0, Space.page, Space.page),
-          child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            Row(children: [
-              const Icon(Icons.warning_amber_rounded, color: AppColors.warning),
-              const SizedBox(width: Space.xs),
-              Expanded(child: Text(l10n.duplicatesFoundTitle, style: Theme.of(context).textTheme.titleLarge)),
-            ]),
-            const SizedBox(height: Space.xs),
-            Text(l10n.duplicatesFoundBody, style: Theme.of(context).textTheme.bodyMedium),
-            const SizedBox(height: Space.md),
-            Flexible(
-              child: ListView(shrinkWrap: true, children: [
-                for (final d in list)
-                  Container(
-                    margin: const EdgeInsets.only(bottom: Space.xs),
-                    padding: const EdgeInsets.all(Space.sm),
-                    decoration: BoxDecoration(border: Border.all(color: AppColors.border), borderRadius: Radii.field),
-                    child: Row(children: [
-                      Expanded(
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Row(children: [
-                            Flexible(child: Text(d.fullName, style: Theme.of(context).textTheme.titleSmall)),
-                            const SizedBox(width: 6),
-                            ReferencePill(d.reference),
-                          ]),
-                          const SizedBox(height: 2),
-                          Text('${Formatters.phone(d.primaryPhone)} · ${d.cityLine}',
-                              style: Theme.of(context).textTheme.bodySmall),
-                        ]),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.warning_amber_rounded, color: AppColors.warning),
+                  const SizedBox(width: Space.xs),
+                  Expanded(child: Text(l10n.duplicatesFoundTitle, style: Theme.of(context).textTheme.titleLarge)),
+                ],
+              ),
+              const SizedBox(height: Space.xs),
+              Text(l10n.duplicatesFoundBody, style: Theme.of(context).textTheme.bodyMedium),
+              const SizedBox(height: Space.md),
+              Flexible(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    for (final d in list)
+                      Container(
+                        margin: const EdgeInsets.only(bottom: Space.xs),
+                        padding: const EdgeInsets.all(Space.sm),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.border),
+                          borderRadius: Radii.field,
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Flexible(child: Text(d.fullName, style: Theme.of(context).textTheme.titleSmall)),
+                                      const SizedBox(width: 6),
+                                      ReferencePill(d.reference),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    '${Formatters.phone(d.primaryPhone)} · ${d.cityLine}',
+                                    style: Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            StatusChip(
+                              label: d.reason == 'phone' ? l10n.duplicateSamePhone : l10n.duplicateSimilarName,
+                              tone: d.reason == 'phone' ? ChipTone.danger : ChipTone.warning,
+                            ),
+                          ],
+                        ),
                       ),
-                      StatusChip(
-                        label: d.reason == 'phone' ? l10n.duplicateSamePhone : l10n.duplicateSimilarName,
-                        tone: d.reason == 'phone' ? ChipTone.danger : ChipTone.warning,
-                      ),
-                    ]),
-                  ),
-              ]),
-            ),
-            const SizedBox(height: Space.md),
-            FilledButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.duplicatesReview)),
-            const SizedBox(height: Space.xs),
-            OutlinedButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.duplicatesSaveAnyway)),
-          ]),
+                  ],
+                ),
+              ),
+              const SizedBox(height: Space.md),
+              FilledButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.duplicatesReview)),
+              const SizedBox(height: Space.xs),
+              OutlinedButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.duplicatesSaveAnyway)),
+            ],
+          ),
         ),
       ),
     );
@@ -329,10 +354,10 @@ class _CustomerFormScreenState extends ConsumerState<CustomerFormScreen> {
     }
 
     InputDecoration deco(String label, {IconData? icon, String? hint, bool required = false}) => InputDecoration(
-          labelText: required ? '$label *' : label,
-          hintText: hint,
-          prefixIcon: icon == null ? null : Icon(icon),
-        );
+      labelText: required ? '$label *' : label,
+      hintText: hint,
+      prefixIcon: icon == null ? null : Icon(icon),
+    );
     String? err(FieldError? e) => fieldErrorText(context, e);
 
     return PopScope(
@@ -369,149 +394,173 @@ class _CustomerFormScreenState extends ConsumerState<CustomerFormScreen> {
               ],
               SectionCard(
                 title: l10n.formIdentity,
-                child: Column(children: [
-                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: _first,
-                        textCapitalization: TextCapitalization.words,
-                        textInputAction: TextInputAction.next,
-                        decoration: deco(l10n.fieldFirstName, required: true),
-                        validator: (v) => err(Validators.required(v, max: 80)),
-                      ),
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: _first,
+                            textCapitalization: TextCapitalization.words,
+                            textInputAction: TextInputAction.next,
+                            decoration: deco(l10n.fieldFirstName, required: true),
+                            validator: (v) => err(Validators.required(v, max: 80)),
+                          ),
+                        ),
+                        const SizedBox(width: Space.sm),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _last,
+                            textCapitalization: TextCapitalization.words,
+                            textInputAction: TextInputAction.next,
+                            decoration: deco(l10n.fieldLastName, required: true),
+                            validator: (v) => err(Validators.required(v, max: 80)),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: Space.sm),
-                    Expanded(
-                      child: TextFormField(
-                        controller: _last,
-                        textCapitalization: TextCapitalization.words,
-                        textInputAction: TextInputAction.next,
-                        decoration: deco(l10n.fieldLastName, required: true),
-                        validator: (v) => err(Validators.required(v, max: 80)),
-                      ),
+                    const SizedBox(height: Space.sm),
+                    TextFormField(
+                      controller: _business,
+                      textCapitalization: TextCapitalization.words,
+                      textInputAction: TextInputAction.next,
+                      decoration: deco(l10n.fieldBusinessName, icon: Icons.storefront_outlined),
+                      validator: (v) => err(Validators.optional(v, max: 120)),
                     ),
-                  ]),
-                  const SizedBox(height: Space.sm),
-                  TextFormField(
-                    controller: _business,
-                    textCapitalization: TextCapitalization.words,
-                    textInputAction: TextInputAction.next,
-                    decoration: deco(l10n.fieldBusinessName, icon: Icons.storefront_outlined),
-                    validator: (v) => err(Validators.optional(v, max: 120)),
-                  ),
-                ]),
+                  ],
+                ),
               ),
               const SizedBox(height: Space.md),
               SectionCard(
                 title: l10n.customerContact,
-                child: Column(children: [
-                  _PhoneField(
-                    controller: _phone,
-                    label: l10n.fieldPrimaryPhone,
-                    required: true,
-                    validator: (v) => err(Validators.phone(v)),
-                  ),
-                  const SizedBox(height: Space.sm),
-                  _PhoneField(
-                    controller: _phone2,
-                    label: l10n.fieldSecondaryPhone,
-                    validator: (v) => err(Validators.phone(v, isRequired: false)),
-                  ),
-                  const SizedBox(height: Space.xs),
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    value: _whatsappSameAsPrimary,
-                    title: Text(l10n.formWhatsappSame, style: text.bodyMedium),
-                    secondary: const Icon(Icons.chat_rounded, color: AppColors.whatsapp),
-                    onChanged: (v) => setState(() {
-                      _whatsappSameAsPrimary = v;
-                      _dirty = true;
-                    }),
-                  ),
-                  if (!_whatsappSameAsPrimary)
+                child: Column(
+                  children: [
                     _PhoneField(
-                      controller: _whatsapp,
-                      label: l10n.fieldWhatsappPhone,
-                      icon: Icons.chat_outlined,
+                      controller: _phone,
+                      label: l10n.fieldPrimaryPhone,
+                      required: true,
+                      validator: (v) => err(Validators.phone(v)),
+                    ),
+                    const SizedBox(height: Space.sm),
+                    _PhoneField(
+                      controller: _phone2,
+                      label: l10n.fieldSecondaryPhone,
                       validator: (v) => err(Validators.phone(v, isRequired: false)),
                     ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: Space.xs),
-                    child: Text(l10n.formWhatsappHint, style: text.bodySmall),
-                  ),
-                ]),
+                    const SizedBox(height: Space.xs),
+                    SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      value: _whatsappSameAsPrimary,
+                      title: Text(l10n.formWhatsappSame, style: text.bodyMedium),
+                      secondary: const Icon(Icons.chat_rounded, color: AppColors.whatsapp),
+                      onChanged: (v) => setState(() {
+                        _whatsappSameAsPrimary = v;
+                        _dirty = true;
+                      }),
+                    ),
+                    if (!_whatsappSameAsPrimary)
+                      _PhoneField(
+                        controller: _whatsapp,
+                        label: l10n.fieldWhatsappPhone,
+                        icon: Icons.chat_outlined,
+                        validator: (v) => err(Validators.phone(v, isRequired: false)),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: Space.xs),
+                      child: Text(l10n.formWhatsappHint, style: text.bodySmall),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: Space.md),
               SectionCard(
                 title: l10n.formAddress,
-                child: Column(children: [
-                  _WilayaField(
-                    controller: _wilaya,
-                    label: '${l10n.fieldWilaya} *',
-                    validator: (v) => err(Validators.required(v, min: 2, max: 60)),
-                  ),
-                  const SizedBox(height: Space.sm),
-                  TextFormField(
-                    controller: _commune,
-                    textCapitalization: TextCapitalization.words,
-                    textInputAction: TextInputAction.next,
-                    decoration: deco(l10n.fieldCommune, icon: Icons.location_city_outlined, required: true),
-                    validator: (v) => err(Validators.required(v, min: 2, max: 80)),
-                  ),
-                  const SizedBox(height: Space.sm),
-                  TextFormField(
-                    controller: _address,
-                    minLines: 2,
-                    maxLines: 4,
-                    textCapitalization: TextCapitalization.sentences,
-                    decoration: deco(l10n.fieldAddress, icon: Icons.signpost_outlined, required: true,
-                        hint: l10n.fieldAddressHint),
-                    validator: (v) => err(Validators.required(v, min: 3, max: 300)),
-                  ),
-                ]),
+                child: Column(
+                  children: [
+                    _WilayaField(
+                      controller: _wilaya,
+                      label: '${l10n.fieldWilaya} *',
+                      validator: (v) => err(Validators.required(v, min: 2, max: 60)),
+                    ),
+                    const SizedBox(height: Space.sm),
+                    TextFormField(
+                      controller: _commune,
+                      textCapitalization: TextCapitalization.words,
+                      textInputAction: TextInputAction.next,
+                      decoration: deco(l10n.fieldCommune, icon: Icons.location_city_outlined, required: true),
+                      validator: (v) => err(Validators.required(v, min: 2, max: 80)),
+                    ),
+                    const SizedBox(height: Space.sm),
+                    TextFormField(
+                      controller: _address,
+                      minLines: 2,
+                      maxLines: 4,
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: deco(
+                        l10n.fieldAddress,
+                        icon: Icons.signpost_outlined,
+                        required: true,
+                        hint: l10n.fieldAddressHint,
+                      ),
+                      validator: (v) => err(Validators.required(v, min: 3, max: 300)),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: Space.md),
               SectionCard(
                 title: l10n.customerLocation,
                 child: _point == null
-                    ? Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                        Text(l10n.formNoLocation, style: text.bodySmall),
-                        const SizedBox(height: Space.sm),
-                        FilledButton.icon(
-                          style: FilledButton.styleFrom(backgroundColor: AppColors.blue),
-                          onPressed: _pickLocation,
-                          icon: const Icon(Icons.add_location_alt_rounded),
-                          label: Text(l10n.actionSetLocation),
-                        ),
-                      ])
-                    : Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                        MiniMapPreview(point: _point!, height: 150),
-                        const SizedBox(height: Space.xs),
-                        Text(Formatters.coordinates(_point!.latitude, _point!.longitude),
-                            textDirection: TextDirection.ltr, style: text.labelMedium),
-                        const SizedBox(height: Space.xs),
-                        Row(children: [
-                          Expanded(
-                            child: OutlinedButton.icon(
-                              onPressed: _pickLocation,
-                              icon: const Icon(Icons.edit_location_alt_outlined, size: 18),
-                              label: Text(l10n.actionChange),
-                            ),
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(l10n.formNoLocation, style: text.bodySmall),
+                          const SizedBox(height: Space.sm),
+                          FilledButton.icon(
+                            style: FilledButton.styleFrom(backgroundColor: AppColors.blue),
+                            onPressed: _pickLocation,
+                            icon: const Icon(Icons.add_location_alt_rounded),
+                            label: Text(l10n.actionSetLocation),
                           ),
-                          const SizedBox(width: Space.xs),
-                          Expanded(
-                            child: OutlinedButton.icon(
-                              style: OutlinedButton.styleFrom(foregroundColor: AppColors.error),
-                              onPressed: () => setState(() {
-                                _point = null;
-                                _dirty = true;
-                              }),
-                              icon: const Icon(Icons.location_off_outlined, size: 18),
-                              label: Text(l10n.actionRemove),
-                            ),
+                        ],
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          MiniMapPreview(point: _point!, height: 150),
+                          const SizedBox(height: Space.xs),
+                          Text(
+                            Formatters.coordinates(_point!.latitude, _point!.longitude),
+                            textDirection: TextDirection.ltr,
+                            style: text.labelMedium,
                           ),
-                        ]),
-                      ]),
+                          const SizedBox(height: Space.xs),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton.icon(
+                                  onPressed: _pickLocation,
+                                  icon: const Icon(Icons.edit_location_alt_outlined, size: 18),
+                                  label: Text(l10n.actionChange),
+                                ),
+                              ),
+                              const SizedBox(width: Space.xs),
+                              Expanded(
+                                child: OutlinedButton.icon(
+                                  style: OutlinedButton.styleFrom(foregroundColor: AppColors.error),
+                                  onPressed: () => setState(() {
+                                    _point = null;
+                                    _dirty = true;
+                                  }),
+                                  icon: const Icon(Icons.location_off_outlined, size: 18),
+                                  label: Text(l10n.actionRemove),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
               ),
               const SizedBox(height: Space.md),
               SectionCard(
@@ -523,43 +572,50 @@ class _CustomerFormScreenState extends ConsumerState<CustomerFormScreen> {
                 ),
                 child: _extraAddresses.isEmpty
                     ? Text(l10n.formNoExtraAddresses, style: text.bodySmall)
-                    : Column(children: [
-                        for (var i = 0; i < _extraAddresses.length; i++)
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Icon(
-                              _extraAddresses[i].hasLocation ? Icons.location_on_rounded : Icons.location_off_outlined,
-                              color: _extraAddresses[i].hasLocation ? AppColors.success : AppColors.warning,
+                    : Column(
+                        children: [
+                          for (var i = 0; i < _extraAddresses.length; i++)
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: Icon(
+                                _extraAddresses[i].hasLocation
+                                    ? Icons.location_on_rounded
+                                    : Icons.location_off_outlined,
+                                color: _extraAddresses[i].hasLocation ? AppColors.success : AppColors.warning,
+                              ),
+                              title: Text(_extraAddresses[i].label),
+                              subtitle: Text(_extraAddresses[i].address, maxLines: 1, overflow: TextOverflow.ellipsis),
+                              onTap: () => _editExtraAddress(i),
+                              trailing: IconButton(
+                                tooltip: l10n.actionRemove,
+                                icon: const Icon(Icons.close_rounded),
+                                onPressed: () => setState(() {
+                                  _extraAddresses = List.of(_extraAddresses)..removeAt(i);
+                                  _dirty = true;
+                                }),
+                              ),
                             ),
-                            title: Text(_extraAddresses[i].label),
-                            subtitle: Text(_extraAddresses[i].address, maxLines: 1, overflow: TextOverflow.ellipsis),
-                            onTap: () => _editExtraAddress(i),
-                            trailing: IconButton(
-                              tooltip: l10n.actionRemove,
-                              icon: const Icon(Icons.close_rounded),
-                              onPressed: () => setState(() {
-                                _extraAddresses = List.of(_extraAddresses)..removeAt(i);
-                                _dirty = true;
-                              }),
-                            ),
-                          ),
-                      ]),
+                        ],
+                      ),
               ),
               const SizedBox(height: Space.md),
               SectionCard(
                 title: l10n.fieldAdminNotes,
                 trailing: const Icon(Icons.lock_outline_rounded, size: 16, color: AppColors.textTertiary),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  TextFormField(
-                    controller: _notes,
-                    enabled: _notesLoaded,
-                    minLines: 2,
-                    maxLines: 6,
-                    maxLength: 4000,
-                    decoration: InputDecoration(hintText: _notesLoaded ? l10n.adminNotesPlaceholder : l10n.loading),
-                  ),
-                  Text(l10n.adminNotesHint, style: text.bodySmall),
-                ]),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFormField(
+                      controller: _notes,
+                      enabled: _notesLoaded,
+                      minLines: 2,
+                      maxLines: 6,
+                      maxLength: 4000,
+                      decoration: InputDecoration(hintText: _notesLoaded ? l10n.adminNotesPlaceholder : l10n.loading),
+                    ),
+                    Text(l10n.adminNotesHint, style: text.bodySmall),
+                  ],
+                ),
               ),
               if (_isEdit) ...[
                 const SizedBox(height: Space.md),
@@ -701,30 +757,41 @@ class _DuplicateHint extends StatelessWidget {
         borderRadius: Radii.field,
         border: Border.all(color: const Color(0xFFF3D9A8)),
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [
-          const Icon(Icons.warning_amber_rounded, color: AppColors.warning, size: 20),
-          const SizedBox(width: Space.xs),
-          Expanded(child: Text(l10n.duplicateHintTitle, style: Theme.of(context).textTheme.titleSmall)),
-        ]),
-        const SizedBox(height: Space.xs),
-        for (final c in customers)
-          InkWell(
-            onTap: () => context.push(Routes.customer(c.id)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Row(children: [
-                ReferencePill(c.reference),
-                const SizedBox(width: Space.xs),
-                Expanded(
-                  child: Text('${c.fullName} · ${Formatters.phone(c.primaryPhone)} · ${c.commune}',
-                      maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.bodySmall),
-                ),
-                const Icon(Icons.open_in_new_rounded, size: 16, color: AppColors.textTertiary),
-              ]),
-            ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.warning_amber_rounded, color: AppColors.warning, size: 20),
+              const SizedBox(width: Space.xs),
+              Expanded(child: Text(l10n.duplicateHintTitle, style: Theme.of(context).textTheme.titleSmall)),
+            ],
           ),
-      ]),
+          const SizedBox(height: Space.xs),
+          for (final c in customers)
+            InkWell(
+              onTap: () => context.push(Routes.customer(c.id)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Row(
+                  children: [
+                    ReferencePill(c.reference),
+                    const SizedBox(width: Space.xs),
+                    Expanded(
+                      child: Text(
+                        '${c.fullName} · ${Formatters.phone(c.primaryPhone)} · ${c.commune}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ),
+                    const Icon(Icons.open_in_new_rounded, size: 16, color: AppColors.textTertiary),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
@@ -763,62 +830,74 @@ class _ExtraAddressSheetState extends State<_ExtraAddressSheet> {
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            Text(l10n.extraAddressTitle, style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: Space.md),
-            TextFormField(
-              controller: _label,
-              decoration: InputDecoration(labelText: '${l10n.fieldLabel} *', hintText: l10n.fieldLabelHint),
-              validator: (v) => err(Validators.required(v, max: 60)),
-            ),
-            const SizedBox(height: Space.sm),
-            TextFormField(
-              controller: _address,
-              decoration: InputDecoration(labelText: '${l10n.fieldAddress} *'),
-              validator: (v) => err(Validators.required(v, min: 3, max: 300)),
-            ),
-            const SizedBox(height: Space.sm),
-            Row(children: [
-              Expanded(
-                child: TextFormField(controller: _commune, decoration: InputDecoration(labelText: l10n.fieldCommune)),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(l10n.extraAddressTitle, style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: Space.md),
+              TextFormField(
+                controller: _label,
+                decoration: InputDecoration(labelText: '${l10n.fieldLabel} *', hintText: l10n.fieldLabelHint),
+                validator: (v) => err(Validators.required(v, max: 60)),
               ),
-              const SizedBox(width: Space.sm),
-              Expanded(
-                child: TextFormField(controller: _wilaya, decoration: InputDecoration(labelText: l10n.fieldWilaya)),
+              const SizedBox(height: Space.sm),
+              TextFormField(
+                controller: _address,
+                decoration: InputDecoration(labelText: '${l10n.fieldAddress} *'),
+                validator: (v) => err(Validators.required(v, min: 3, max: 300)),
               ),
-            ]),
-            const SizedBox(height: Space.sm),
-            OutlinedButton.icon(
-              onPressed: () async {
-                final picked = await LocationPickerScreen.open(context, initial: _point, addressHint: _address.text);
-                if (picked != null) setState(() => _point = picked.point);
-              },
-              icon: Icon(_point == null ? Icons.add_location_alt_outlined : Icons.edit_location_alt_outlined),
-              label: Text(_point == null
-                  ? l10n.actionSetLocation
-                  : Formatters.coordinates(_point!.latitude, _point!.longitude)),
-            ),
-            const SizedBox(height: Space.md),
-            FilledButton(
-              onPressed: () {
-                if (!_formKey.currentState!.validate()) return;
-                String? opt(TextEditingController c) => c.text.trim().isEmpty ? null : c.text.trim();
-                Navigator.pop(
-                  context,
-                  CustomerAddress(
-                    id: widget.initial?.id,
-                    label: _label.text.trim(),
-                    address: _address.text.trim(),
-                    commune: opt(_commune),
-                    wilaya: opt(_wilaya),
-                    latitude: _point?.latitude,
-                    longitude: _point?.longitude,
+              const SizedBox(height: Space.sm),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _commune,
+                      decoration: InputDecoration(labelText: l10n.fieldCommune),
+                    ),
                   ),
-                );
-              },
-              child: Text(l10n.actionApply),
-            ),
-          ]),
+                  const SizedBox(width: Space.sm),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _wilaya,
+                      decoration: InputDecoration(labelText: l10n.fieldWilaya),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: Space.sm),
+              OutlinedButton.icon(
+                onPressed: () async {
+                  final picked = await LocationPickerScreen.open(context, initial: _point, addressHint: _address.text);
+                  if (picked != null) setState(() => _point = picked.point);
+                },
+                icon: Icon(_point == null ? Icons.add_location_alt_outlined : Icons.edit_location_alt_outlined),
+                label: Text(
+                  _point == null ? l10n.actionSetLocation : Formatters.coordinates(_point!.latitude, _point!.longitude),
+                ),
+              ),
+              const SizedBox(height: Space.md),
+              FilledButton(
+                onPressed: () {
+                  if (!_formKey.currentState!.validate()) return;
+                  String? opt(TextEditingController c) => c.text.trim().isEmpty ? null : c.text.trim();
+                  Navigator.pop(
+                    context,
+                    CustomerAddress(
+                      id: widget.initial?.id,
+                      label: _label.text.trim(),
+                      address: _address.text.trim(),
+                      commune: opt(_commune),
+                      wilaya: opt(_wilaya),
+                      latitude: _point?.latitude,
+                      longitude: _point?.longitude,
+                    ),
+                  );
+                },
+                child: Text(l10n.actionApply),
+              ),
+            ],
+          ),
         ),
       ),
     );

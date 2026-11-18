@@ -19,14 +19,18 @@ void showToast(BuildContext context, String message, {ToastKind kind = ToastKind
   };
   messenger
     ..hideCurrentSnackBar()
-    ..showSnackBar(SnackBar(
-      duration: Duration(seconds: kind == ToastKind.error ? 5 : 3),
-      content: Row(children: [
-        Icon(icon, color: color, size: 20),
-        const SizedBox(width: Space.sm),
-        Expanded(child: Text(message)),
-      ]),
-    ));
+    ..showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: kind == ToastKind.error ? 5 : 3),
+        content: Row(
+          children: [
+            Icon(icon, color: color, size: 20),
+            const SizedBox(width: Space.sm),
+            Expanded(child: Text(message)),
+          ],
+        ),
+      ),
+    );
 }
 
 void showErrorToast(BuildContext context, Object error) =>
@@ -58,22 +62,24 @@ Future<bool> showConfirmDialog(
       content: Text(message, textAlign: icon == null ? null : TextAlign.center),
       actionsPadding: const EdgeInsets.fromLTRB(Space.lg, 0, Space.lg, Space.lg),
       actions: [
-        Row(children: [
-          Expanded(
-            child: OutlinedButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(context.l10n.actionCancel),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(context.l10n.actionCancel),
+              ),
             ),
-          ),
-          const SizedBox(width: Space.sm),
-          Expanded(
-            child: FilledButton(
-              style: destructive ? FilledButton.styleFrom(backgroundColor: AppColors.error) : null,
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(confirmLabel),
+            const SizedBox(width: Space.sm),
+            Expanded(
+              child: FilledButton(
+                style: destructive ? FilledButton.styleFrom(backgroundColor: AppColors.error) : null,
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(confirmLabel),
+              ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ],
     ),
   );

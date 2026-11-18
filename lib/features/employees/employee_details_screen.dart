@@ -86,23 +86,26 @@ class _Details extends ConsumerWidget {
         title: Text(l10n.employeeResetTitle),
         content: Form(
           key: formKey,
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Text(l10n.employeeResetBody(profile.fullName)),
-            const SizedBox(height: Space.md),
-            TextFormField(
-              controller: controller,
-              textDirection: TextDirection.ltr,
-              decoration: InputDecoration(
-                labelText: l10n.loginPassword,
-                suffixIcon: IconButton(
-                  tooltip: l10n.actionGenerate,
-                  icon: const Icon(Icons.autorenew_rounded),
-                  onPressed: () => controller.text = generateTemporaryPassword(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(l10n.employeeResetBody(profile.fullName)),
+              const SizedBox(height: Space.md),
+              TextFormField(
+                controller: controller,
+                textDirection: TextDirection.ltr,
+                decoration: InputDecoration(
+                  labelText: l10n.loginPassword,
+                  suffixIcon: IconButton(
+                    tooltip: l10n.actionGenerate,
+                    icon: const Icon(Icons.autorenew_rounded),
+                    onPressed: () => controller.text = generateTemporaryPassword(),
+                  ),
                 ),
+                validator: (v) => fieldErrorText(context, Validators.password(v)),
               ),
-              validator: (v) => fieldErrorText(context, Validators.password(v)),
-            ),
-          ]),
+            ],
+          ),
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.actionCancel)),
@@ -138,39 +141,45 @@ class _Details extends ConsumerWidget {
           padding: EdgeInsets.fromLTRB(Space.page, 0, Space.page, MediaQuery.viewInsetsOf(context).bottom + Space.page),
           child: Form(
             key: formKey,
-            child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-              Text(l10n.employeeEditTitle, style: Theme.of(context).textTheme.titleLarge),
-              const SizedBox(height: Space.md),
-              TextFormField(
-                controller: name,
-                decoration: InputDecoration(labelText: l10n.fieldFullName),
-                validator: (v) => fieldErrorText(context, Validators.required(v, min: 2, max: 120)),
-              ),
-              if (!isSelf) ...[
-                const SizedBox(height: Space.sm),
-                SegmentedButton<UserRole>(
-                  segments: [
-                    ButtonSegment(value: UserRole.employee, label: Text(l10n.roleEmployee)),
-                    ButtonSegment(value: UserRole.admin, label: Text(l10n.roleAdmin)),
-                  ],
-                  selected: {role},
-                  onSelectionChanged: (s) => setSheet(() => role = s.first),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(l10n.employeeEditTitle, style: Theme.of(context).textTheme.titleLarge),
+                const SizedBox(height: Space.md),
+                TextFormField(
+                  controller: name,
+                  decoration: InputDecoration(labelText: l10n.fieldFullName),
+                  validator: (v) => fieldErrorText(context, Validators.required(v, min: 2, max: 120)),
+                ),
+                if (!isSelf) ...[
+                  const SizedBox(height: Space.sm),
+                  SegmentedButton<UserRole>(
+                    segments: [
+                      ButtonSegment(value: UserRole.employee, label: Text(l10n.roleEmployee)),
+                      ButtonSegment(value: UserRole.admin, label: Text(l10n.roleAdmin)),
+                    ],
+                    selected: {role},
+                    onSelectionChanged: (s) => setSheet(() => role = s.first),
+                  ),
+                ],
+                const SizedBox(height: Space.md),
+                AsyncButton(
+                  label: l10n.actionSaveChanges,
+                  onPressed: () async {
+                    if (!formKey.currentState!.validate()) return;
+                    try {
+                      await ref
+                          .read(employeeRepositoryProvider)
+                          .update(profile.id, fullName: name.text.trim(), role: role);
+                      if (context.mounted) Navigator.pop(context, true);
+                    } catch (e) {
+                      if (context.mounted) showErrorToast(context, e);
+                    }
+                  },
                 ),
               ],
-              const SizedBox(height: Space.md),
-              AsyncButton(
-                label: l10n.actionSaveChanges,
-                onPressed: () async {
-                  if (!formKey.currentState!.validate()) return;
-                  try {
-                    await ref.read(employeeRepositoryProvider).update(profile.id, fullName: name.text.trim(), role: role);
-                    if (context.mounted) Navigator.pop(context, true);
-                  } catch (e) {
-                    if (context.mounted) showErrorToast(context, e);
-                  }
-                },
-              ),
-            ]),
+            ),
           ),
         ),
       ),
@@ -200,81 +209,93 @@ class _Details extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(Space.lg),
             decoration: AppDecorations.card(),
-            child: Column(children: [
-              InitialsAvatar(initials: profile.initials, seed: profile.id, size: 68, muted: !profile.isActive),
-              const SizedBox(height: Space.sm),
-              Text(profile.fullName, style: text.headlineSmall, textAlign: TextAlign.center),
-              Text('@${profile.username}', textDirection: TextDirection.ltr, style: text.bodyMedium),
-              const SizedBox(height: Space.sm),
-              Wrap(spacing: Space.xs, alignment: WrapAlignment.center, children: [
-                StatusChip(
-                  label: profile.isActive ? l10n.statusActive : l10n.statusInactive,
-                  tone: profile.isActive ? ChipTone.success : ChipTone.danger,
+            child: Column(
+              children: [
+                InitialsAvatar(initials: profile.initials, seed: profile.id, size: 68, muted: !profile.isActive),
+                const SizedBox(height: Space.sm),
+                Text(profile.fullName, style: text.headlineSmall, textAlign: TextAlign.center),
+                Text('@${profile.username}', textDirection: TextDirection.ltr, style: text.bodyMedium),
+                const SizedBox(height: Space.sm),
+                Wrap(
+                  spacing: Space.xs,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    StatusChip(
+                      label: profile.isActive ? l10n.statusActive : l10n.statusInactive,
+                      tone: profile.isActive ? ChipTone.success : ChipTone.danger,
+                    ),
+                    StatusChip(label: profile.isAdmin ? l10n.roleAdmin : l10n.roleEmployee, tone: ChipTone.info),
+                  ],
                 ),
-                StatusChip(label: profile.isAdmin ? l10n.roleAdmin : l10n.roleEmployee, tone: ChipTone.info),
-              ]),
-            ]),
+              ],
+            ),
           ),
           const SizedBox(height: Space.md),
           SectionCard(
             title: l10n.employeeAccount,
-            child: Column(children: [
-              InfoRow(
-                icon: Icons.event_outlined,
-                label: l10n.fieldCreatedAt,
-                value: Formatters.dateTime(context, profile.createdAt),
-              ),
-              InfoRow(
-                icon: Icons.login_rounded,
-                label: l10n.fieldLastLogin,
-                value: profile.lastLoginAt == null
-                    ? l10n.employeeNeverLoggedIn
-                    : Formatters.dateTime(context, profile.lastLoginAt!),
-              ),
-              if (profile.phone != null)
+            child: Column(
+              children: [
                 InfoRow(
-                  icon: Icons.phone_outlined,
-                  label: l10n.fieldPhone,
-                  value: Formatters.phone(profile.phone),
-                  valueDirection: TextDirection.ltr,
+                  icon: Icons.event_outlined,
+                  label: l10n.fieldCreatedAt,
+                  value: Formatters.dateTime(context, profile.createdAt),
                 ),
-            ]),
+                InfoRow(
+                  icon: Icons.login_rounded,
+                  label: l10n.fieldLastLogin,
+                  value: profile.lastLoginAt == null
+                      ? l10n.employeeNeverLoggedIn
+                      : Formatters.dateTime(context, profile.lastLoginAt!),
+                ),
+                if (profile.phone != null)
+                  InfoRow(
+                    icon: Icons.phone_outlined,
+                    label: l10n.fieldPhone,
+                    value: Formatters.phone(profile.phone),
+                    valueDirection: TextDirection.ltr,
+                  ),
+              ],
+            ),
           ),
           const SizedBox(height: Space.md),
           SectionCard(
             title: l10n.employeeManage,
-            child: Column(children: [
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.edit_outlined, color: AppColors.navy),
-                title: Text(l10n.employeeEditTitle),
-                onTap: () => _edit(context, ref),
-              ),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.key_outlined, color: AppColors.warning),
-                title: Text(l10n.employeeResetTitle),
-                subtitle: Text(l10n.employeeResetHint),
-                onTap: () => _resetPassword(context, ref),
-              ),
-              if (!isSelf)
+            child: Column(
+              children: [
                 ListTile(
                   contentPadding: EdgeInsets.zero,
-                  leading: Icon(profile.isActive ? Icons.block_rounded : Icons.lock_open_rounded,
-                      color: profile.isActive ? AppColors.error : AppColors.success),
-                  title: Text(
-                    profile.isActive ? l10n.actionDeactivate : l10n.actionActivate,
-                    style: TextStyle(color: profile.isActive ? AppColors.error : AppColors.success),
-                  ),
-                  subtitle: Text(profile.isActive ? l10n.employeeDeactivateHint : l10n.employeeActivateHint),
-                  onTap: () => _toggleActive(context, ref),
-                )
-              else
-                Padding(
-                  padding: const EdgeInsets.only(top: Space.xs),
-                  child: Text(l10n.employeeSelfHint, style: text.bodySmall),
+                  leading: const Icon(Icons.edit_outlined, color: AppColors.navy),
+                  title: Text(l10n.employeeEditTitle),
+                  onTap: () => _edit(context, ref),
                 ),
-            ]),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.key_outlined, color: AppColors.warning),
+                  title: Text(l10n.employeeResetTitle),
+                  subtitle: Text(l10n.employeeResetHint),
+                  onTap: () => _resetPassword(context, ref),
+                ),
+                if (!isSelf)
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Icon(
+                      profile.isActive ? Icons.block_rounded : Icons.lock_open_rounded,
+                      color: profile.isActive ? AppColors.error : AppColors.success,
+                    ),
+                    title: Text(
+                      profile.isActive ? l10n.actionDeactivate : l10n.actionActivate,
+                      style: TextStyle(color: profile.isActive ? AppColors.error : AppColors.success),
+                    ),
+                    subtitle: Text(profile.isActive ? l10n.employeeDeactivateHint : l10n.employeeActivateHint),
+                    onTap: () => _toggleActive(context, ref),
+                  )
+                else
+                  Padding(
+                    padding: const EdgeInsets.only(top: Space.xs),
+                    child: Text(l10n.employeeSelfHint, style: text.bodySmall),
+                  ),
+              ],
+            ),
           ),
           const SizedBox(height: Space.md),
           SectionCard(

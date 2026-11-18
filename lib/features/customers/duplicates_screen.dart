@@ -78,36 +78,41 @@ class _PairCard extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(Space.md),
       decoration: AppDecorations.card(),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Row(children: [
-          StatusChip(
-            label: pair.reason == 'phone' ? l10n.duplicateSamePhone : l10n.duplicateSimilarName,
-            tone: pair.reason == 'phone' ? ChipTone.danger : ChipTone.warning,
-            icon: pair.reason == 'phone' ? Icons.phone_rounded : Icons.badge_outlined,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              StatusChip(
+                label: pair.reason == 'phone' ? l10n.duplicateSamePhone : l10n.duplicateSimilarName,
+                tone: pair.reason == 'phone' ? ChipTone.danger : ChipTone.warning,
+                icon: pair.reason == 'phone' ? Icons.phone_rounded : Icons.badge_outlined,
+              ),
+              const Spacer(),
+              Text(l10n.duplicateScore((pair.score * 100).round()), style: Theme.of(context).textTheme.labelSmall),
+            ],
           ),
-          const Spacer(),
-          Text(l10n.duplicateScore((pair.score * 100).round()), style: Theme.of(context).textTheme.labelSmall),
-        ]),
-        const SizedBox(height: Space.sm),
-        _Side(customer: a),
-        const Divider(height: Space.lg),
-        _Side(customer: b),
-        const SizedBox(height: Space.sm),
-        AsyncButton(
-          style: AsyncButtonStyle.outlined,
-          icon: Icons.do_not_disturb_on_outlined,
-          label: l10n.duplicatesDismiss,
-          onPressed: () async {
-            try {
-              await ref.read(customerRepositoryProvider).dismissDuplicatePair(a.id, b.id);
-              ref.invalidate(duplicatePairsProvider);
-              if (context.mounted) showToast(context, l10n.duplicatesDismissed, kind: ToastKind.success);
-            } catch (e) {
-              if (context.mounted) showErrorToast(context, e);
-            }
-          },
-        ),
-      ]),
+          const SizedBox(height: Space.sm),
+          _Side(customer: a),
+          const Divider(height: Space.lg),
+          _Side(customer: b),
+          const SizedBox(height: Space.sm),
+          AsyncButton(
+            style: AsyncButtonStyle.outlined,
+            icon: Icons.do_not_disturb_on_outlined,
+            label: l10n.duplicatesDismiss,
+            onPressed: () async {
+              try {
+                await ref.read(customerRepositoryProvider).dismissDuplicatePair(a.id, b.id);
+                ref.invalidate(duplicatePairsProvider);
+                if (context.mounted) showToast(context, l10n.duplicatesDismissed, kind: ToastKind.success);
+              } catch (e) {
+                if (context.mounted) showErrorToast(context, e);
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -122,21 +127,30 @@ class _Side extends StatelessWidget {
     return InkWell(
       borderRadius: Radii.field,
       onTap: () => context.push(Routes.customer(customer.id)),
-      child: Row(children: [
-        InitialsAvatar(initials: customer.initials, seed: customer.id, size: 38, muted: customer.isArchived),
-        const SizedBox(width: Space.sm),
-        Expanded(
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Row(children: [
-              Flexible(child: Text(customer.fullName, style: text.titleSmall, overflow: TextOverflow.ellipsis)),
-              const SizedBox(width: 6),
-              ReferencePill(customer.reference),
-            ]),
-            Text('${Formatters.phone(customer.primaryPhone)} · ${customer.cityLine}', style: text.bodySmall),
-          ]),
-        ),
-        const Icon(Icons.open_in_new_rounded, size: 18, color: AppColors.textTertiary),
-      ]),
+      child: Row(
+        children: [
+          InitialsAvatar(initials: customer.initials, seed: customer.id, size: 38, muted: customer.isArchived),
+          const SizedBox(width: Space.sm),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(customer.fullName, style: text.titleSmall, overflow: TextOverflow.ellipsis),
+                    ),
+                    const SizedBox(width: 6),
+                    ReferencePill(customer.reference),
+                  ],
+                ),
+                Text('${Formatters.phone(customer.primaryPhone)} · ${customer.cityLine}', style: text.bodySmall),
+              ],
+            ),
+          ),
+          const Icon(Icons.open_in_new_rounded, size: 18, color: AppColors.textTertiary),
+        ],
+      ),
     );
   }
 }

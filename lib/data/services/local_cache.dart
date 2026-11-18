@@ -29,13 +29,13 @@ class DirectorySnapshot {
   final DateTime? lastSyncedAt;
 
   Map<String, dynamic> toJson() => {
-        'schema': schemaVersion,
-        'user_id': userId,
-        'customers_cursor': customersCursor?.toUtc().toIso8601String(),
-        'deletions_cursor': deletionsCursor?.toUtc().toIso8601String(),
-        'last_synced_at': lastSyncedAt?.toUtc().toIso8601String(),
-        'customers': customers.map((c) => c.toJson()).toList(),
-      };
+    'schema': schemaVersion,
+    'user_id': userId,
+    'customers_cursor': customersCursor?.toUtc().toIso8601String(),
+    'deletions_cursor': deletionsCursor?.toUtc().toIso8601String(),
+    'last_synced_at': lastSyncedAt?.toUtc().toIso8601String(),
+    'customers': customers.map((c) => c.toJson()).toList(),
+  };
 
   static DirectorySnapshot? fromJson(Map<String, dynamic> json) {
     if (json['schema'] != schemaVersion) return null;
@@ -56,7 +56,7 @@ class DirectorySnapshot {
 /// directory (not readable by other apps).
 class LocalCacheService {
   LocalCacheService({Future<Directory> Function()? directoryProvider})
-      : _directoryProvider = directoryProvider ?? getApplicationSupportDirectory;
+    : _directoryProvider = directoryProvider ?? getApplicationSupportDirectory;
 
   final Future<Directory> Function() _directoryProvider;
 

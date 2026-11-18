@@ -102,24 +102,31 @@ class _SearchPanelState extends ConsumerState<SearchPanel> {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(Space.page, Space.xs, Space.page, Space.xs),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(l10n.searchResultsCount(hits.length), style: Theme.of(context).textTheme.labelMedium),
-                if (hits.length > 1) ...[
-                  const SizedBox(height: Space.xs),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: Space.sm, vertical: Space.xs),
-                    decoration: BoxDecoration(color: AppColors.infoSoft, borderRadius: Radii.field),
-                    child: Row(children: [
-                      const Icon(Icons.info_outline_rounded, size: 16, color: AppColors.blue),
-                      const SizedBox(width: Space.xs),
-                      Expanded(
-                        child: Text(l10n.searchMultipleHint,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.navy)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(l10n.searchResultsCount(hits.length), style: Theme.of(context).textTheme.labelMedium),
+                  if (hits.length > 1) ...[
+                    const SizedBox(height: Space.xs),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: Space.sm, vertical: Space.xs),
+                      decoration: BoxDecoration(color: AppColors.infoSoft, borderRadius: Radii.field),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.info_outline_rounded, size: 16, color: AppColors.blue),
+                          const SizedBox(width: Space.xs),
+                          Expanded(
+                            child: Text(
+                              l10n.searchMultipleHint,
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.navy),
+                            ),
+                          ),
+                        ],
                       ),
-                    ]),
-                  ),
+                    ),
+                  ],
                 ],
-              ]),
+              ),
             ),
           ),
           SliverPadding(
@@ -150,8 +157,12 @@ class _PinnedField extends SliverPersistentHeaderDelegate {
   double get maxExtent => 78;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) =>
-      ColoredBox(color: AppColors.background, child: child);
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) => SizedBox.expand(
+    child: ColoredBox(
+      color: AppColors.background,
+      child: Align(alignment: Alignment.topCenter, child: child),
+    ),
+  );
 
   @override
   bool shouldRebuild(_PinnedField oldDelegate) => oldDelegate.child != child;
@@ -169,25 +180,30 @@ class RecentCustomers extends ConsumerWidget {
     if (customers.isEmpty) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.fromLTRB(Space.page, Space.md, Space.page, 0),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [
-          Expanded(child: Text(context.l10n.searchRecent, style: Theme.of(context).textTheme.titleSmall)),
-          TextButton(
-            onPressed: () => ref.read(recentCustomersProvider.notifier).clear(),
-            child: Text(context.l10n.actionClear),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(child: Text(context.l10n.searchRecent, style: Theme.of(context).textTheme.titleSmall)),
+              TextButton(
+                onPressed: () => ref.read(recentCustomersProvider.notifier).clear(),
+                child: Text(context.l10n.actionClear),
+              ),
+            ],
           ),
-        ]),
-        for (final c in customers) ...[
-          CustomerTile(
-            customer: c,
-            onTap: () {
-              ref.read(recentCustomersProvider.notifier).touch(c.id);
-              context.push(Routes.customer(c.id));
-            },
-          ),
-          const SizedBox(height: Space.xs),
+          for (final c in customers) ...[
+            CustomerTile(
+              customer: c,
+              onTap: () {
+                ref.read(recentCustomersProvider.notifier).touch(c.id);
+                context.push(Routes.customer(c.id));
+              },
+            ),
+            const SizedBox(height: Space.xs),
+          ],
         ],
-      ]),
+      ),
     );
   }
 }
@@ -201,24 +217,31 @@ class SearchTips extends StatelessWidget {
     final l10n = context.l10n;
     final text = Theme.of(context).textTheme;
     Widget tip(IconData icon, String title, String example) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6),
-          child: Row(children: [
-            Icon(icon, size: 18, color: AppColors.blue),
-            const SizedBox(width: Space.sm),
-            Expanded(child: Text(title, style: text.bodyMedium)),
-            Text(example,
-                textDirection: TextDirection.ltr, style: text.bodySmall?.copyWith(color: AppColors.textTertiary)),
-          ]),
-        );
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          Icon(icon, size: 18, color: AppColors.blue),
+          const SizedBox(width: Space.sm),
+          Expanded(child: Text(title, style: text.bodyMedium)),
+          Text(
+            example,
+            textDirection: TextDirection.ltr,
+            style: text.bodySmall?.copyWith(color: AppColors.textTertiary),
+          ),
+        ],
+      ),
+    );
     return Padding(
       padding: const EdgeInsets.fromLTRB(Space.page, Space.md, Space.page, 0),
       child: SectionCard(
         title: l10n.searchTipsTitle,
-        child: Column(children: [
-          tip(Icons.receipt_long_rounded, l10n.searchTipName, 'Benali M'),
-          tip(Icons.tag_rounded, l10n.searchTipReference, 'OUT-000125'),
-          tip(Icons.phone_rounded, l10n.searchTipPhone, '0555 12'),
-        ]),
+        child: Column(
+          children: [
+            tip(Icons.receipt_long_rounded, l10n.searchTipName, 'Benali M'),
+            tip(Icons.tag_rounded, l10n.searchTipReference, 'OUT-000125'),
+            tip(Icons.phone_rounded, l10n.searchTipPhone, '0555 12'),
+          ],
+        ),
       ),
     );
   }
