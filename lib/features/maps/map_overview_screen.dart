@@ -78,6 +78,8 @@ class _MapOverviewScreenState extends ConsumerState<MapOverviewScreen> {
         ? const LatLng(36.7538, 3.0588)
         : LatLng(settings.defaultLatitude, settings.defaultLongitude);
 
+    // Height of the floating navigation bar (extendBody shell).
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
     return Scaffold(
       body: Stack(
         children: [
@@ -168,7 +170,7 @@ class _MapOverviewScreenState extends ConsumerState<MapOverviewScreen> {
           ),
           PositionedDirectional(
             end: Space.md,
-            bottom: (selected != null ? 190 : Space.md),
+            bottom: (selected != null ? 190 : Space.md) + bottomInset,
             child: Column(
               children: [
                 MapControlButton(
@@ -212,13 +214,13 @@ class _MapOverviewScreenState extends ConsumerState<MapOverviewScreen> {
                 ),
               ),
             ),
-          const Positioned(bottom: 0, left: 0, child: MapAttribution()),
+          Positioned(bottom: bottomInset, left: 0, child: const MapAttribution()),
           AnimatedPositioned(
             duration: Motion.normal,
             curve: Motion.curve,
             left: Space.md,
             right: Space.md,
-            bottom: selected != null ? Space.md : -220,
+            bottom: selected != null ? Space.md + bottomInset : -220,
             child: selected == null ? const SizedBox.shrink() : _SelectedCard(customer: selected),
           ),
         ],

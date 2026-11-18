@@ -9,6 +9,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_tokens.dart';
 import '../../data/models/activity.dart';
 import '../../domain/directory_controller.dart';
+import '../../shared/widgets/glass_nav_bar.dart';
 import '../../shared/widgets/common.dart';
 import '../../shared/widgets/states.dart';
 import '../auth/auth_controller.dart';
@@ -60,7 +61,7 @@ class AdminDashboardScreen extends ConsumerWidget {
         child: RefreshIndicator(
           onRefresh: refresh,
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(Space.page, Space.md, Space.page, 120),
+            padding: EdgeInsets.fromLTRB(Space.page, Space.md, Space.page, navBarClearance(context, fab: true)),
             children: [
               Row(
                 children: [

@@ -9,7 +9,7 @@
   "demoLoginBody": "لا يُرسل أي شيء إلى خادم، وتُعاد البيانات عند إعادة تشغيل التطبيق. المس حسابًا لملئه:",
   "demoAdmin": "المسؤول",
   "demoEmployee": "موظف التوصيل",
-  "navDashboard": "لوحة القيادة",
+  "navDashboard": "الرئيسية",
   "navCustomers": "الزبائن",
   "navEmployees": "الموظفون",
   "navMap": "الخريطة",

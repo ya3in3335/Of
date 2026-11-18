@@ -40,7 +40,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get demoEmployee => 'Livreur';
 
   @override
-  String get navDashboard => 'Tableau de bord';
+  String get navDashboard => 'Accueil';
 
   @override
   String get navCustomers => 'Clients';

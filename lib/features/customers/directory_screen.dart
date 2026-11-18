@@ -12,6 +12,7 @@ import '../../shared/widgets/common.dart';
 import '../../shared/widgets/states.dart';
 import '../auth/auth_controller.dart';
 import 'widgets/customer_tile.dart';
+import '../../shared/widgets/glass_nav_bar.dart';
 
 enum StatusFilter { active, archived, all }
 
@@ -138,7 +139,7 @@ class _DirectoryScreenState extends ConsumerState<DirectoryScreen> {
       body = RefreshIndicator(
         onRefresh: () => ref.read(directoryProvider.notifier).sync(),
         child: ListView.separated(
-          padding: const EdgeInsets.fromLTRB(Space.page, Space.xs, Space.page, 110),
+          padding: EdgeInsets.fromLTRB(Space.page, Space.xs, Space.page, navBarClearance(context, fab: isAdmin)),
           itemCount: customers.length,
           separatorBuilder: (_, _) => const SizedBox(height: Space.xs),
           itemBuilder: (context, i) => CustomerTile(

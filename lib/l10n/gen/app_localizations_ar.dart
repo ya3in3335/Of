@@ -40,7 +40,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get demoEmployee => 'موظف التوصيل';
 
   @override
-  String get navDashboard => 'لوحة القيادة';
+  String get navDashboard => 'الرئيسية';
 
   @override
   String get navCustomers => 'الزبائن';

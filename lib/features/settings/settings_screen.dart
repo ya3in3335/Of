@@ -11,6 +11,7 @@ import '../../domain/directory_controller.dart';
 import '../../shared/widgets/common.dart';
 import '../../shared/widgets/feedback.dart';
 import '../auth/auth_controller.dart';
+import '../../shared/widgets/glass_nav_bar.dart';
 
 /// Settings hub (admin "Settings" tab, employee "Profile" tab).
 class SettingsScreen extends ConsumerWidget {
@@ -41,7 +42,7 @@ class SettingsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(isAdmin ? l10n.navSettings : l10n.navProfile)),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(Space.page, Space.xs, Space.page, Space.xxl),
+        padding: EdgeInsets.fromLTRB(Space.page, Space.xs, Space.page, navBarClearance(context)),
         children: [
           if (profile != null)
             Container(

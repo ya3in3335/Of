@@ -9,6 +9,7 @@ import '../../core/theme/app_tokens.dart';
 import '../../domain/directory_controller.dart';
 import '../auth/auth_controller.dart';
 import '../search/search_panel.dart';
+import '../../shared/widgets/glass_nav_bar.dart';
 
 /// Employee home = search. The field is focused on launch so the employee can
 /// type the name from the invoice right away.
@@ -23,7 +24,7 @@ class EmployeeHomeScreen extends ConsumerWidget {
         child: SearchPanel(
           autofocus: true,
           header: _Header(),
-          idle: Column(children: [_DirectorySummary(), RecentCustomers(), SearchTips(), SizedBox(height: 120)]),
+          idle: Column(children: [_DirectorySummary(), RecentCustomers(), SearchTips(), NavBarSpacer()]),
         ),
       ),
     );

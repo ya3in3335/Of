@@ -9,7 +9,7 @@
   "demoLoginBody": "Rien n'est envoyé à un serveur ; les données sont réinitialisées au redémarrage. Touchez un compte pour le remplir :",
   "demoAdmin": "Administrateur",
   "demoEmployee": "Livreur",
-  "navDashboard": "Tableau de bord",
+  "navDashboard": "Accueil",
   "navCustomers": "Clients",
   "navEmployees": "Employés",
   "navMap": "Carte",

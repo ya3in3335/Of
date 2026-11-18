@@ -12,6 +12,7 @@ import '../../core/utils/text_normalizer.dart';
 import '../../data/models/profile.dart';
 import '../../shared/widgets/common.dart';
 import '../../shared/widgets/states.dart';
+import '../../shared/widgets/glass_nav_bar.dart';
 
 final employeesProvider = FutureProvider.autoDispose<List<Profile>>(
   (ref) => ref.read(employeeRepositoryProvider).list(),
@@ -105,7 +106,7 @@ class _EmployeesScreenState extends ConsumerState<EmployeesScreen> {
                 return RefreshIndicator(
                   onRefresh: () async => ref.invalidate(employeesProvider),
                   child: ListView.separated(
-                    padding: const EdgeInsets.fromLTRB(Space.page, Space.xs, Space.page, 110),
+                    padding: EdgeInsets.fromLTRB(Space.page, Space.xs, Space.page, navBarClearance(context, fab: true)),
                     itemCount: filtered.length,
                     separatorBuilder: (_, _) => const SizedBox(height: Space.xs),
                     itemBuilder: (context, i) => _EmployeeTile(

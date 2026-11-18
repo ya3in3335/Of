@@ -12,6 +12,7 @@ import '../../domain/directory_controller.dart';
 import '../../shared/widgets/common.dart';
 import '../../shared/widgets/states.dart';
 import '../customers/widgets/customer_tile.dart';
+import '../../shared/widgets/glass_nav_bar.dart';
 
 /// Search-as-you-type over the device copy of the directory. Results update on
 /// every keystroke without a network round trip. When several customers
@@ -130,7 +131,7 @@ class _SearchPanelState extends ConsumerState<SearchPanel> {
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(Space.page, Space.xs, Space.page, 120),
+            padding: EdgeInsets.fromLTRB(Space.page, Space.xs, Space.page, navBarClearance(context)),
             sliver: SliverList.separated(
               itemCount: hits.length,
               separatorBuilder: (_, _) => const SizedBox(height: Space.xs),
