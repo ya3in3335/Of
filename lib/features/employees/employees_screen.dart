@@ -43,15 +43,6 @@ class _EmployeesScreenState extends ConsumerState<EmployeesScreen> {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navEmployees)),
-      floatingActionButton: FloatingActionButton.extended(
-        heroTag: 'new-employee',
-        onPressed: () async {
-          await context.push(Routes.newEmployee);
-          ref.invalidate(employeesProvider);
-        },
-        icon: const Icon(Icons.person_add_alt_rounded),
-        label: Text(l10n.employeeNew),
-      ),
       body: Column(
         children: [
           Padding(

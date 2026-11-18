@@ -11,6 +11,7 @@ import 'package:outifor/data/models/customer.dart';
 import 'package:outifor/data/services/local_cache.dart';
 import 'package:outifor/demo/demo_backend.dart';
 import 'package:outifor/features/customers/customer_profile_screen.dart';
+import 'package:outifor/shared/widgets/glass_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Full app (router, role shells, sync controller) on the in-memory backend.
@@ -94,6 +95,29 @@ void main() {
     await login(tester, 'admin');
     expect(find.text('Dashboard'), findsWidgets);
     expect(find.text('New customer'), findsWidgets);
+  });
+
+  testWidgets('admin: floating button sits above the glass bar and follows the tab', (tester) async {
+    await start(tester);
+    await login(tester, 'admin');
+
+    void expectAboveBar() {
+      final fab = tester.getRect(find.byType(FloatingActionButton));
+      final bar = tester.getRect(find.byType(GlassNavBar));
+      expect(fab.bottom, lessThanOrEqualTo(bar.top), reason: 'button must not be hidden by the bar');
+    }
+
+    expect(find.widgetWithText(FloatingActionButton, 'New customer'), findsOneWidget);
+    expectAboveBar();
+
+    await tester.tap(find.text('Employees').last);
+    await settle(tester);
+    expect(find.widgetWithText(FloatingActionButton, 'New employee'), findsOneWidget);
+    expectAboveBar();
+
+    await tester.tap(find.widgetWithText(FloatingActionButton, 'New employee'));
+    await settle(tester);
+    expect(find.text('Create account'), findsOneWidget);
   });
 
   testWidgets('wrong password is refused', (tester) async {

@@ -53,6 +53,21 @@ void main() {
     });
   });
 
+  test('avatar initials use letters only', () {
+    Profile p(String name) => Profile(
+      id: 'x',
+      fullName: name,
+      username: 'x',
+      role: UserRole.employee,
+      isActive: true,
+      createdAt: DateTime.utc(2026),
+    );
+    expect(p('Ancien employé (démo)').initials, 'AD');
+    expect(p('Samir').initials, 'S');
+    expect(p('(  )').initials, '?');
+    expect(p('محمد بن علي').initials, 'مع');
+  });
+
   test('generated temporary passwords always pass validation', () {
     final rng = Random(42);
     for (var i = 0; i < 500; i++) {

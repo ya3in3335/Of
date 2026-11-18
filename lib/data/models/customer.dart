@@ -1,5 +1,7 @@
 import 'package:latlong2/latlong.dart';
 
+import 'profile.dart' show initialLetters;
+
 enum CustomerStatus {
   active,
   archived;
@@ -117,7 +119,11 @@ class Customer {
   String get cityLine => commune == wilaya ? commune : '$commune, $wilaya';
 
   String get initials {
-    String first(String s) => s.trim().isEmpty ? '' : String.fromCharCode(s.trim().runes.first);
+    String first(String s) {
+      final l = initialLetters(s);
+      return l.isEmpty ? '' : l.first;
+    }
+
     return (first(firstName) + first(lastName)).toUpperCase();
   }
 

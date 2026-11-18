@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../domain/directory_controller.dart';
+import '../../features/employees/employees_screen.dart' show employeesProvider;
 import '../../shared/widgets/glass_nav_bar.dart';
 import '../l10n_ext.dart';
 import '../providers.dart';
@@ -17,7 +18,11 @@ class AdminShell extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final showFab = shell.currentIndex <= 1;
+    // The shell owns the floating button so it always sits above the glass
+    // bar: "New customer" on Dashboard/Customers, "New employee" on Employees.
+    final tab = shell.currentIndex;
+    final showFab = tab <= 2;
+    final employeesTab = tab == 2;
     return Scaffold(
       // Content scrolls behind the frosted bar; screens read the bar height
       // from MediaQuery.padding.bottom.
@@ -27,10 +32,26 @@ class AdminShell extends ConsumerWidget {
         scale: showFab ? 1 : 0,
         duration: const Duration(milliseconds: 180),
         child: FloatingActionButton.extended(
-          heroTag: 'new-customer',
-          onPressed: showFab ? () => context.push(Routes.newCustomer) : null,
-          icon: const Icon(Icons.person_add_alt_1_rounded),
-          label: Text(l10n.customerNew),
+          heroTag: 'shell-fab',
+          onPressed: !showFab
+              ? null
+              : employeesTab
+              ? () async {
+                  await context.push(Routes.newEmployee);
+                  ref.invalidate(employeesProvider);
+                }
+              : () => context.push(Routes.newCustomer),
+          icon: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 180),
+            child: Icon(
+              employeesTab ? Icons.badge_rounded : Icons.person_add_alt_1_rounded,
+              key: ValueKey(employeesTab),
+            ),
+          ),
+          label: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 180),
+            child: Text(employeesTab ? l10n.employeeNew : l10n.customerNew, key: ValueKey(employeesTab)),
+          ),
         ),
       ),
       bottomNavigationBar: ShellNavBar(

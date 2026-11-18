@@ -29,11 +29,9 @@ class Profile {
   bool get isAdmin => role == UserRole.admin;
 
   String get initials {
-    final parts = fullName.trim().split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
-    if (parts.isEmpty) return '?';
-    final first = String.fromCharCode(parts.first.runes.first);
-    final last = parts.length > 1 ? String.fromCharCode(parts.last.runes.first) : '';
-    return (first + last).toUpperCase();
+    final letters = initialLetters(fullName);
+    if (letters.isEmpty) return '?';
+    return (letters.first + (letters.length > 1 ? letters.last : '')).toUpperCase();
   }
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
@@ -47,3 +45,12 @@ class Profile {
     lastLoginAt: json['last_login_at'] == null ? null : DateTime.parse(json['last_login_at'] as String),
   );
 }
+
+final _letter = RegExp(r'\p{L}', unicode: true);
+
+/// First letter of each word that contains a letter, so "(démo)", "&" or
+/// numbers never end up in an avatar.
+List<String> initialLetters(String text) => [
+  for (final word in text.trim().split(RegExp(r'\s+')))
+    if (_letter.firstMatch(word) case final m?) m.group(0)!,
+];
