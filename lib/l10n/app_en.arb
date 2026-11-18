@@ -16,7 +16,7 @@
   "demoLoginBody": "Nothing is sent to a server; data resets when the app restarts. Tap an account to fill it in:",
   "demoAdmin": "Administrator",
   "demoEmployee": "Delivery employee",
-  "navDashboard": "Dashboard",
+  "navDashboard": "Home",
   "navCustomers": "Customers",
   "navEmployees": "Employees",
   "navMap": "Map",

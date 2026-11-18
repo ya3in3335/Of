@@ -40,7 +40,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get demoEmployee => 'Delivery employee';
 
   @override
-  String get navDashboard => 'Dashboard';
+  String get navDashboard => 'Home';
 
   @override
   String get navCustomers => 'Customers';

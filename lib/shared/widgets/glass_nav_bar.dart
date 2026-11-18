@@ -34,88 +34,119 @@ class GlassNavBar extends StatelessWidget {
   static const _duration = Duration(milliseconds: 320);
   static const _curve = Curves.easeOutCubic;
 
+  static const _baseFontSize = 11.0;
+  static const _labelPadding = 6.0;
+
+  /// One font size for every label: the largest (up to 11) at which the
+  /// longest label, in bold, fits inside its bubble with padding. All tabs
+  /// then read at the same size instead of each shrinking differently.
+  double _sharedFontSize(BuildContext context, TextStyle? base, double itemWidth) {
+    final available = itemWidth - 2 * _labelPadding - 2;
+    final scaler = MediaQuery.textScalerOf(context);
+    var widest = 0.0;
+    for (final item in items) {
+      final painter = TextPainter(
+        text: TextSpan(
+          text: item.label,
+          style: base?.copyWith(fontSize: _baseFontSize, fontWeight: FontWeight.w700, height: 1.1),
+        ),
+        textDirection: Directionality.of(context),
+        textScaler: scaler,
+        maxLines: 1,
+      )..layout();
+      if (painter.width > widest) widest = painter.width;
+      painter.dispose();
+    }
+    if (widest <= available) return _baseFontSize;
+    return (_baseFontSize * available / widest).clamp(7.5, _baseFontSize);
+  }
+
   @override
   Widget build(BuildContext context) {
     final bottomSafe = MediaQuery.paddingOf(context).bottom;
     final text = Theme.of(context).textTheme;
 
-    return Padding(
-      padding: EdgeInsets.fromLTRB(16, 0, 16, bottomSafe > 0 ? bottomSafe : 14),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ?top,
-          DecoratedBox(
-            // Soft shadow outside the glass, so the bar floats above content.
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(radius),
-              boxShadow: const [
-                BoxShadow(color: Color(0x24123B70), blurRadius: 30, offset: Offset(0, 12)),
-                BoxShadow(color: Color(0x0F123B70), blurRadius: 6, offset: Offset(0, 2)),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(radius),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 22, sigmaY: 22),
-                child: Container(
-                  height: height,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(radius),
-                    gradient: const LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Color(0xC7FFFFFF), Color(0xB3F4F8FD)],
+    return MediaQuery.withClampedTextScaling(
+      maxScaleFactor: 1.15,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(16, 0, 16, bottomSafe > 0 ? bottomSafe : 14),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ?top,
+            DecoratedBox(
+              // Soft shadow outside the glass, so the bar floats above content.
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(radius),
+                boxShadow: const [
+                  BoxShadow(color: Color(0x24123B70), blurRadius: 30, offset: Offset(0, 12)),
+                  BoxShadow(color: Color(0x0F123B70), blurRadius: 6, offset: Offset(0, 2)),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(radius),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 22, sigmaY: 22),
+                  child: Container(
+                    height: height,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(radius),
+                      gradient: const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Color(0xC7FFFFFF), Color(0xB3F4F8FD)],
+                      ),
+                      border: Border.all(color: const Color(0x99FFFFFF), width: 1.2),
                     ),
-                    border: Border.all(color: const Color(0x99FFFFFF), width: 1.2),
-                  ),
-                  padding: const EdgeInsets.all(inset),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      final itemWidth = constraints.maxWidth / items.length;
-                      return Stack(
-                        children: [
-                          // Selection bubble, concentric with the bar's corners.
-                          AnimatedPositionedDirectional(
-                            duration: _duration,
-                            curve: _curve,
-                            start: itemWidth * currentIndex,
-                            top: 0,
-                            bottom: 0,
-                            width: itemWidth,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                color: AppColors.navy.withValues(alpha: 0.10),
-                                borderRadius: BorderRadius.circular(radius - inset),
-                                border: Border.all(color: AppColors.navy.withValues(alpha: 0.06)),
+                    padding: const EdgeInsets.all(inset),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final itemWidth = constraints.maxWidth / items.length;
+                        final fontSize = _sharedFontSize(context, text.labelSmall, itemWidth);
+                        return Stack(
+                          children: [
+                            // Selection bubble, concentric with the bar's corners.
+                            AnimatedPositionedDirectional(
+                              duration: _duration,
+                              curve: _curve,
+                              start: itemWidth * currentIndex,
+                              top: 0,
+                              bottom: 0,
+                              width: itemWidth,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: AppColors.navy.withValues(alpha: 0.10),
+                                  borderRadius: BorderRadius.circular(radius - inset),
+                                  border: Border.all(color: AppColors.navy.withValues(alpha: 0.06)),
+                                ),
                               ),
                             ),
-                          ),
-                          Row(
-                            children: [
-                              for (var i = 0; i < items.length; i++)
-                                Expanded(
-                                  child: _Item(
-                                    item: items[i],
-                                    selected: i == currentIndex,
-                                    textStyle: text.labelSmall,
-                                    onTap: () {
-                                      HapticFeedback.selectionClick();
-                                      onTap(i);
-                                    },
+                            Row(
+                              children: [
+                                for (var i = 0; i < items.length; i++)
+                                  Expanded(
+                                    child: _Item(
+                                      item: items[i],
+                                      selected: i == currentIndex,
+                                      textStyle: text.labelSmall?.copyWith(fontSize: fontSize),
+                                      onTap: () {
+                                        HapticFeedback.selectionClick();
+                                        onTap(i);
+                                      },
+                                    ),
                                   ),
-                                ),
-                            ],
-                          ),
-                        ],
-                      );
-                    },
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -151,15 +182,22 @@ class _Item extends StatelessWidget {
               child: Icon(selected ? item.selectedIcon : item.icon, color: color, size: 24),
             ),
             const SizedBox(height: 3),
-            Text(
-              item.label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: textStyle?.copyWith(
-                color: color,
-                fontSize: 11,
-                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                height: 1.1,
+            // The label always fits inside the bubble: it shrinks (never
+            // truncates) when the tab is narrow or the phone uses large text.
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: GlassNavBar._labelPadding),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  item.label,
+                  maxLines: 1,
+                  softWrap: false,
+                  style: textStyle?.copyWith(
+                    color: color,
+                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                    height: 1.1,
+                  ),
+                ),
               ),
             ),
           ],

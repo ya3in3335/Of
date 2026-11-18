@@ -77,7 +77,7 @@ void main() {
     await login(tester, 'livreur');
 
     expect(find.text('Find a customer'), findsOneWidget);
-    expect(find.text('Dashboard'), findsNothing, reason: 'employee shell has no admin tabs');
+    expect(find.text('Home'), findsNothing, reason: 'employee shell has no admin tabs');
 
     await tester.enterText(find.byType(TextField).first, 'benali');
     await settle(tester);
@@ -93,7 +93,7 @@ void main() {
   testWidgets('admin: login lands on the dashboard with live statistics', (tester) async {
     await start(tester);
     await login(tester, 'admin');
-    expect(find.text('Dashboard'), findsWidgets);
+    expect(find.text('Home'), findsWidgets);
     expect(find.text('New customer'), findsWidgets);
   });
 
