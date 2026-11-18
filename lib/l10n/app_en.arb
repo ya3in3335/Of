@@ -1,0 +1,681 @@
+{
+  "@@locale": "en",
+  "appName": "OUTIFOR",
+  "appVersion": "Version {version}",
+  "@appVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "splashLoading": "Securing your session…",
+  "loading": "Loading…",
+  "navDashboard": "Dashboard",
+  "navCustomers": "Customers",
+  "navEmployees": "Employees",
+  "navMap": "Map",
+  "navSettings": "Settings",
+  "navSearch": "Search",
+  "navProfile": "Profile",
+  "offlineBanner": "Offline — showing the copy saved on this phone",
+  "actionActivate": "Activate",
+  "actionAdd": "Add",
+  "actionApply": "Apply",
+  "actionArchive": "Archive",
+  "actionBack": "Back",
+  "actionCall": "Call",
+  "actionCancel": "Cancel",
+  "actionChange": "Change",
+  "actionClear": "Clear",
+  "actionConfirm": "Confirm",
+  "actionCopy": "Copy",
+  "actionCopyAll": "Copy all",
+  "actionCopyPhone": "Copy phone",
+  "actionCopyReference": "Copy reference",
+  "actionCreateAccount": "Create account",
+  "actionCreateCustomer": "Create customer",
+  "actionDeactivate": "Deactivate",
+  "actionDelete": "Delete",
+  "actionDiscard": "Discard",
+  "actionDone": "Done",
+  "actionEdit": "Edit",
+  "actionGenerate": "Generate",
+  "actionHidePassword": "Hide password",
+  "actionShowPassword": "Show password",
+  "actionNavigate": "Route",
+  "actionNext": "Next",
+  "actionOk": "OK",
+  "actionOpenInMaps": "Open in Maps",
+  "actionOpenSettings": "Settings",
+  "actionRemove": "Remove",
+  "actionReset": "Reset",
+  "actionRestore": "Restore",
+  "actionRetry": "Try again",
+  "actionSaveChanges": "Save changes",
+  "actionSearchAddressInMaps": "Search address in Google Maps",
+  "actionSeeAll": "See all",
+  "actionSetLocation": "Set location on map",
+  "actionSignOut": "Sign out",
+  "actionSkip": "Skip",
+  "actionStartNavigation": "Start navigation",
+  "actionViewProfile": "View profile",
+  "actionWhatsapp": "WhatsApp",
+  "onboarding1Title": "From invoice to customer in seconds",
+  "onboarding1Body": "Type the name printed on the invoice. Partial names, references and phone numbers all work.",
+  "onboarding2Title": "Exact delivery locations",
+  "onboarding2Body": "See each shop on the map and start Google Maps navigation with one tap.",
+  "onboarding3Title": "Secure and always up to date",
+  "onboarding3Body": "Accounts are created by your manager. Changes reach every phone automatically.",
+  "onboardingStart": "Get started",
+  "loginTitle": "Welcome back",
+  "loginSubtitle": "Sign in to the OUTIFOR customer directory",
+  "loginUsername": "Username",
+  "loginPassword": "Password",
+  "loginButton": "Sign in",
+  "loginNoSignup": "Accounts are created by your administrator.",
+  "errorOffline": "No internet connection. Check your network and try again.",
+  "errorOfflineSave": "You are offline. Nothing was saved — try again when the connection is back.",
+  "errorTimeout": "The server took too long to answer. Try again.",
+  "errorInvalidCredentials": "Incorrect username or password.",
+  "errorAccountDisabled": "This account is deactivated. Contact your administrator.",
+  "errorSessionExpired": "Your session has expired. Please sign in again.",
+  "errorForbidden": "You do not have permission for this action.",
+  "errorNotFound": "This item no longer exists.",
+  "errorConflict": "Someone else changed this record. Reload and try again.",
+  "errorUsernameTaken": "This username is already in use.",
+  "errorWeakPassword": "Password too weak: at least 8 characters with letters and digits.",
+  "errorValidation": "Some information is invalid. Check the form.",
+  "errorNotConfigured": "The server is not fully configured. Contact your administrator.",
+  "errorGeneric": "Something went wrong. Try again.",
+  "errorCannotOpenApp": "No app on this phone can open this.",
+  "stateOfflineTitle": "You're offline",
+  "stateErrorTitle": "Couldn't load",
+  "validationRequired": "Required",
+  "validationTooShort": "Too short",
+  "validationTooLong": "Too long",
+  "validationPhone": "Invalid number (e.g. 0555 12 34 56)",
+  "validationUsername": "3–32 characters: lowercase letters, digits, . _ -",
+  "validationPassword": "At least 8 characters, with letters and digits",
+  "validationMismatch": "Passwords do not match",
+  "validationNumber": "Invalid value",
+  "validationSamePassword": "Choose a different password",
+  "formFixErrors": "Please correct the highlighted fields.",
+  "syncSyncing": "Syncing…",
+  "syncDone": "Synced at {time}",
+  "@syncDone": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "syncOffline": "Offline · data from {time}",
+  "@syncOffline": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "syncOfflineNoData": "Offline · not synced yet",
+  "syncError": "Sync failed · tap to retry",
+  "syncNever": "Not synced yet",
+  "syncNow": "Sync now",
+  "syncCompleted": "Directory is up to date",
+  "syncFailed": "Sync failed. Your changes are not affected; try again later.",
+  "timeJustNow": "just now",
+  "timeMinutesAgo": "{count} min ago",
+  "@timeMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHoursAgo": "{count} h ago",
+  "@timeHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeYesterday": "yesterday",
+  "timeDaysAgo": "{count} days ago",
+  "@timeDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "distanceMeters": "{meters} m",
+  "@distanceMeters": {
+    "placeholders": {
+      "meters": {
+        "type": "int"
+      }
+    }
+  },
+  "distanceKm": "{km} km",
+  "@distanceKm": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGreeting": "Hello {name}",
+  "@homeGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTitle": "Find a customer",
+  "homeCustomersAvailable": "customers in the directory",
+  "homeWithLocation": "with GPS location",
+  "searchTitle": "Search customers",
+  "searchHint": "Name on invoice, phone or OUT-reference",
+  "searchResultsCount": "{count, plural, =1{1 customer found} other{{count} customers found}}",
+  "@searchResultsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "1": {
+        "type": "String"
+      }
+    }
+  },
+  "searchMultipleHint": "Several customers match. Check the phone number and city before opening.",
+  "searchNoResultsTitle": "No customer found",
+  "searchNoResultsBody": "Check the spelling, try only the last name, or search by phone number.",
+  "searchOfflineNote": "You are offline: customers added since the last sync are not on this phone yet.",
+  "searchRecent": "Recently opened",
+  "searchTipsTitle": "You can search by",
+  "searchTipName": "Name (first, last or part of it)",
+  "searchTipReference": "Customer reference",
+  "searchTipPhone": "Phone number",
+  "directoryCount": "{count, plural, =0{No customers} =1{1 customer} other{{count} customers}}",
+  "@directoryCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "No": {
+        "type": "String"
+      },
+      "1": {
+        "type": "String"
+      }
+    }
+  },
+  "directoryFilterHint": "Filter by name, phone, reference…",
+  "directoryEmptyTitle": "No customers yet",
+  "directoryEmptyAdmin": "Add your first customer to start building the directory.",
+  "directoryEmptyEmployee": "Customers added by your administrator will appear here.",
+  "directoryNoMatchTitle": "No match",
+  "directoryNoMatchBody": "No customer matches these filters.",
+  "filterAll": "All",
+  "filterAllWilayas": "All wilayas",
+  "filterNoLocation": "No GPS location",
+  "filterReset": "Reset filters",
+  "filterWilaya": "Wilaya",
+  "sortTitle": "Sort",
+  "sortName": "Name A–Z",
+  "sortNewest": "Newest",
+  "sortUpdated": "Recently updated",
+  "statusActive": "Active",
+  "statusArchived": "Archived",
+  "statusArchivedPlural": "Archived",
+  "statusInactive": "Inactive",
+  "customerProfileTitle": "Customer",
+  "customerNew": "New customer",
+  "customerEditTitle": "Edit customer",
+  "customerLocation": "Location",
+  "customerContact": "Contact",
+  "customerOtherAddresses": "Other delivery addresses",
+  "customerRecord": "Record",
+  "customerNoWhatsapp": "No WhatsApp number registered.",
+  "customerNoLocationTitle": "No GPS location recorded",
+  "customerNoLocationShort": "No GPS location",
+  "customerNoLocationAdmin": "Place this customer on the map so drivers can navigate to them.",
+  "customerNoLocationEmployee": "Use the written address, or call the customer for directions.",
+  "customerNotFoundTitle": "Customer not found",
+  "customerNotFoundBody": "This customer may have been deleted.",
+  "customerArchiveTitle": "Archive this customer?",
+  "customerArchiveBody": "{name} will be hidden from employees’ searches. You can restore them at any time.",
+  "@customerArchiveBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "customerRestoreTitle": "Restore this customer?",
+  "customerRestoreBody": "{name} will be visible to employees again.",
+  "@customerRestoreBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "customerArchived": "Customer archived",
+  "customerRestored": "Customer restored",
+  "customerDeleteTitle": "Delete permanently?",
+  "customerDeleteBody": "{name} ({reference}) and their addresses will be deleted for everyone. This cannot be undone. Consider archiving instead.",
+  "@customerDeleteBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "reference": {
+        "type": "String"
+      }
+    }
+  },
+  "customerDeleted": "Customer deleted",
+  "customerCreated": "Customer {reference} created",
+  "@customerCreated": {
+    "placeholders": {
+      "reference": {
+        "type": "String"
+      }
+    }
+  },
+  "customerUpdated": "Changes saved",
+  "copiedPhone": "Phone number copied",
+  "copiedReference": "Reference copied",
+  "copiedAddress": "Address copied",
+  "copiedCredentials": "Credentials copied",
+  "adminNotesEmpty": "No notes.",
+  "adminNotesHint": "Visible to administrators only.",
+  "adminNotesPlaceholder": "Payment habits, opening hours, access instructions…",
+  "fieldFirstName": "First name",
+  "fieldLastName": "Last name",
+  "fieldFullName": "Full name",
+  "fieldBusinessName": "Shop / business name",
+  "fieldPrimaryPhone": "Primary phone",
+  "fieldSecondaryPhone": "Secondary phone",
+  "fieldWhatsappPhone": "WhatsApp number",
+  "fieldPhone": "Phone",
+  "fieldWilaya": "Wilaya",
+  "fieldCommune": "Commune",
+  "fieldWilayaCommune": "Commune — Wilaya",
+  "fieldAddress": "Detailed address",
+  "fieldAddressHint": "Street, building, landmark…",
+  "fieldAdminNotes": "Administrator notes",
+  "fieldCreatedAt": "Created",
+  "fieldUpdatedAt": "Last modified",
+  "fieldLastLogin": "Last login",
+  "fieldLatitude": "Latitude",
+  "fieldLongitude": "Longitude",
+  "fieldLabel": "Label",
+  "fieldLabelHint": "e.g. Depot, Second shop",
+  "fieldCompanyName": "Company name",
+  "fieldCurrentPassword": "Current password",
+  "fieldNewPassword": "New password",
+  "fieldConfirmPassword": "Confirm new password",
+  "formIdentity": "Identity",
+  "formAddress": "Address",
+  "formWhatsappSame": "WhatsApp on the primary number",
+  "formWhatsappHint": "Only enter a WhatsApp number the customer actually uses on WhatsApp.",
+  "formNoLocation": "No location yet. Without it, drivers only have the written address.",
+  "formNoExtraAddresses": "No other address.",
+  "formStatusActive": "Active customer",
+  "formStatusActiveHint": "Visible to employees.",
+  "formStatusArchivedHint": "Archived: hidden from employees.",
+  "extraAddressTitle": "Delivery address",
+  "discardTitle": "Discard changes?",
+  "discardBody": "Your changes have not been saved.",
+  "conflictTitle": "Modified elsewhere",
+  "conflictBody": "Another administrator saved this customer while you were editing. The latest version has been loaded; please re-apply your changes.",
+  "duplicateHintTitle": "Possible existing customer",
+  "duplicatesFoundTitle": "Possible duplicates",
+  "duplicatesFoundBody": "These customers have the same phone number or a very similar name. Check before creating a new record.",
+  "duplicatesReview": "Go back and check",
+  "duplicatesSaveAnyway": "It is a different customer — save",
+  "duplicateSamePhone": "Same phone",
+  "duplicateSimilarName": "Similar name",
+  "duplicateScore": "{percent}% match",
+  "@duplicateScore": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "duplicatesTitle": "Duplicate review",
+  "duplicatesShort": "Duplicates",
+  "duplicatesIntro": "Records are never merged automatically. Open both, then archive or delete the wrong one, or mark the pair as different customers.",
+  "duplicatesNoneTitle": "No duplicates detected",
+  "duplicatesNoneBody": "No customers share a phone number or a near-identical name.",
+  "duplicatesDismiss": "Different customers",
+  "duplicatesDismissed": "Pair marked as different customers",
+  "mapOpenFull": "Full map",
+  "mapMyLocation": "My location",
+  "mapRecenter": "Center on customer",
+  "mapShowAll": "Show all customers",
+  "mapDistanceAway": "{distance} away (straight line)",
+  "@mapDistanceAway": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "mapLocatedCount": "{count} on map",
+  "@mapLocatedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mapMissingCount": "{count} without GPS",
+  "@mapMissingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mapEmptyTitle": "No customer has a GPS location yet",
+  "mapEmptyAdmin": "Open a customer and use “Set location on map”.",
+  "mapEmptyEmployee": "Locations added by your administrator will appear here.",
+  "locationServiceDisabled": "Location is turned off on this phone.",
+  "locationDenied": "Location permission was refused.",
+  "locationDeniedForever": "Location permission is blocked. Enable it in the app settings.",
+  "locationTimeout": "Could not get a GPS fix. Move outdoors and try again.",
+  "pickerTitle": "Customer location",
+  "pickerSearchHint": "Search an address or place",
+  "pickerNoAddressFound": "No address found. Move the map manually.",
+  "pickerSearchFailed": "Address search unavailable. Check the connection or move the map manually.",
+  "pickerInstructions": "Move the map or tap to place the pin on the shop entrance.",
+  "pickerUseMyLocation": "Use my current position",
+  "pickerManualTitle": "Enter coordinates",
+  "pickerManualHint": "Decimal degrees, e.g. 36.753800 and 3.058800",
+  "pickerMoveFirst": "Place the pin first: move the map, tap it, or search an address.",
+  "pickerConfirm": "Confirm this location",
+  "pickerConfirmTitle": "Check the location",
+  "pickerConfirmBody": "Drivers will be guided to exactly this point.",
+  "pickerUseThisLocation": "Use this location",
+  "pickerAdjust": "Adjust",
+  "dashboardQuickActions": "Quick actions",
+  "dashboardDirectory": "Directory",
+  "dashboardRecentCustomers": "Recently added",
+  "dashboardRecentActivity": "Recent activity",
+  "statTotalCustomers": "Customers",
+  "statActiveCustomers": "Active",
+  "statEmployees": "Employees",
+  "statAdded30Days": "Added in 30 days",
+  "statAddedThisWeek": "+{count} this week",
+  "@statAddedThisWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statArchived": "{count} archived",
+  "@statArchived": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statEmployeesActive": "{count} active",
+  "@statEmployeesActive": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statMissingLocation": "{count} without GPS",
+  "@statMissingLocation": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statAllLocated": "All located",
+  "employeeNew": "New employee",
+  "employeesSearchHint": "Search by name or username",
+  "employeesEmptyTitle": "No accounts yet",
+  "employeesEmptyBody": "Create an account for each delivery employee.",
+  "employeeNeverLoggedIn": "Never logged in",
+  "employeeLastLogin": "Last login {when}",
+  "@employeeLastLogin": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "employeeIdentity": "Identity",
+  "employeeRole": "Role",
+  "employeeTempPassword": "Temporary password",
+  "usernameHelper": "Used to sign in. Lowercase, no spaces.",
+  "passwordRules": "At least 8 characters with letters and digits. Share it privately; the employee can change it in Account settings.",
+  "roleAdmin": "Administrator",
+  "roleEmployee": "Delivery employee",
+  "roleAdminHint": "Full access: customers, employees, settings.",
+  "roleEmployeeHint": "Search and view customers, call, navigate. Cannot modify data.",
+  "employeeAdminConfirmTitle": "Create an administrator?",
+  "employeeAdminConfirmBody": "This person will be able to modify and delete customers and manage all accounts.",
+  "employeeCreated": "Account created",
+  "credentialsTitle": "Sign-in details",
+  "credentialsBody": "Give these to the employee now. The password will not be shown again.",
+  "employeeDetailsTitle": "Employee",
+  "employeeAccount": "Account",
+  "employeeManage": "Manage",
+  "employeeEditTitle": "Edit name and role",
+  "employeeUpdated": "Account updated",
+  "employeeResetTitle": "Reset password",
+  "employeeResetHint": "Sets a new temporary password.",
+  "employeeResetBody": "Set a new password for {name}. Their current password stops working immediately.",
+  "@employeeResetBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "employeeDeactivateTitle": "Deactivate this account?",
+  "employeeDeactivateBody": "{name} will immediately lose access to customer data on every device.",
+  "@employeeDeactivateBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "employeeDeactivateHint": "Blocks access immediately.",
+  "employeeActivateTitle": "Reactivate this account?",
+  "employeeActivateBody": "{name} will be able to sign in again.",
+  "@employeeActivateBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "employeeActivateHint": "Restores access.",
+  "employeeDeactivated": "Account deactivated",
+  "employeeActivated": "Account activated",
+  "employeeSelfHint": "You cannot deactivate your own account.",
+  "employeeRecentActivity": "Recent activity",
+  "activityTitle": "Activity log",
+  "activityEmpty": "No activity yet",
+  "activityFilterAdmin": "Changes",
+  "activityFilterField": "Field",
+  "activitySystem": "System",
+  "logCustomerCreated": "Created customer {name}",
+  "@logCustomerCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "logCustomerUpdated": "Updated {name}",
+  "@logCustomerUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "logCustomerLocation": "Moved location of {name}",
+  "@logCustomerLocation": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "logCustomerArchived": "Archived {name}",
+  "@logCustomerArchived": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "logCustomerRestored": "Restored {name}",
+  "@logCustomerRestored": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "logCustomerDeleted": "Deleted {name}",
+  "@logCustomerDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "logCustomerViewed": "Viewed {name}",
+  "@logCustomerViewed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "logCustomerCalled": "Called {name}",
+  "@logCustomerCalled": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "logCustomerWhatsapp": "Opened WhatsApp with {name}",
+  "@logCustomerWhatsapp": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "logCustomerNavigated": "Started navigation to {name}",
+  "@logCustomerNavigated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "logEmployeeCreated": "Created account for {name}",
+  "@logEmployeeCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "logEmployeeActivated": "Activated {name}",
+  "@logEmployeeActivated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "logEmployeeDeactivated": "Deactivated {name}",
+  "@logEmployeeDeactivated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "logEmployeePassword": "Reset password of {name}",
+  "@logEmployeePassword": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "logEmployeeUpdated": "Updated account of {name}",
+  "@logEmployeeUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "logDuplicateDismissed": "Marked two customers as different",
+  "logSettingsUpdated": "Updated company settings",
+  "notificationsTitle": "Notifications",
+  "notificationsIntro": "Directory changes received on this phone.",
+  "notificationsEmptyTitle": "No notifications",
+  "notificationsEmptyBody": "New customers and location changes will appear here.",
+  "notifCreated": "New customer",
+  "notifUpdated": "Customer updated",
+  "notifLocation": "Location changed",
+  "notifArchived": "Customer archived",
+  "notifRestored": "Customer restored",
+  "notifDeleted": "Customer deleted",
+  "settingsAccountGroup": "Account",
+  "settingsAdminGroup": "Administration",
+  "settingsDataGroup": "Data",
+  "settingsProfile": "Profile",
+  "settingsAccount": "Account & password",
+  "settingsAccountInfo": "Account",
+  "settingsLanguage": "Language",
+  "settingsApp": "Company settings",
+  "settingsCompany": "Company",
+  "settingsMapCenter": "Default map area",
+  "settingsMapCenterHint": "Where maps open when no customer is selected.",
+  "settingsMapZoom": "Zoom level: {zoom}",
+  "@settingsMapZoom": {
+    "placeholders": {
+      "zoom": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsSaved": "Settings saved",
+  "changePasswordTitle": "Change password",
+  "passwordChanged": "Password changed",
+  "profileSaved": "Profile updated",
+  "profileRoleHint": "Your role and username can only be changed by an administrator.",
+  "languageSystem": "Phone language",
+  "languageSystemHint": "Follows the phone settings",
+  "languageNote": "Customer names are always shown as they were entered.",
+  "signOutTitle": "Sign out?",
+  "signOutBody": "The customer data saved on this phone will be erased."
+}

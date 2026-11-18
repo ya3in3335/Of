@@ -1,0 +1,202 @@
+{
+    "normalize_phone": [
+        [
+            "0555 12 34 56",
+            "0555123456"
+        ],
+        [
+            "+213 555 12 34 56",
+            "0555123456"
+        ],
+        [
+            "00213555123456",
+            "0555123456"
+        ],
+        [
+            "213555123456",
+            "0555123456"
+        ],
+        [
+            "(021) 54-32-10",
+            "021543210"
+        ],
+        [
+            "٠٥٥٥١٢٣٤٥٦",
+            "0555123456"
+        ],
+        [
+            "abc",
+            null
+        ],
+        [
+            "2130",
+            "2130"
+        ],
+        [
+            "0770112233",
+            "0770112233"
+        ]
+    ],
+    "normalize_search": [
+        [
+            "  Mohamed   BENALI ",
+            "mohamed benali"
+        ],
+        [
+            "Mohammed",
+            "mohamed"
+        ],
+        [
+            "Muhammad",
+            "muhamad"
+        ],
+        [
+            "Hadj Aïssa",
+            "hadj aisa"
+        ],
+        [
+            "Ammar Bouzid",
+            "amar bouzid"
+        ],
+        [
+            "Quincaillerie El-Amel & Fils",
+            "quincailerie el amel fils"
+        ],
+        [
+            "Société Générale d'Outillage",
+            "societe generale d outilage"
+        ],
+        [
+            "Œuvre Ébéniste",
+            "oeuvre ebeniste"
+        ],
+        [
+            "Ferhat Abbès",
+            "ferhat abes"
+        ],
+        [
+            "Zoubir Laâmari",
+            "zoubir lamari"
+        ],
+        [
+            "Naïma Gaïd",
+            "naima gaid"
+        ],
+        [
+            "François Çelik",
+            "francois celik"
+        ],
+        [
+            "مُحَمَّد",
+            "محمد"
+        ],
+        [
+            "محمد",
+            "محمد"
+        ],
+        [
+            "أحمد بن علي",
+            "احمد بن علي"
+        ],
+        [
+            "إبراهيم",
+            "ابراهيم"
+        ],
+        [
+            "آمنة",
+            "امنه"
+        ],
+        [
+            "مصطفى",
+            "مصطفي"
+        ],
+        [
+            "فاطمة",
+            "فاطمه"
+        ],
+        [
+            "مؤسسة",
+            "موسه"
+        ],
+        [
+            "رئيس",
+            "ريس"
+        ],
+        [
+            "عبــد القادر",
+            "عبد القادر"
+        ],
+        [
+            "الله",
+            "اله"
+        ],
+        [
+            "OUT-000125",
+            "out 000125"
+        ],
+        [
+            "out 125",
+            "out 125"
+        ],
+        [
+            "0555 12 34 56",
+            "0555 12 34 56"
+        ],
+        [
+            "+213 555 12 34 56",
+            "213 555 12 34 56"
+        ],
+        [
+            "٠٥٥٥١٢٣٤٥٦",
+            "0555123456"
+        ],
+        [
+            "Bab-Ezzouar",
+            "bab ezouar"
+        ],
+        [
+            "Bir El Djir / Oran",
+            "bir el djir oran"
+        ],
+        [
+            "Tizi-Ouzou",
+            "tizi ouzou"
+        ],
+        [
+            "Aïn Témouchent",
+            "ain temouchent"
+        ],
+        [
+            "Ghardaïa",
+            "ghardaia"
+        ],
+        [
+            "Béjaïa",
+            "bejaia"
+        ],
+        [
+            "Rue des frères Abed, n°12",
+            "rue des freres abed n 12"
+        ],
+        [
+            "",
+            ""
+        ],
+        [
+            "   ",
+            ""
+        ],
+        [
+            "Hello  World",
+            "helo world"
+        ],
+        [
+            "aaab",
+            "ab"
+        ],
+        [
+            "SSS-111",
+            "s 111"
+        ]
+    ]
+}

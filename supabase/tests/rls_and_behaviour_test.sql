@@ -134,6 +134,24 @@ select public.dismiss_duplicate_pair(customer_a, customer_b) from public.list_po
 select tests.check((select count(*) = 0 from public.list_potential_duplicates()), 'review list: dismissed pair hidden');
 select tests.check((select count(*) = 4 from public.customers), 'no automatic merge');
 
+
+\echo '== Atomic save_customer RPC'
+create temp table t_saved as
+  select public.save_customer(null, '{"first_name":"Rachid","last_name":"Haddad","primary_phone":"0550 99 88 77","wilaya":"Setif","commune":"El Eulma","address":"Cité 500 logements"}',
+    '[{"label":"Magasin 2","address":"Route de Batna","commune":"El Eulma","wilaya":"Setif","latitude":36.15,"longitude":5.69}]', 'VIP') as j;
+grant select on t_saved to public;
+select tests.check((select (j->>'reference') ~ '^OUT-' and jsonb_array_length(j->'customer_addresses') = 1 and not (j ? 'search_text') from t_saved),
+  'save_customer creates customer + address and returns JSON without internal columns');
+select tests.check((select notes = 'VIP' from public.customer_admin_notes n join t_saved t on n.customer_id = (t.j->>'id')::uuid),
+  'save_customer stores admin notes');
+select tests.check((select jsonb_array_length(public.save_customer((j->>'id')::uuid, j - 'customer_addresses', '[]', '', (j->>'updated_at')::timestamptz)->'customer_addresses') = 0 from t_saved),
+  'save_customer update replaces the address list and clears notes');
+select tests.must_fail($$select public.save_customer((j->>'id')::uuid, j, null, null, '2000-01-01'::timestamptz) from t_saved$$,
+  'save_customer refuses to overwrite a newer version (optimistic concurrency)');
+select tests.must_fail($$select public.save_customer(null, '{"first_name":"","last_name":"x","primary_phone":"0550998877","wilaya":"Setif","commune":"El Eulma","address":"abc"}')$$,
+  'save_customer validates input through table constraints');
+delete from public.customers where last_name = 'Haddad';
+
 \echo '== Admin edits, archives, addresses'
 select tests.must_fail($$update public.customers set reference = 'OUT-999999' where last_name = 'Kaci'$$,
   'reference column is not updatable');
@@ -180,6 +198,10 @@ select tests.must_fail($$insert into public.customer_admin_notes (customer_id, n
 select tests.must_fail($$insert into public.customer_addresses (customer_id, label, address)
   select id, 'x', 'xxxx' from public.customers limit 1$$, 'employee cannot add addresses');
 
+select tests.must_fail($$select public.save_customer(null, '{"first_name":"A","last_name":"B","primary_phone":"0550000000","wilaya":"Alger","commune":"Alger","address":"Rue X"}')$$,
+  'employee cannot use save_customer');
+select tests.must_fail($$select public.save_customer((select id from public.customers limit 1), '{"first_name":"A","last_name":"B","primary_phone":"0550000000","wilaya":"Alger","commune":"Alger","address":"Rue X"}')$$,
+  'employee cannot update through save_customer');
 select tests.check((select count(*) = 1 from public.profiles), 'employee sees only own profile');
 update public.profiles set role = 'admin' where id = :emp_id;
 select tests.check((select role = 'employee' from public.profiles where id = :emp_id), 'employee cannot promote self via update');
@@ -250,14 +272,14 @@ reset role;
 select set_config('request.jwt.claims', '{"sub":"a0000000-0000-4000-8000-000000000001","role":"authenticated"}', false);
 set role authenticated;
 delete from public.customers where last_name = 'Kaci';
-select tests.check((select count(*) = 1 from public.customer_deletions), 'delete writes a tombstone');
+select tests.check((select count(*) = 1 from public.customer_deletions where reference = (select details->>'reference' from public.activity_logs where action = 'customer_deleted' and details->>'name' = 'Amina Kaci')), 'delete writes a tombstone');
 select tests.check((select action = 'customer_deleted' and details->>'name' = 'Amina Kaci' from public.activity_logs order by id desc limit 1),
   'delete audited with name and reference');
 reset role;
 
 select set_config('request.jwt.claims', '{"sub":"e0000000-0000-4000-8000-000000000001","role":"authenticated"}', false);
 set role authenticated;
-select tests.check((select count(*) = 1 from public.customer_deletions), 'active employee receives tombstones for sync');
+select tests.check((select count(*) = 2 from public.customer_deletions), 'active employee receives tombstones for sync');
 select tests.check((select count(*) = 3 from public.customers), 'deleted customer gone for employees');
 reset role;
 
