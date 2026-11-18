@@ -1,0 +1,5 @@
+{
+  "SUPABASE_URL": "https://YOUR-PROJECT-REF.supabase.co",
+  "SUPABASE_ANON_KEY": "YOUR-PUBLISHABLE-OR-ANON-KEY",
+  "LOGIN_DOMAIN": "outifor.local"
+}

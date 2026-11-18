@@ -1,7 +1,7 @@
 name: outifor
 description: "OUTIFOR — wholesale customer directory and delivery location system."
 publish_to: 'none'
-version: 0.1.0+1
+version: 1.0.0+1
 
 environment:
   sdk: ^3.14.0

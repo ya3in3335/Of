@@ -1,0 +1,20 @@
+# Supabase CLI configuration for OUTIFOR (used by `supabase link`, `db push`,
+# `functions deploy` and local development with `supabase start`).
+project_id = "outifor"
+
+[api]
+schemas = ["public"]
+max_rows = 1000
+
+[auth]
+# No public registration: accounts are created by an administrator only.
+enable_signup = false
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+
+[auth.email]
+enable_signup = false
+enable_confirmations = false
+
+[functions.admin-users]
+verify_jwt = true
