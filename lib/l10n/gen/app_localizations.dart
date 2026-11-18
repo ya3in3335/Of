@@ -124,6 +124,36 @@ abstract class AppLocalizations {
   /// **'Loading…'**
   String get loading;
 
+  /// No description provided for @demoRibbon.
+  ///
+  /// In en, this message translates to:
+  /// **'DEMO'**
+  String get demoRibbon;
+
+  /// No description provided for @demoLoginTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo version — sample data'**
+  String get demoLoginTitle;
+
+  /// No description provided for @demoLoginBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is sent to a server; data resets when the app restarts. Tap an account to fill it in:'**
+  String get demoLoginBody;
+
+  /// No description provided for @demoAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Administrator'**
+  String get demoAdmin;
+
+  /// No description provided for @demoEmployee.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery employee'**
+  String get demoEmployee;
+
   /// No description provided for @navDashboard.
   ///
   /// In en, this message translates to:

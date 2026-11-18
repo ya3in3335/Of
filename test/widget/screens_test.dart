@@ -72,7 +72,14 @@ final noLocation = testCustomer(
   whatsapp: '0555123456',
   businessName: 'Quincaillerie Benali',
 );
-final twin = testCustomer(id: 'c2', reference: 'OUT-000310', firstName: 'Mohammed', lastName: 'Benali', phone: '0661987654', commune: 'Boufarik');
+final twin = testCustomer(
+  id: 'c2',
+  reference: 'OUT-000310',
+  firstName: 'Mohammed',
+  lastName: 'Benali',
+  phone: '0661987654',
+  commune: 'Boufarik',
+);
 
 void main() {
   late MockCustomerRepository repo;
@@ -88,7 +95,12 @@ void main() {
     when(() => repo.fetchAdminNotes(any())).thenAnswer((_) async => 'Pays on delivery only');
   });
 
-  Future<void> pump(WidgetTester tester, Widget child, {required AuthController auth, Locale locale = const Locale('en')}) async {
+  Future<void> pump(
+    WidgetTester tester,
+    Widget child, {
+    required AuthController auth,
+    Locale locale = const Locale('en'),
+  }) async {
     tester.view.physicalSize = const Size(1170, 2532);
     tester.view.devicePixelRatio = 3;
     addTearDown(tester.view.reset);
@@ -121,8 +133,11 @@ void main() {
 
   group('customer profile', () {
     testWidgets('employee: contact actions shown, admin notes and edit hidden, view logged', (tester) async {
-      await pump(tester, const CustomerProfileScreen(customerId: 'c1'),
-          auth: FakeAuth(AuthState.signedIn(profile(UserRole.employee))));
+      await pump(
+        tester,
+        const CustomerProfileScreen(customerId: 'c1'),
+        auth: FakeAuth(AuthState.signedIn(profile(UserRole.employee))),
+      );
 
       expect(find.text('Mohamed Benali'), findsOneWidget);
       expect(find.text('OUT-000125'), findsOneWidget);
@@ -138,8 +153,11 @@ void main() {
     });
 
     testWidgets('missing GPS is stated, never replaced by a guessed point', (tester) async {
-      await pump(tester, const CustomerProfileScreen(customerId: 'c1'),
-          auth: FakeAuth(AuthState.signedIn(profile(UserRole.employee))));
+      await pump(
+        tester,
+        const CustomerProfileScreen(customerId: 'c1'),
+        auth: FakeAuth(AuthState.signedIn(profile(UserRole.employee))),
+      );
       await tester.scrollUntilVisible(find.text('No GPS location recorded'), 200);
       expect(find.text('No GPS location recorded'), findsOneWidget);
       expect(find.text('Search address in Google Maps'), findsOneWidget);
@@ -147,8 +165,11 @@ void main() {
     });
 
     testWidgets('admin: notes loaded and edit/archive/delete available', (tester) async {
-      await pump(tester, const CustomerProfileScreen(customerId: 'c1'),
-          auth: FakeAuth(AuthState.signedIn(profile(UserRole.admin))));
+      await pump(
+        tester,
+        const CustomerProfileScreen(customerId: 'c1'),
+        auth: FakeAuth(AuthState.signedIn(profile(UserRole.admin))),
+      );
       expect(find.byTooltip('Edit'), findsOneWidget);
       await tester.scrollUntilVisible(find.text('Pays on delivery only'), 200);
       expect(find.text('Pays on delivery only'), findsOneWidget);
@@ -156,8 +177,12 @@ void main() {
     });
 
     testWidgets('Arabic: right-to-left layout with Arabic labels', (tester) async {
-      await pump(tester, const CustomerProfileScreen(customerId: 'c1'),
-          auth: FakeAuth(AuthState.signedIn(profile(UserRole.employee))), locale: const Locale('ar'));
+      await pump(
+        tester,
+        const CustomerProfileScreen(customerId: 'c1'),
+        auth: FakeAuth(AuthState.signedIn(profile(UserRole.employee))),
+        locale: const Locale('ar'),
+      );
       expect(find.text('اتصال'), findsOneWidget);
       final dir = Directionality.of(tester.element(find.text('اتصال')));
       expect(dir, TextDirection.rtl);
@@ -193,8 +218,10 @@ void main() {
     });
 
     testWidgets('shows a clear message for wrong credentials', (tester) async {
-      final auth = FakeAuth(const AuthState.signedOut(),
-          signInError: const AppException(AppErrorKind.invalidCredentials));
+      final auth = FakeAuth(
+        const AuthState.signedOut(),
+        signInError: const AppException(AppErrorKind.invalidCredentials),
+      );
       await pump(tester, const LoginScreen(), auth: auth);
       await tester.enterText(find.byType(TextFormField).at(0), 'livreur1');
       await tester.enterText(find.byType(TextFormField).at(1), 'wrong-pass1');

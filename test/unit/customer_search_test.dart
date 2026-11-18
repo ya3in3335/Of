@@ -5,17 +5,49 @@ import 'package:outifor/domain/customer_search.dart';
 import '../helpers.dart';
 
 void main() {
-  final benali1 = testCustomer(id: 'b1', reference: 'OUT-000125', firstName: 'Mohamed', lastName: 'Benali',
-      phone: '0555123456', commune: 'Bab Ezzouar');
-  final benali2 = testCustomer(id: 'b2', reference: 'OUT-000310', firstName: 'Mohammed', lastName: 'Benali',
-      phone: '0661987654', commune: 'Boufarik', wilaya: 'Blida');
-  final kaci = testCustomer(id: 'k1', reference: 'OUT-000007', firstName: 'Amina', lastName: 'Kaci',
-      phone: '0770112233', whatsapp: '0770112233', businessName: 'Quincaillerie El Amel', commune: 'Bir El Djir',
-      wilaya: 'Oran');
-  final arabic = testCustomer(id: 'a1', reference: 'OUT-000042', firstName: 'مُحَمَّد', lastName: 'بن علي',
-      phone: '0550998877');
-  final archived = testCustomer(id: 'x1', reference: 'OUT-000099', firstName: 'Rachid', lastName: 'Haddad',
-      phone: '0699000000', status: CustomerStatus.archived);
+  final benali1 = testCustomer(
+    id: 'b1',
+    reference: 'OUT-000125',
+    firstName: 'Mohamed',
+    lastName: 'Benali',
+    phone: '0555123456',
+    commune: 'Bab Ezzouar',
+  );
+  final benali2 = testCustomer(
+    id: 'b2',
+    reference: 'OUT-000310',
+    firstName: 'Mohammed',
+    lastName: 'Benali',
+    phone: '0661987654',
+    commune: 'Boufarik',
+    wilaya: 'Blida',
+  );
+  final kaci = testCustomer(
+    id: 'k1',
+    reference: 'OUT-000007',
+    firstName: 'Amina',
+    lastName: 'Kaci',
+    phone: '0770112233',
+    whatsapp: '0770112233',
+    businessName: 'Quincaillerie El Amel',
+    commune: 'Bir El Djir',
+    wilaya: 'Oran',
+  );
+  final arabic = testCustomer(
+    id: 'a1',
+    reference: 'OUT-000042',
+    firstName: 'مُحَمَّد',
+    lastName: 'بن علي',
+    phone: '0550998877',
+  );
+  final archived = testCustomer(
+    id: 'x1',
+    reference: 'OUT-000099',
+    firstName: 'Rachid',
+    lastName: 'Haddad',
+    phone: '0699000000',
+    status: CustomerStatus.archived,
+  );
 
   final engine = CustomerSearchEngine([benali1, benali2, kaci, arabic, archived]);
   List<String> ids(String q, {bool archivedToo = false}) =>
@@ -103,7 +135,11 @@ void main() {
     });
     test('the record being edited is excluded', () {
       final d = engine.possibleDuplicates(
-          firstName: 'Amina', lastName: 'Kaci', phones: const ['0770112233'], excludeId: 'k1');
+        firstName: 'Amina',
+        lastName: 'Kaci',
+        phones: const ['0770112233'],
+        excludeId: 'k1',
+      );
       expect(d, isEmpty);
     });
   });
@@ -111,7 +147,12 @@ void main() {
   test('handles a large directory quickly', () {
     final many = [
       for (var i = 0; i < 20000; i++)
-        testCustomer(id: 'm$i', firstName: 'Client$i', lastName: 'Nom${i % 500}', phone: '05${(i + 10000000).toString().padLeft(8, '0')}'),
+        testCustomer(
+          id: 'm$i',
+          firstName: 'Client$i',
+          lastName: 'Nom${i % 500}',
+          phone: '05${(i + 10000000).toString().padLeft(8, '0')}',
+        ),
     ];
     final big = CustomerSearchEngine(many);
     final sw = Stopwatch()..start();

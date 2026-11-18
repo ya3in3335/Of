@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 import 'package:supabase_flutter/supabase_flutter.dart' as sb show AuthState;
 
+import '../../core/config/app_config.dart';
 import '../../core/errors/app_exception.dart';
 import '../../core/preferences.dart';
 import '../../core/providers.dart';
@@ -91,7 +92,13 @@ class AuthController extends Notifier<AuthState> {
   /// role change takes effect on the device within seconds.
   void _watchOwnProfile(String userId) {
     _removeProfileChannel();
-    final client = ref.read(supabaseClientProvider);
+    if (AppConfig.demoMode) return; // the demo backend has no realtime server
+    final SupabaseClient client;
+    try {
+      client = ref.read(supabaseClientProvider);
+    } catch (_) {
+      return; // no Supabase client (tests): deactivation is still caught on resume
+    }
     _profileChannel = client
         .channel('own-profile-$userId')
         .onPostgresChanges(

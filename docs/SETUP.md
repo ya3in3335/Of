@@ -129,3 +129,16 @@ scripts/test_db.sh
 * **Push notifications** are not set up. The Notifications screen lists the
   directory changes the phone received through sync. Server push (FCM) can be
   added later without changing the data model.
+
+## Demo build (no server)
+
+To show the app without a Supabase project:
+
+```bash
+flutter build apk --release --split-per-abi --dart-define=DEMO_MODE=true
+```
+
+The demo uses an in-memory backend that enforces the same role rules, holds
+sample data, and resets on restart. Every screen carries a "DEMO" ribbon. The
+login screen offers two accounts: `admin` / `demo1234` and `livreur` / `demo1234`.
+Never distribute a demo build as the production app.

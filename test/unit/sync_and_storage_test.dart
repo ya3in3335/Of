@@ -17,7 +17,10 @@ void main() {
     test('first download fills the directory without notifications', () {
       final r = DirectoryMerger.merge(
         current: const {},
-        changed: [testCustomer(id: 'a', updatedAt: t0), testCustomer(id: 'b', updatedAt: t1)],
+        changed: [
+          testCustomer(id: 'a', updatedAt: t0),
+          testCustomer(id: 'b', updatedAt: t1),
+        ],
         deletions: const [],
         customersCursor: null,
         deletionsCursor: null,
@@ -33,7 +36,9 @@ void main() {
       final b = testCustomer(id: 'b', updatedAt: t0, phone: '0555000001');
       final c = testCustomer(id: 'c', updatedAt: t0);
       final d = testCustomer(id: 'd', updatedAt: t0, reference: 'OUT-000040');
-      final current = {for (final x in [a, b, c, d]) x.id: x};
+      final current = {
+        for (final x in [a, b, c, d]) x.id: x,
+      };
 
       final r = DirectoryMerger.merge(
         current: current,
@@ -114,7 +119,9 @@ void main() {
         id: 'a',
         lat: 36.75,
         lng: 3.05,
-        addresses: const [CustomerAddress(id: 'x', label: 'Dépôt', address: 'ZI lot 12', latitude: 36.7, longitude: 3.2)],
+        addresses: const [
+          CustomerAddress(id: 'x', label: 'Dépôt', address: 'ZI lot 12', latitude: 36.7, longitude: 3.2),
+        ],
       );
       await cache.save(DirectorySnapshot(userId: 'u1', customers: [c], customersCursor: t1, lastSyncedAt: t2));
       final s = await cache.load('u1');
@@ -163,7 +170,15 @@ void main() {
       'updated_at': '2026-11-02T10:00:00+00:00',
       'created_by': null,
       'customer_addresses': [
-        {'id': 'a', 'label': 'Dépôt', 'address': 'ZI', 'wilaya': null, 'commune': null, 'latitude': null, 'longitude': null},
+        {
+          'id': 'a',
+          'label': 'Dépôt',
+          'address': 'ZI',
+          'wilaya': null,
+          'commune': null,
+          'latitude': null,
+          'longitude': null,
+        },
       ],
     };
     final c = Customer.fromJson(json);

@@ -8,9 +8,31 @@ import 'core/config/app_config.dart';
 import 'core/providers.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
+import 'demo/demo_backend.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  if (AppConfig.demoMode) {
+    // Demo build: same app, in-memory backend with sample data.
+    final prefs = await SharedPreferences.getInstance();
+    final demo = DemoBackend();
+    runApp(
+      ProviderScope(
+        retry: (retryCount, error) => null,
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+          authRepositoryProvider.overrideWithValue(DemoAuthRepository(demo)),
+          customerRepositoryProvider.overrideWithValue(DemoCustomerRepository(demo)),
+          employeeRepositoryProvider.overrideWithValue(DemoEmployeeRepository(demo)),
+          activityRepositoryProvider.overrideWithValue(DemoActivityRepository(demo)),
+          settingsRepositoryProvider.overrideWithValue(DemoSettingsRepository(demo)),
+        ],
+        child: const OutiforApp(),
+      ),
+    );
+    return;
+  }
 
   if (!AppConfig.isConfigured) {
     runApp(const _NotConfiguredApp());

@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart' show GlobalWid
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
+import 'core/config/app_config.dart';
 import 'core/l10n_ext.dart';
 import 'core/preferences.dart';
 import 'core/router/app_router.dart';
@@ -67,7 +68,17 @@ class _OutiforAppState extends ConsumerState<OutiforApp> with WidgetsBindingObse
         final arabic = Localizations.localeOf(context).languageCode == 'ar';
         return Theme(
           data: AppTheme.light(arabic: arabic),
-          child: MediaQuery.withClampedTextScaling(maxScaleFactor: 1.3, child: child!),
+          child: MediaQuery.withClampedTextScaling(
+            maxScaleFactor: 1.3,
+            child: AppConfig.demoMode
+                ? Banner(
+                    message: context.l10n.demoRibbon,
+                    location: BannerLocation.topEnd,
+                    color: const Color(0xFFED1A2D),
+                    child: child!,
+                  )
+                : child!,
+          ),
         );
       },
       theme: AppTheme.light(arabic: false),

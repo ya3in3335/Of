@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../core/config/app_config.dart';
 import '../../core/errors/app_exception.dart';
 import '../../core/l10n_ext.dart';
 import '../../core/preferences.dart';
@@ -141,6 +142,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       const SizedBox(height: Space.xl),
                       AsyncButton(label: l10n.loginButton, icon: Icons.login_rounded, onPressed: _submit),
+                      if (AppConfig.demoMode) ...[
+                        const SizedBox(height: Space.lg),
+                        _DemoAccounts(
+                          onPick: (u) {
+                            _identifier.text = u;
+                            _password.text = 'demo1234';
+                          },
+                        ),
+                      ],
                       const SizedBox(height: Space.lg),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -189,6 +199,59 @@ class _LanguageButton extends ConsumerWidget {
             Text(context.languageCode.toUpperCase(), style: Theme.of(context).textTheme.labelMedium),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Demo build only: explains that data is fictitious and offers the two accounts.
+class _DemoAccounts extends StatelessWidget {
+  const _DemoAccounts({required this.onPick});
+  final ValueChanged<String> onPick;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final text = Theme.of(context).textTheme;
+    Widget account(String username, String role, IconData icon) => Expanded(
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: Space.sm)),
+        onPressed: () => onPick(username),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 20),
+            const SizedBox(height: 2),
+            Text(role, style: text.labelMedium, textAlign: TextAlign.center),
+            Text('$username / demo1234', textDirection: TextDirection.ltr, style: text.bodySmall),
+          ],
+        ),
+      ),
+    );
+    return Container(
+      padding: const EdgeInsets.all(Space.md),
+      decoration: BoxDecoration(color: AppColors.warningSoft, borderRadius: Radii.field),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.science_outlined, color: AppColors.warning, size: 20),
+              const SizedBox(width: Space.xs),
+              Expanded(child: Text(l10n.demoLoginTitle, style: text.titleSmall)),
+            ],
+          ),
+          const SizedBox(height: Space.xxs),
+          Text(l10n.demoLoginBody, style: text.bodySmall),
+          const SizedBox(height: Space.sm),
+          Row(
+            children: [
+              account('admin', l10n.demoAdmin, Icons.admin_panel_settings_outlined),
+              const SizedBox(width: Space.xs),
+              account('livreur', l10n.demoEmployee, Icons.local_shipping_outlined),
+            ],
+          ),
+        ],
       ),
     );
   }

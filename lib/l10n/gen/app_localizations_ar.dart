@@ -24,6 +24,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get loading => 'جارٍ التحميل…';
 
   @override
+  String get demoRibbon => 'تجريبي';
+
+  @override
+  String get demoLoginTitle => 'نسخة تجريبية — بيانات وهمية';
+
+  @override
+  String get demoLoginBody =>
+      'لا يُرسل أي شيء إلى خادم، وتُعاد البيانات عند إعادة تشغيل التطبيق. المس حسابًا لملئه:';
+
+  @override
+  String get demoAdmin => 'المسؤول';
+
+  @override
+  String get demoEmployee => 'موظف التوصيل';
+
+  @override
   String get navDashboard => 'لوحة القيادة';
 
   @override

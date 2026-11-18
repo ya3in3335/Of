@@ -97,15 +97,33 @@ void main() {
 
     test('employees cannot open admin screens', () {
       for (final loc in [
-        '/dashboard', '/customers', '/employees', '/employee/x', '/employee-new', '/customer-new',
-        '/customer/abc/edit', '/duplicates', '/activity', '/app-settings', '/settings', '/map',
+        '/dashboard',
+        '/customers',
+        '/employees',
+        '/employee/x',
+        '/employee-new',
+        '/customer-new',
+        '/customer/abc/edit',
+        '/duplicates',
+        '/activity',
+        '/app-settings',
+        '/settings',
+        '/map',
       ]) {
         expect(go(loc, employee), Routes.home, reason: loc);
       }
     });
 
     test('employees reach their screens and customer profiles', () {
-      for (final loc in ['/home', '/directory', '/explore', '/me', '/customer/abc', '/customer/abc/location', '/search']) {
+      for (final loc in [
+        '/home',
+        '/directory',
+        '/explore',
+        '/me',
+        '/customer/abc',
+        '/customer/abc/location',
+        '/search',
+      ]) {
         expect(go(loc, employee), isNull, reason: loc);
       }
     });

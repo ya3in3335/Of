@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' show RealtimeChannel;
 
 import '../core/errors/app_exception.dart';
 import '../core/providers.dart';
@@ -101,7 +100,7 @@ class DirectoryState {
 /// Keeps the device copy of the directory in sync with Supabase:
 /// cache on start, delta sync, realtime triggers, reconnect triggers.
 class DirectoryController extends Notifier<DirectoryState> {
-  RealtimeChannel? _channel;
+  void Function()? _unsubscribe;
   Timer? _debounce;
   bool _syncing = false;
   bool _pending = false;
@@ -129,9 +128,9 @@ class DirectoryController extends Notifier<DirectoryState> {
 
   void _teardown() {
     _debounce?.cancel();
-    final channel = _channel;
-    _channel = null;
-    if (channel != null) unawaited(ref.read(customerRepositoryProvider).unsubscribe(channel));
+    final stop = _unsubscribe;
+    _unsubscribe = null;
+    stop?.call();
   }
 
   Future<void> _start(String userId) async {
@@ -148,7 +147,7 @@ class DirectoryController extends Notifier<DirectoryState> {
         lastSyncedAt: snapshot.lastSyncedAt,
       );
     }
-    _channel = ref.read(customerRepositoryProvider).subscribe(_onRemoteChange);
+    _unsubscribe = ref.read(customerRepositoryProvider).subscribe(_onRemoteChange);
     await sync();
   }
 

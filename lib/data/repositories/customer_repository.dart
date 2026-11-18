@@ -150,7 +150,8 @@ class CustomerRepository {
   }
 
   /// Notifies [onChange] whenever another device changes the directory.
-  RealtimeChannel subscribe(void Function() onChange) {
+  /// Returns a function that stops listening.
+  void Function() subscribe(void Function() onChange) {
     final channel = _client.channel('directory-changes');
     for (final table in ['customers', 'customer_addresses', 'customer_deletions']) {
       channel.onPostgresChanges(
@@ -161,12 +162,6 @@ class CustomerRepository {
       );
     }
     channel.subscribe();
-    return channel;
-  }
-
-  Future<void> unsubscribe(RealtimeChannel channel) async {
-    try {
-      await _client.removeChannel(channel);
-    } catch (_) {}
+    return () => _client.removeChannel(channel).catchError((_) => 'error');
   }
 }

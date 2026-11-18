@@ -24,6 +24,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loading => 'Loading…';
 
   @override
+  String get demoRibbon => 'DEMO';
+
+  @override
+  String get demoLoginTitle => 'Demo version — sample data';
+
+  @override
+  String get demoLoginBody =>
+      'Nothing is sent to a server; data resets when the app restarts. Tap an account to fill it in:';
+
+  @override
+  String get demoAdmin => 'Administrator';
+
+  @override
+  String get demoEmployee => 'Delivery employee';
+
+  @override
   String get navDashboard => 'Dashboard';
 
   @override

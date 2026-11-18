@@ -35,5 +35,9 @@ class AppConfig {
 
   static const userAgentPackage = 'dz.outifor.outifor';
 
+  /// Demo build: in-memory backend with sample data, clearly labelled in
+  /// the UI. Enabled only with --dart-define=DEMO_MODE=true; never in production.
+  static const demoMode = bool.fromEnvironment('DEMO_MODE');
+
   static bool get isConfigured => supabaseUrl.startsWith('https://') && supabaseAnonKey.length > 20;
 }

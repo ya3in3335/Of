@@ -24,6 +24,22 @@ class AppLocalizationsFr extends AppLocalizations {
   String get loading => 'Chargement…';
 
   @override
+  String get demoRibbon => 'DÉMO';
+
+  @override
+  String get demoLoginTitle => 'Version de démonstration — données fictives';
+
+  @override
+  String get demoLoginBody =>
+      'Rien n\'est envoyé à un serveur ; les données sont réinitialisées au redémarrage. Touchez un compte pour le remplir :';
+
+  @override
+  String get demoAdmin => 'Administrateur';
+
+  @override
+  String get demoEmployee => 'Livreur';
+
+  @override
   String get navDashboard => 'Tableau de bord';
 
   @override
