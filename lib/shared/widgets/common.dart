@@ -98,28 +98,37 @@ class SectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: AppDecorations.card(),
-      padding: padding ?? const EdgeInsets.all(Space.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (title != null) ...[
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    title!.toUpperCase(),
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(letterSpacing: context.isArabic ? 0 : 0.8),
-                  ),
+    // Shadow on the outside, Material inside, so list tiles and ink
+    // ripples inside the card paint correctly.
+    return DecoratedBox(
+      decoration: const BoxDecoration(borderRadius: Radii.card, boxShadow: Shadows.card),
+      child: Material(
+        color: AppColors.surface,
+        borderRadius: Radii.card,
+        child: Padding(
+          padding: padding ?? const EdgeInsets.all(Space.md),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (title != null) ...[
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        title!.toUpperCase(),
+                        style: Theme.of(context).textTheme.labelSmall
+                            ?.copyWith(letterSpacing: context.isArabic ? 0 : 0.8),
+                      ),
+                    ),
+                    ?trailing,
+                  ],
                 ),
-                ?trailing,
+                const SizedBox(height: Space.sm),
               ],
-            ),
-            const SizedBox(height: Space.sm),
-          ],
-          child,
-        ],
+              child,
+            ],
+          ),
+        ),
       ),
     );
   }
