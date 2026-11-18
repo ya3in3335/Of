@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Plain white launch window: the animated logo intro (SplashScreen) starts
+     from a clean canvas, so there is no jump from a static logo. -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/splash_background" />
-    <item>
-        <bitmap android:gravity="center" android:src="@drawable/splash_logo" />
-    </item>
 </layer-list>

@@ -55,3 +55,4 @@ supabase/.branches/
 android/key.properties
 *.jks
 *.keystore
+tool/splash_frames/out/

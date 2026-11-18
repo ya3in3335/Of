@@ -83,9 +83,17 @@ const _employeeShellPrefixes = [Routes.home, Routes.directory, Routes.explore, R
 
 /// Redirect rules. The UI guard mirrors the server rules; the server (RLS)
 /// remains the real enforcement.
-String? resolveRedirect({required String location, required AuthState auth, required bool onboardingDone}) {
+String? resolveRedirect({
+  required String location,
+  required AuthState auth,
+  required bool onboardingDone,
+  bool splashDone = true,
+}) {
   final atSplash = location == Routes.splash;
   final atPublic = location == Routes.login || location == Routes.onboarding;
+
+  // The intro animation always plays to the end once per launch.
+  if (!splashDone) return atSplash ? null : Routes.splash;
 
   switch (auth.phase) {
     case AuthPhase.initializing:
@@ -111,6 +119,7 @@ class _RouterRefresh extends ChangeNotifier {
   _RouterRefresh(Ref ref) {
     ref.listen(authControllerProvider, (_, _) => notifyListeners());
     ref.listen(preferencesProvider.select((p) => p.onboardingDone), (_, _) => notifyListeners());
+    ref.listen(splashGateProvider, (_, _) => notifyListeners());
   }
 }
 
@@ -131,6 +140,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       location: state.matchedLocation,
       auth: ref.read(authControllerProvider),
       onboardingDone: ref.read(preferencesProvider).onboardingDone,
+      splashDone: ref.read(splashGateProvider),
     ),
     routes: [
       GoRoute(path: '/', redirect: (_, _) => Routes.splash),

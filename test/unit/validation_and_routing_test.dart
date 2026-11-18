@@ -91,6 +91,18 @@ void main() {
       expect(go(Routes.login, const AuthState.signedOut()), isNull);
     });
 
+    test('the intro animation plays to the end before any other screen', () {
+      expect(
+        resolveRedirect(location: '/login', auth: const AuthState.signedOut(), onboardingDone: true, splashDone: false),
+        Routes.splash,
+      );
+      expect(
+        resolveRedirect(location: '/home', auth: employee, onboardingDone: true, splashDone: false),
+        Routes.splash,
+      );
+      expect(resolveRedirect(location: Routes.splash, auth: employee, onboardingDone: true), Routes.home);
+    });
+
     test('while restoring the session, only the splash is shown', () {
       expect(go('/home', const AuthState.initializing()), Routes.splash);
     });

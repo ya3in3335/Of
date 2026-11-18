@@ -39,6 +39,7 @@ flutter:
 
   assets:
     - assets/brand/
+    - assets/brand/splash/
 
   fonts:
     - family: Inter
